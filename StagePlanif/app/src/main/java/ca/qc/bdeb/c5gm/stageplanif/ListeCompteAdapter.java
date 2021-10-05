@@ -15,11 +15,11 @@ import java.util.ArrayList;
 /**
  * Adapte la liste de compte pour le recycler view
  */
-public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.ListeCompteHolder>{
+public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.ListeCompteHolder> {
     /**
      * La liste des comptes à adapter pour le recycler view
      */
-    private ArrayList<Compte> listeCompte;
+    private final ArrayList<Compte> listeCompte;
     /**
      * Un layout inflater
      */
@@ -35,32 +35,9 @@ public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.
     }
 
     /**
-     * Interface qui demande de creer des methodes pour definir le comportements selon les listeners
-     */
-    public interface OnItemClickListener{
-        /**
-         * Comportement lors du clique pour mettre la priorité d'un contact
-         * @param position position dans le recyclerView de l'item
-         * @param favoriteView l'item qui a ete clique
-         */
-        void OnDrapeauClick(int position, ImageView favoriteView);
-
-        /**
-         * Comportement lors d'un clique sur le nom
-         * @param position position dans le recyclerView de l'item
-         */
-        void onNomClick(int position);
-
-        /**
-         * Comportement lors d'un clique sur l'image de l'élève
-         * @param position position dans le recyclerView de l'item
-         */
-        void OnImageEleveClick(int position);
-    }
-
-    /**
      * Permet de setter les listeners
-     * @param listener
+     *
+     * @param listener Les déclarations de l'interface OnItemClickListener
      */
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
@@ -85,21 +62,48 @@ public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.
     }
 
     /**
+     * Interface qui demande de creer des methodes pour definir le comportements selon les listeners
+     */
+    public interface OnItemClickListener {
+        /**
+         * Comportement lors du clique pour mettre la priorité d'un contact
+         *
+         * @param position     position dans le recyclerView de l'item
+         * @param favoriteView l'item qui a ete clique
+         */
+        void OnDrapeauClick(int position, ImageView favoriteView);
+
+        /**
+         * Comportement lors d'un clique sur le nom
+         *
+         * @param position position dans le recyclerView de l'item
+         */
+        void onNomClick(int position);
+
+        /**
+         * Comportement lors d'un clique sur l'image de l'élève
+         *
+         * @param position position dans le recyclerView de l'item
+         */
+        void OnImageEleveClick(int position);
+    }
+
+    /**
      * Classe qui va afficher les views
      */
-    public class ListeCompteHolder extends RecyclerView.ViewHolder{
+    public class ListeCompteHolder extends RecyclerView.ViewHolder {
         /**
          * TextView contenant le nom de l'élève
          */
-        private TextView nomEleveView;
+        private final TextView nomEleveView;
         /**
          * ImageView contenant le drapeau
          */
-        private ImageView drapeauView;
+        private final ImageView drapeauView;
         /**
          * ImageView contenant l'image de l'élève
          */
-        private ImageView imageEleveView;
+        private final ImageView imageEleveView;
         /**
          * L'adapteur de la liste de compte
          */
@@ -107,46 +111,37 @@ public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.
 
         public ListeCompteHolder(@NonNull View itemView, ListeCompteAdapter adapter, final OnItemClickListener listener) {
             super(itemView);
-            nomEleveView = (TextView) itemView.findViewById(R.id.text_nom_eleve);
-            drapeauView = (ImageView) itemView.findViewById(R.id.image_drapeau);
-            imageEleveView = (ImageView) itemView.findViewById(R.id.image_eleve);
+            nomEleveView = itemView.findViewById(R.id.text_nom_eleve);
+            drapeauView = itemView.findViewById(R.id.image_drapeau);
+            imageEleveView = itemView.findViewById(R.id.image_eleve);
             this.adapter = adapter;
             setListeners(listener);
         }
 
         private void setListeners(final OnItemClickListener listener) {
-            drapeauView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.OnDrapeauClick(position, drapeauView);
-                        }
+            drapeauView.setOnClickListener(view -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.OnDrapeauClick(position, drapeauView);
                     }
                 }
             });
 
-            nomEleveView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onNomClick(position);
-                        }
+            nomEleveView.setOnClickListener(view -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onNomClick(position);
                     }
                 }
             });
 
-            imageEleveView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.OnImageEleveClick(position);
-                        }
+            imageEleveView.setOnClickListener(view -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.OnImageEleveClick(position);
                     }
                 }
             });

@@ -46,4 +46,12 @@ public class Compte {
     public Integer getTypeCompte() {
         return typeCompte;
     }
+
+    public Byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Byte[] photo) {
+        this.photo = photo;
+    }
 }

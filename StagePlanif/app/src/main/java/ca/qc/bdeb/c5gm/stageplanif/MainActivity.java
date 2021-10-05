@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<Compte> listeCompte = new ArrayList<>();
+    private final ArrayList<Compte> listeCompte = new ArrayList<>();
     private RecyclerView recyclerView;
     private ListeCompteAdapter compteAdapter;
     private Toolbar toolbar;
