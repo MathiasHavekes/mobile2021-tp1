@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">StagePlanif</string>
+    <string name="msg_img_eleve">TODO</string>
+    <string name="msg_img_drapeau">TODO</string>
+    <string name="msg_nom">Nom de l\'eleve</string>
 </resources>
