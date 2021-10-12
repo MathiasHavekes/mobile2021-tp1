@@ -19,6 +19,7 @@ public class Compte implements Parcelable {
      * La photo du compte
      */
     private Byte[] photo;
+    private String
     /**
      * Le type de compte
      */

@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ListeCompteAdapter compteAdapter;
     private Toolbar toolbar;
+    private Stockage dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         listeCompte.add(new Compte("Havekes", "Mathias", null, 1));
         listeCompte.add(new Compte("Hadjeres", "Amar", null, 1));
         creationRecyclerView();
+        dbHelper = Stockage.getInstance(getApplicationContext());
     }
 
     @Override
@@ -38,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Stockage.getInstance(getApplicationContext()).close();
+    }
     /**
      * Cree le recycler view dans l'activitee
      */

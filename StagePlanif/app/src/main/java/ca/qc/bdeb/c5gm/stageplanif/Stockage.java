@@ -1,5 +1,6 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -24,14 +25,44 @@ public class Stockage extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_CLIENTS =
             "CREATE TABLE " + Entreprise.NOM_TABLE + " (" +
-                    Entreprise._ID + " INTEGER PRIMARY KEY," +
+                    Entreprise._ID + " TEXT PRIMARY KEY," +
                     Entreprise.ENTREPRISE_NOM + " TEXT," +
                     Entreprise.ENTREPRISE_ADRESSE + " TEXT," +
                     Entreprise.ENTREPRISE_VILLE + " TEXT," +
                     Entreprise.ENTREPRISE_PROVINCE + " TEXT," +
-                    Entreprise.ENTREPRISE_CP + " TEXT)";
+                    Entreprise.ENTREPRISE_CP + " TEXT);" +
+                    "CREATE TABLE " + Compte.NOM_TABLE + " (" +
+                    Compte._ID + " INTEGER PRIMARY KEY," +
+                    Compte.COMPTE_EMAIL + " TEXT," +
+                    Compte.COMPTE_EST_ACTIF + " NUMERIC," +
+                    Compte.COMPTE_MOT_PASSE + " TEXT," +
+                    Compte.COMPTE_NOM + " TEXT," +
+                    Compte.COMPTE_PRENOM + " TEXT," +
+                    Compte.COMPTE_PHOTO + " BLOB," +
+                    Compte.COMPTE_TYPE_COMPTE + " INTEGER;)" +
+                    "CREATE TABLE " + Stage.NOM_TABLE + " (" +
+                    Stage._ID + " INTEGER PRIMARY KEY," +
+                    Stage.STAGE_ANNEE_SCOLAIRE + " TEXT," +
+                    Stage.STAGE_ENTREPRISE_ID + " TEXT," +
+                    Stage.STAGE_ETUDIANT_ID + " INTEGER," +
+                    Stage.STAGE_PROFESSEUR_ID + " INTEGER," +
+                    "FOREIGN KEY (" + Stage.STAGE_ENTREPRISE_ID + ") REFERENCES " +
+                    Entreprise.NOM_TABLE + "(" + Entreprise._ID + ")," +
+                    "FOREIGN KEY (" + Stage.STAGE_ETUDIANT_ID + ") REFERENCES " +
+                    Compte.NOM_TABLE + "(" + Compte._ID + ")," +
+                    "FOREIGN KEY (" + Stage.STAGE_PROFESSEUR_ID + ") REFERENCES " +
+                    Compte.NOM_TABLE + "(" + Compte._ID + ");" +
+                    "CREATE TABLE " + Visite.NOM_TABLE + " (" +
+                    Visite._ID + " TEXT PRIMARY KEY," +
+                    Visite.VISITE_DATE + " NUMERIC," +
+                    Visite.VISITE_HEURE_DEBUT + " NUMERIC," +
+                    Visite.VISITE_DUREE + " INTEGER" +
+                    "FOREIGN KEY (" + Visite._ID + ") REFERENCES " +
+                    Stage.NOM_TABLE + "(" + Stage._ID + ");";
+
     private static final String SQL_DELETE_CLIENTS =
-            "DROP TABLE IF EXISTS " + Clients.NOM_TABLE_COMPTE;
+            "DROP TABLE IF EXISTS " + Visite.NOM_TABLE + ", " + Stage.NOM_TABLE + ", " +
+                    Entreprise.NOM_TABLE + ", " + Compte.NOM_TABLE + ";";
     private Stockage(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context= context;
@@ -61,15 +92,12 @@ public class Stockage extends SQLiteOpenHelper {
      */
     public static class Compte implements BaseColumns {
         public static final String NOM_TABLE = "compte";
-        public static final String COMPTE_CREATED_AT = "created_at";
-        public static final String COMPTE_DELETED_AT = "deleted_at";
         public static final String COMPTE_EMAIL = "email";
         public static final String COMPTE_EST_ACTIF = "est_actif";
         public static final String COMPTE_MOT_PASSE = "mot_passe";
         public static final String COMPTE_NOM = "nom";
         public static final String COMPTE_PRENOM = "prenom";
         public static final String COMPTE_PHOTO = "photo";
-        public static final String COMPTE_UPDATED_AT = "updated_at";
         public static final String COMPTE_TYPE_COMPTE = "type_compte";
     }
 
@@ -82,10 +110,6 @@ public class Stockage extends SQLiteOpenHelper {
         public static final String STAGE_ENTREPRISE_ID = "entreprise_id";
         public static final String STAGE_ETUDIANT_ID = "etudiant_id";
         public static final String STAGE_PROFESSEUR_ID = "professeur_id";
-        public static final String NOM_TABLE_VISITE = "visite";
-        public static final String VISITE_DATE = "date";
-        public static final String VISITE_HEURE_DEBUT = "heure_debut";
-        public static final String VISITE_DUREE = "duree";
     }
 
     /**
@@ -100,11 +124,19 @@ public class Stockage extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
+        sqLiteDatabase.execSQL(SQL_CREATE_CLIENTS);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        sqLiteDatabase.execSQL(SQL_DELETE_CLIENTS);
+        onCreate(sqLiteDatabase);
     }
+
+    public void insererCompte(Compte compte) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(Compte.COMPTE_EMAIL, compte.);
+    }
+
 }
