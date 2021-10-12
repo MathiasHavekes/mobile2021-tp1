@@ -25,12 +25,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         toolbar = findViewById((R.id.toolbar));
         setSupportActionBar(toolbar);
-        //Donnees de test, a enlever
-        listeCompte.add(new Compte("Paquet", "Xavier", null, 1));
-        listeCompte.add(new Compte("Havekes", "Mathias", null, 1));
-        listeCompte.add(new Compte("Hadjeres", "Amar", null, 1));
-        creationRecyclerView();
         dbHelper = Stockage.getInstance(getApplicationContext());
+        ajouterComptes();
+        ajouterCompteDansBD();
+        creationRecyclerView();
+    }
+
+    private void ajouterCompteDansBD() {
+        for (Compte compte: listeCompte) {
+            dbHelper.ajouterClient(compte);
+        }
+    }
+
+    private void ajouterComptes() {
+        listeCompte.add(new Compte("Boucher", "Mikaël", null, 2));
+        listeCompte.add(new Compte("Caron", "Thomas", null, 2));
+        listeCompte.add(new Compte("Gingras", "Simon", null, 2));
+        listeCompte.add(new Compte("Leblanc", "Kevin", null, 2));
+        listeCompte.add(new Compte("Masson", "Cédric", null, 2));
+        listeCompte.add(new Compte("Monette", "Vanessa", null, 2));
+        listeCompte.add(new Compte("Picard", "Vincent", null, 2));
+        listeCompte.add(new Compte("Poulain", "Mélissa", null, 2));
+        listeCompte.add(new Compte("Vargas", "Diego", null, 2));
+        listeCompte.add(new Compte("Tremblay", "Geneviève", null, 2));
     }
 
     @Override

@@ -18,8 +18,7 @@ public class Compte implements Parcelable {
     /**
      * La photo du compte
      */
-    private Byte[] photo;
-    private String
+    private byte[] photo;
     /**
      * Le type de compte
      */
@@ -32,7 +31,7 @@ public class Compte implements Parcelable {
      * @param photo La photo du compte (a modifier)
      * @param typeCompte Le type de compte
      */
-    public Compte(String nom, String prenom, Byte[] photo, Integer typeCompte) {
+    public Compte(String nom, String prenom, byte[] photo, Integer typeCompte) {
         this.nom = nom;
         this.prenom = prenom;
         this.photo = photo;
@@ -73,11 +72,11 @@ public class Compte implements Parcelable {
         return typeCompte;
     }
 
-    public Byte[] getPhoto() {
+    public byte[] getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Byte[] photo) {
+    public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
 
