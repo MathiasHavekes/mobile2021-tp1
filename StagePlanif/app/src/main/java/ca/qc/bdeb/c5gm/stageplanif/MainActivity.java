@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private final ArrayList<Compte> listeCompte = new ArrayList<>();
+    private ArrayList<Compte> listeCompte = new ArrayList<>();
     private RecyclerView recyclerView;
     private ListeCompteAdapter compteAdapter;
     private Toolbar toolbar;
@@ -26,28 +26,8 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById((R.id.toolbar));
         setSupportActionBar(toolbar);
         dbHelper = Stockage.getInstance(getApplicationContext());
-        ajouterComptes();
-        ajouterCompteDansBD();
+        listeCompte = dbHelper.getComptes(TypeComptes.ELEVE);
         creationRecyclerView();
-    }
-
-    private void ajouterCompteDansBD() {
-        for (Compte compte: listeCompte) {
-            dbHelper.ajouterClient(compte);
-        }
-    }
-
-    private void ajouterComptes() {
-        listeCompte.add(new Compte("Boucher", "Mikaël", null, 2));
-        listeCompte.add(new Compte("Caron", "Thomas", null, 2));
-        listeCompte.add(new Compte("Gingras", "Simon", null, 2));
-        listeCompte.add(new Compte("Leblanc", "Kevin", null, 2));
-        listeCompte.add(new Compte("Masson", "Cédric", null, 2));
-        listeCompte.add(new Compte("Monette", "Vanessa", null, 2));
-        listeCompte.add(new Compte("Picard", "Vincent", null, 2));
-        listeCompte.add(new Compte("Poulain", "Mélissa", null, 2));
-        listeCompte.add(new Compte("Vargas", "Diego", null, 2));
-        listeCompte.add(new Compte("Tremblay", "Geneviève", null, 2));
     }
 
     @Override
@@ -62,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         Stockage.getInstance(getApplicationContext()).close();
     }
+
     /**
      * Cree le recycler view dans l'activitee
      */

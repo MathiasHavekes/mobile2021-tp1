@@ -7,6 +7,7 @@ import android.os.Parcelable;
  * Le compte sont le type de donnees utilise pour le recycler view
  */
 public class Compte implements Parcelable {
+    private final Integer Id;
     /**
      * Le nom du compte
      */
@@ -31,7 +32,23 @@ public class Compte implements Parcelable {
      * @param photo La photo du compte (a modifier)
      * @param typeCompte Le type de compte
      */
+    public Compte(Integer id, String nom, String prenom, byte[] photo, Integer typeCompte) {
+        this.Id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.photo = photo;
+        this.typeCompte = typeCompte;
+    }
+
+    /**
+     * Constructeur par défaut
+     * @param nom Le nom du compte
+     * @param prenom Le prénom du compte
+     * @param photo La photo du compte (a modifier)
+     * @param typeCompte Le type de compte
+     */
     public Compte(String nom, String prenom, byte[] photo, Integer typeCompte) {
+        this.Id = null;
         this.nom = nom;
         this.prenom = prenom;
         this.photo = photo;
@@ -46,6 +63,7 @@ public class Compte implements Parcelable {
         } else {
             typeCompte = in.readInt();
         }
+        Id = null;
     }
 
     public static final Creator<Compte> CREATOR = new Creator<Compte>() {
