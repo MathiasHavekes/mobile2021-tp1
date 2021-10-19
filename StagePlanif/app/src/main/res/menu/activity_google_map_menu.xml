@@ -3,16 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/passer_sur_carte"
-        android:icon="@drawable/ic_baseline_map_24"
-        android:title="passerSurCarte"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/afficher_menu_filtre"
         android:icon="@drawable/ic_baseline_filter_alt_24"
         android:title="afficherMenuFiltre"
         app:showAsAction="ifRoom">
+
         <menu>
             <item
                 android:id="@+id/filtrer_par_rouge"

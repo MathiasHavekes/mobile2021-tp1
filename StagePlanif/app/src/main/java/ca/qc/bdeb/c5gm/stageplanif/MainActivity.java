@@ -1,10 +1,14 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +36,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.passer_sur_carte) {
+            Intent intent = new Intent(this, GoogleMaps.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.activity_main_menu, menu);
@@ -46,5 +60,10 @@ public class MainActivity extends AppCompatActivity {
         compteAdapter = new ListeCompteAdapter(this, listeCompte);
         recyclerView.setAdapter(compteAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void lancerActiviteAjoutEleve(View view) {
+        Intent intent = new Intent(this, DemandeInfoEleve.class);
+        startActivity(intent);
     }
 }

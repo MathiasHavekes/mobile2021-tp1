@@ -3,5 +3,24 @@
     <string name="msg_img_eleve">TODO</string>
     <string name="msg_img_drapeau">TODO</string>
     <string name="msg_bouton_ajout">TODO</string>
+    <string name="msg_bouton_filtre">TODO</string>
     <string name="msg_nom">Nom de l\'eleve</string>
+    <string name="title_activity_google_maps">GoogleMaps</string>
+    <string name="title_activity_add_student">activity_add_student</string>
+
+    <string name="btn_prochaine_page_demande_info">Prochain</string>
+
+    <string name="info_eleve">Élève</string>
+    <string name="entree_prenom">Prénom</string>
+    <string name="entree_nom">Nom de famille</string>
+
+    <string name="info_entreprise_stage">Entreprise de stage</string>
+    <string name="entree_nom_entreprise">Nom de l\'entreprise</string>
+    <string name="entree_adresse_entreprise">Adresse (numéro et nom de rue)</string>
+    <string name="entree_ville_entreprise">Ville</string>
+    <string name="entree_code_postale_entreprise">Code postale</string>
+    <string name="entree_province_entreprise">Province</string>
+
+    <string name="info_stage">Stage</string>
+    <string name="journees_stage">Journées de stage</string>
 </resources>
