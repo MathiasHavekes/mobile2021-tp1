@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 
 public class Stockage extends SQLiteOpenHelper {
@@ -17,7 +18,7 @@ public class Stockage extends SQLiteOpenHelper {
     /**
      * numéro actuel de version de BD
      */
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 3;
     private Context context;
     /**
      * L’unique instance de DbHelper possible
@@ -161,7 +162,6 @@ public class Stockage extends SQLiteOpenHelper {
         listeCompte.add(new Compte("Poulain", "Mélissa", null, 2));
         listeCompte.add(new Compte("Vargas", "Diego", null, 2));
         listeCompte.add(new Compte("Tremblay", "Geneviève", null, 2));
-        listeCompte.add(new Compte("Tremblay", "Geneviève", null, 2));
         listeCompte.add(new Compte("Prades", "Pierre", null, 1));
         return listeCompte;
     }
@@ -193,10 +193,12 @@ public class Stockage extends SQLiteOpenHelper {
 
     private void ajouterCompte(ArrayList<Compte> listeCompte, SQLiteDatabase db) {
         for (Compte compte: listeCompte) {
+            String email = Normalizer.normalize(compte.getPrenom() + "." + compte.getNom() + "@test.com", Normalizer.Form.NFD);
+            email = email.replaceAll("[^\\p{ASCII}]", "");
             ContentValues values = new ContentValues();
             values.put(CompteHelper.COMPTE_NOM, compte.getNom()); // Nom du client
             values.put(CompteHelper.COMPTE_PRENOM, compte.getPrenom()); // #tel du client
-            values.put(CompteHelper.COMPTE_EMAIL, compte.getPrenom() + "." + compte.getNom() + "@test.com");
+            values.put(CompteHelper.COMPTE_EMAIL, email);
             values.put(CompteHelper.COMPTE_TYPE_COMPTE, compte.getTypeCompte());
             values.put(CompteHelper.COMPTE_PHOTO, compte.getPhoto());
             db.insert(CompteHelper.NOM_TABLE, null, values);
@@ -227,7 +229,7 @@ public class Stockage extends SQLiteOpenHelper {
                 CompteHelper.COMPTE_PHOTO,
                 CompteHelper.COMPTE_TYPE_COMPTE
         };
-        String selection = CompteHelper.COMPTE_TYPE_COMPTE + " = " + type.;
+        String selection = CompteHelper.COMPTE_TYPE_COMPTE + " = " + type.getValue();
         Cursor cursor = db.query(CompteHelper.NOM_TABLE, colonnes, selection, null, null, null, null, null);
         if (cursor != null){
             cursor.moveToFirst();
