@@ -20,10 +20,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
-    private final ArrayList<Compte> listeComptes = new ArrayList<>();
-    private final ArrayList<Compte> listeComptesMasques = new ArrayList<>();
+    private Stockage dbHelper;
+    private ArrayList<Stage> listeStages = new ArrayList<>();
+    private final ArrayList<Stage> listeStagesMasques = new ArrayList<>();
     private RecyclerView recyclerView;
-    private ListeCompteAdapter compteAdapter;
+    private ListeStageAdapter StageAdapter;
     private Toolbar toolbar;
     private ItemViewModel viewModel;
 
@@ -33,27 +34,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         toolbar = findViewById((R.id.toolbar));
         setSupportActionBar(toolbar);
-
+        dbHelper = Stockage.getInstance(getApplicationContext());
+        listeStages = dbHelper.getStages();
         viewModel = new ViewModelProvider(this).get(ItemViewModel.class);
         viewModel.getSelectedItem().observe(this, selection -> {
-            listeComptes.addAll(listeComptesMasques);
-            listeComptesMasques.clear();
-            trierListeCompte(listeComptes);
+            listeStages.addAll(listeStagesMasques);
+            listeStagesMasques.clear();
+            trierListeStage(listeStages);
             ArrayList<Integer> ListePrioritesSelectionnees = calculerPrioritesSelectionnees(selection);
             filtrerListeCompte(ListePrioritesSelectionnees);
         });
-
-        //Donnees de test, a enlever
-        listeComptes.add(new Compte("Paquet", "Xavier", null, 1, Priorite.MAXIMUM));
-        listeComptes.add(new Compte("Havekes", "Mathias", null, 1, Priorite.MOYENNE));
-        listeComptes.add(new Compte("xxHavekes", "Mathias", null, 1, Priorite.MOYENNE));
-        listeComptes.add(new Compte("ggHavekes", "Mathias", null, 1, Priorite.MINIMUM));
-        listeComptes.add(new Compte("ffHavekes", "Mathias", null, 1, Priorite.MINIMUM));
-        listeComptes.add(new Compte("lHavekes", "Mathias", null, 1, Priorite.MAXIMUM));
-        listeComptes.add(new Compte("kkHavekes", "Mathias", null, 1, Priorite.MOYENNE));
-        listeComptes.add(new Compte("ttHavekes", "Mathias", null, 1, Priorite.MOYENNE));
-        listeComptes.add(new Compte("hgfhHavekes", "Mathias", null, 1, Priorite.MAXIMUM));
-        listeComptes.add(new Compte("Hadjeres", "Amar", null, 1, Priorite.MINIMUM));
 
         creationRecyclerView();
     }
@@ -70,20 +60,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void filtrerListeCompte(ArrayList<Integer> ListePrioritesSelectionnees) {
-        for (Compte c : listeComptes) {
-            if (!ListePrioritesSelectionnees.contains(c.getPriorite().getValeur())) {
-                listeComptesMasques.add(c);
+        for (Stage s : listeStages) {
+            if (!ListePrioritesSelectionnees.contains(s.getPriorite().getValeur())) {
+                listeStagesMasques.add(s);
             }
         }
-        listeComptes.removeAll(listeComptesMasques);
-        compteAdapter.notifyDataSetChanged();
+        listeStages.removeAll(listeStagesMasques);
+        StageAdapter.notifyDataSetChanged();
     }
 
-    private void trierListeCompte(ArrayList<Compte> liste) {
-        Collections.sort(liste, new CompteChainedComparateur(
-                new ComptePrioriteComparateur(),
-                new CompteNomComparateur(),
-                new ComptePrenomComparateur()));
+    private void trierListeStage(ArrayList<Stage> liste) {
+        Collections.sort(liste, new StageChainedComparateur(
+                new StagePrioriteComparateur(),
+                new StageNomComparateur(),
+                new StagePrenomComparateur()));
     }
 
     @Override
@@ -108,15 +98,15 @@ public class MainActivity extends AppCompatActivity {
      */
     private void creationRecyclerView() {
         recyclerView = findViewById(R.id.rv_eleves);
-        compteAdapter = new ListeCompteAdapter(this, listeComptes);
-        recyclerView.setAdapter(compteAdapter);
+        StageAdapter = new ListeStageAdapter(this, listeStages);
+        recyclerView.setAdapter(StageAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
 
-        compteAdapter.setOnItemClickListener(new ListeCompteAdapter.OnItemClickListener() {
+        StageAdapter.setOnItemClickListener(new ListeStageAdapter.OnItemClickListener() {
             @Override
             public void OnDrapeauClick(int position, ImageView favoriteView) {
-                changerPrioriteEleve(position);
+                //changerPrioriteEleve(position);
             }
 
             @Override
@@ -126,14 +116,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void changerPrioriteEleve(int positionEleve) {
-        int prioriteActuel = listeComptes.get(positionEleve).getPriorite().ordinal();
+   /* private void changerPrioriteEleve(int positionEleve) {
+        int prioriteActuel = listeStages.get(positionEleve).getPriorite().ordinal();
         int prochainePriorite = prioriteActuel++;
         Priorite[] priorites = Priorite.values();
         prochainePriorite %= priorites.length;
-        listeComptes.get(positionEleve).setPriorite(priorites[prochainePriorite]);
-        compteAdapter.notifyItemChanged(positionEleve);
-    }
+        listeStages.get(positionEleve).setPriorite(priorites[prochainePriorite]);
+        StageAdapter.notifyItemChanged(positionEleve);
+    }*/
+
 
     public void lancerActiviteAjoutEleve(View view) {
         Intent intent = new Intent(this, DemandeInfoEleve.class);
@@ -149,8 +140,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int removedItemIndex = viewHolder.getAdapterPosition();
-            listeComptes.remove(removedItemIndex);
-            compteAdapter.notifyItemRemoved(removedItemIndex);
+            listeStages.remove(removedItemIndex);
+            StageAdapter.notifyItemRemoved(removedItemIndex);
         }
     };
 }

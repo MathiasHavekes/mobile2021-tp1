@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -29,9 +30,11 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
      */
     private OnItemClickListener listener;
 
+    private Context context;
     public ListeStageAdapter(Context context, ArrayList<Stage> listeStages) {
         inflater = LayoutInflater.from(context);
         this.listeStages = listeStages;
+        this.context = context;
     }
 
     /**
@@ -53,6 +56,7 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
     @Override
     public void onBindViewHolder(@NonNull ListeStageHolder holder, int position) {
         Stage stage = listeStages.get(position);
+        holder.drapeauView.setColorFilter(ContextCompat.getColor(context, renvoyerCouleur(stage.getPriorite())));
         holder.nomEleveView.setText(stage.getEtudiant().getPrenom() + " " + stage.getEtudiant().getNom());
     }
 
@@ -74,20 +78,24 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
         void OnDrapeauClick(int position, ImageView favoriteView);
 
         /**
-         * Comportement lors d'un clique sur le nom
-         *
-         * @param position position dans le recyclerView de l'item
-         */
-        void onNomClick(int position);
-
-        /**
          * Comportement lors d'un clique sur l'image de l'élève
          *
          * @param position position dans le recyclerView de l'item
          */
         void OnImageEleveClick(int position);
     }
-
+    private int renvoyerCouleur(Priorite valeurPriorite) {
+        switch (valeurPriorite) {
+            case MINIMUM:
+                return R.color.green;
+            case MOYENNE:
+                return  R.color.yellow;
+            case MAXIMUM:
+                return R.color.red;
+            default:
+                return R.color.black;
+        }
+    }
     /**
      * Classe qui va afficher les views
      */
@@ -124,15 +132,6 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         listener.OnDrapeauClick(position, drapeauView);
-                    }
-                }
-            });
-
-            nomEleveView.setOnClickListener(view -> {
-                if (listener != null) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onNomClick(position);
                     }
                 }
             });

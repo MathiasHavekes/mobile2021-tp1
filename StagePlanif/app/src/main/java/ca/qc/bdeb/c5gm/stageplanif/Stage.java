@@ -24,12 +24,29 @@ public class Stage {
     /**
      * Drapeau du stage
      */
-    private Integer drapeau;
+    private Priorite priorite;
 
-    public Stage(String id, String anneeScolaire, Integer drapeau) {
+    public Stage(String id, String anneeScolaire, Priorite priorite) {
         this.id = id;
         this.anneeScolaire = anneeScolaire;
-        this.drapeau = drapeau;
+        this.priorite = priorite;
+    }
+
+    public Stage(String id, String anneeScolaire, Integer priorite) {
+        this.id = id;
+        this.anneeScolaire = anneeScolaire;
+        switch (priorite) {
+            case 1:
+                this.priorite = Priorite.MINIMUM;
+                break;
+            case 2:
+                this.priorite = Priorite.MOYENNE;
+                break;
+            case 4:
+                this.priorite = Priorite.MAXIMUM;
+                break;
+        }
+
     }
 
     /**
@@ -72,8 +89,8 @@ public class Stage {
         return professeur;
     }
 
-    public Integer getDrapeau() {
-        return drapeau;
+    public Priorite getPriorite() {
+        return priorite;
     }
 
     public String getId() {

@@ -211,7 +211,7 @@ public class Stockage extends SQLiteOpenHelper {
     private ArrayList<Stage> creerStages(ArrayList<Entreprise> entreprises, ArrayList<Compte> comptes) {
         ArrayList<Stage> listeStages = new ArrayList<>();
         for (int i = 0; i < comptes.size() - 1; i++) {
-            Stage stage = new Stage(UUID.randomUUID().toString(),"2021-2022", getDrapeauAleatoire());
+            Stage stage = new Stage(UUID.randomUUID().toString(),"2021-2022", Priorite.MINIMUM);
             stage.addEntreprise(entreprises.get(i));
             stage.addEtudiant(comptes.get(i));
             stage.addProfesseur(comptes.get(comptes.size() - 1));
@@ -224,11 +224,13 @@ public class Stockage extends SQLiteOpenHelper {
      * Méthode qui crée des valeurs de drapeau aléatoire
      * @return un chiffre soit 1, 2 ou 4
      */
-    public Integer getDrapeauAleatoire() {
-        Integer[] drapeaux = new Integer[] {1, 2, 4};
+    /*public Priorite getPrioriteAleatoire() {
         Random rand = new Random();
+        return
+        Integer[] drapeaux = new Integer[] {1, 2, 4};
+
         return drapeaux[rand.nextInt(drapeaux.length)];
-    }
+    }*/
 
     /**
      * Méthode qui ajoute les comptes à la base de données
@@ -280,7 +282,7 @@ public class Stockage extends SQLiteOpenHelper {
             values.put(StageHelper.STAGE_ETUDIANT_ID, stage.getEtudiant().getId()); // #tel du client
             values.put(StageHelper.STAGE_PROFESSEUR_ID, stage.getProfesseur().getId());
             values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, stage.getAnneeScolaire());
-            values.put(StageHelper.STAGE_DRAPEAU, stage.getDrapeau());
+            values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
             db.insert(StageHelper.NOM_TABLE, null, values);
         }
     }
