@@ -3,5 +3,15 @@
     <string name="msg_img_eleve">TODO</string>
     <string name="msg_img_drapeau">TODO</string>
     <string name="msg_bouton_ajout">TODO</string>
+    <string name="msg_bouton_filtre">TODO</string>
     <string name="msg_nom">Nom de l\'eleve</string>
+    <string name="msg_prenom">Prénom de l\'eleve</string>
+    <string name="title_activity_google_maps">GoogleMaps</string>
+    <string name="title_activity_add_student">activity_add_student</string>
+
+    <string name="btn_ajouter">Ajouter</string>
+
+    <string name="info_eleve">Élève</string>
+    <string name="entree_prenom">Prénom</string>
+    <string name="entree_nom">Nom de famille</string>
 </resources>

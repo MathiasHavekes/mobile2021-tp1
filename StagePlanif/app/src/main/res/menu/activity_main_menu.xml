@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/checkoutMap"
-        android:icon="@drawable/ic_baseline_map_24"
-        android:title="CheckoutMap"
-        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/checkoutList"
-        android:icon="@drawable/ic_baseline_view_list_24"
-        android:title="CheckoutList"
+        android:id="@+id/passer_sur_carte"
+        android:icon="@drawable/ic_baseline_map_24"
+        android:title="passerSurCarte"
         app:showAsAction="ifRoom" />
 </menu>
