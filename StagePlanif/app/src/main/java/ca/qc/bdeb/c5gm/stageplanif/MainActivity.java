@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<Compte> listeCompte = new ArrayList<>();
+    private ArrayList<Stage> listeStage = new ArrayList<>();
     private RecyclerView recyclerView;
-    private ListeCompteAdapter compteAdapter;
+    private ListeStageAdapter compteAdapter;
     private Toolbar toolbar;
     private Stockage dbHelper;
 
@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById((R.id.toolbar));
         setSupportActionBar(toolbar);
         dbHelper = Stockage.getInstance(getApplicationContext());
-        listeCompte = dbHelper.getComptes(TypeComptes.ELEVE);
+        listeStage = dbHelper.getStages();
         creationRecyclerView();
     }
 
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void creationRecyclerView() {
         recyclerView = findViewById(R.id.rv_eleves);
-        compteAdapter = new ListeCompteAdapter(this, listeCompte);
+        compteAdapter = new ListeStageAdapter(this, listeStage);
         recyclerView.setAdapter(compteAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

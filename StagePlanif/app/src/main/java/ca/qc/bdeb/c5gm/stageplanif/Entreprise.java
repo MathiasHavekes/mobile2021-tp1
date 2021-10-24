@@ -3,25 +3,33 @@ package ca.qc.bdeb.c5gm.stageplanif;
 import java.util.UUID;
 
 public class Entreprise {
+    /**
+     * ID de l'entreprise
+     */
     private final String id;
+    /**
+     * Nom de l'entreprise
+     */
     private final String nom;
+    /**
+     * Adresse de l'entreprise
+     */
     private final String adresse;
+    /**
+     * Ville de l'entreprise
+     */
     private final String ville;
+    /**
+     * Province de l'entreprise
+     */
     private final String province;
+    /**
+     * Code postal de l'entreprise
+     */
     private final String codePostal;
-
 
     public Entreprise(String id, String nom, String adresse, String ville, String province, String codePostal) {
         this.id = id;
-        this.nom = nom;
-        this.adresse = adresse;
-        this.ville = ville;
-        this.province = province;
-        this.codePostal = codePostal;
-    }
-
-    public Entreprise(String nom, String adresse, String ville, String province, String codePostal) {
-        this.id = UUID.randomUUID().toString();
         this.nom = nom;
         this.adresse = adresse;
         this.ville = ville;

@@ -1,43 +1,82 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
-import java.util.UUID;
-
 public class Stage {
-    private String id;
+    /**
+     * ID du stage
+     */
+    private final String id;
+    /**
+     * Entreprise de stage
+     */
     private Entreprise entreprise;
-    private Compte eleve;
-    private String anneeScolaire;
-    private Compte enseignant;
+    /**
+     * Etudiant du stage
+     */
+    private Compte etudiant;
+    /**
+     * Annee scolaire du stage
+     */
+    private final String anneeScolaire;
+    /**
+     * Professeur du stage
+     */
+    private Compte professeur;
+    /**
+     * Drapeau du stage
+     */
+    private Integer drapeau;
 
-    public Stage(Entreprise entreprise, Compte eleve, String anneeScolaire, Compte enseignant) {
-        this.id = UUID.randomUUID().toString();
-        this.entreprise = entreprise;
-        this.eleve = eleve;
+    public Stage(String id, String anneeScolaire, Integer drapeau) {
+        this.id = id;
         this.anneeScolaire = anneeScolaire;
-        this.enseignant = enseignant;
+        this.drapeau = drapeau;
     }
 
-    public Stage(String id, Entreprise entreprise, Compte eleve, String anneeScolaire, Compte enseignant) {
-        this.id = id;
+    /**
+     * Ajouter un etudiant au stage
+     * @param etudiant etudiant du stage
+     */
+    public void addEtudiant(Compte etudiant) {
+        this.etudiant = etudiant;
+    }
+
+    /**
+     * Professeur du stage
+     * @param professeur
+     */
+    public void addProfesseur(Compte professeur) {
+        this.professeur = professeur;
+    }
+
+    /**
+     * Entreprise du stage
+     * @param entreprise
+     */
+    public void addEntreprise(Entreprise entreprise) {
         this.entreprise = entreprise;
-        this.eleve = eleve;
-        this.anneeScolaire = anneeScolaire;
-        this.enseignant = enseignant;
     }
 
     public Entreprise getEntreprise() {
         return entreprise;
     }
 
-    public Compte getEleve() {
-        return eleve;
+    public Compte getEtudiant() {
+        return etudiant;
     }
 
     public String getAnneeScolaire() {
         return anneeScolaire;
     }
 
-    public Compte getEnseignant() {
-        return enseignant;
+    public Compte getProfesseur() {
+        return professeur;
+    }
+
+    public Integer getDrapeau() {
+        return drapeau;
+    }
+
+    public String getId() {
+        return id;
     }
 }

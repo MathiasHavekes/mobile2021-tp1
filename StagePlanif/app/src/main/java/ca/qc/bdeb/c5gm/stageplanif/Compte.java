@@ -114,4 +114,8 @@ public class Compte implements Parcelable {
             parcel.writeInt(typeCompte);
         }
     }
+
+    public Integer getId() {
+        return Id;
+    }
 }
