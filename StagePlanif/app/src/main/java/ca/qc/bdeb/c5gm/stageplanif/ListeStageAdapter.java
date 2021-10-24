@@ -15,11 +15,11 @@ import java.util.ArrayList;
 /**
  * Adapte la liste de compte pour le recycler view
  */
-public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.ListeCompteHolder> {
+public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.ListeStageHolder> {
     /**
      * La liste des comptes à adapter pour le recycler view
      */
-    private final ArrayList<Compte> listeCompte;
+    private final ArrayList<Stage> listeStages;
     /**
      * Un layout inflater
      */
@@ -29,9 +29,9 @@ public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.
      */
     private OnItemClickListener listener;
 
-    public ListeCompteAdapter(Context context, ArrayList<Compte> listeCompte) {
+    public ListeStageAdapter(Context context, ArrayList<Stage> listeStages) {
         inflater = LayoutInflater.from(context);
-        this.listeCompte = listeCompte;
+        this.listeStages = listeStages;
     }
 
     /**
@@ -45,20 +45,20 @@ public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.
 
     @NonNull
     @Override
-    public ListeCompteHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ListeStageHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = inflater.inflate(R.layout.student_list_item, parent, false);
-        return new ListeCompteHolder(itemView, this, listener);
+        return new ListeStageHolder(itemView, this, listener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListeCompteHolder holder, int position) {
-        Compte compte = listeCompte.get(position);
-        holder.nomEleveView.setText(compte.getPrenom() + " " + compte.getNom());
+    public void onBindViewHolder(@NonNull ListeStageHolder holder, int position) {
+        Stage stage = listeStages.get(position);
+        holder.nomEleveView.setText(stage.getEtudiant().getPrenom() + " " + stage.getEtudiant().getNom());
     }
 
     @Override
     public int getItemCount() {
-        return listeCompte.size();
+        return listeStages.size();
     }
 
     /**
@@ -91,7 +91,7 @@ public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.
     /**
      * Classe qui va afficher les views
      */
-    public class ListeCompteHolder extends RecyclerView.ViewHolder {
+    public class ListeStageHolder extends RecyclerView.ViewHolder {
         /**
          * TextView contenant le nom de l'élève
          */
@@ -107,9 +107,9 @@ public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.
         /**
          * L'adapteur de la liste de compte
          */
-        private final ListeCompteAdapter adapter;
+        private final ListeStageAdapter adapter;
 
-        public ListeCompteHolder(@NonNull View itemView, ListeCompteAdapter adapter, final OnItemClickListener listener) {
+        public ListeStageHolder(@NonNull View itemView, ListeStageAdapter adapter, final OnItemClickListener listener) {
             super(itemView);
             nomEleveView = itemView.findViewById(R.id.text_nom_eleve);
             drapeauView = itemView.findViewById(R.id.image_drapeau);

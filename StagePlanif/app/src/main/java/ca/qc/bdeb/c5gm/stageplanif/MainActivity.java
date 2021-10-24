@@ -13,10 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private final ArrayList<Compte> listeCompte = new ArrayList<>();
+    private ArrayList<Stage> listeStage = new ArrayList<>();
     private RecyclerView recyclerView;
-    private ListeCompteAdapter compteAdapter;
+    private ListeStageAdapter compteAdapter;
     private Toolbar toolbar;
+    private Stockage dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +25,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         toolbar = findViewById((R.id.toolbar));
         setSupportActionBar(toolbar);
-        //Donnees de test, a enlever
-        listeCompte.add(new Compte("Paquet", "Xavier", null, 1));
-        listeCompte.add(new Compte("Havekes", "Mathias", null, 1));
-        listeCompte.add(new Compte("Hadjeres", "Amar", null, 1));
+        dbHelper = Stockage.getInstance(getApplicationContext());
+        listeStage = dbHelper.getStages();
         creationRecyclerView();
     }
 
@@ -38,12 +37,18 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Stockage.getInstance(getApplicationContext()).close();
+    }
+
     /**
      * Cree le recycler view dans l'activitee
      */
     private void creationRecyclerView() {
         recyclerView = findViewById(R.id.rv_eleves);
-        compteAdapter = new ListeCompteAdapter(this, listeCompte);
+        compteAdapter = new ListeStageAdapter(this, listeStage);
         recyclerView.setAdapter(compteAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
