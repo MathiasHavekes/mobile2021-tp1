@@ -7,28 +7,4 @@
         android:icon="@drawable/ic_baseline_map_24"
         android:title="passerSurCarte"
         app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/afficher_menu_filtre"
-        android:icon="@drawable/ic_baseline_filter_alt_24"
-        android:title="afficherMenuFiltre"
-        app:showAsAction="ifRoom">
-        <menu>
-            <item
-                android:id="@+id/filtrer_par_rouge"
-                android:icon="@drawable/ic_baseline_flag_24"
-                android:title="filtrerParRouge"
-                app:showAsAction="ifRoom"/>
-            <item
-                android:id="@+id/filtrer_par_jaune"
-                android:icon="@drawable/ic_baseline_flag_24"
-                android:title="filtrerParJaune"
-                app:showAsAction="ifRoom"/>
-            <item
-                android:id="@+id/filtrer_par_vert"
-                android:icon="@drawable/ic_baseline_flag_24"
-                android:title="filtrerParVert"
-                app:showAsAction="ifRoom"/>
-        </menu>
-    </item>
 </menu>

@@ -18,71 +18,92 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btn_prendre_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:maxImageSize="16dp"
+                app:fabCustomSize="32dp"
+                app:srcCompat="@drawable/ic_baseline_camera_alt_24" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="124dp"
+                android:layout_height="124dp"
+                app:cardCornerRadius="62dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/image_eleve_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="TODO"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_launcher_foreground" />
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Spinner
+            android:id="@+id/nom_complet_entre_utilisateur"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/info_eleve"
-            android:textSize="25sp"
-            android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="32dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:weightSum="100"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="32dp"
-            >
-            <EditText
-                android:id="@+id/prenom_entree_utilisateur"
-                android:inputType="text"
-                android:maxLines="1"
-                android:hint="@string/entree_prenom"
-                android:layout_width="0dp"
-                android:layout_weight="50"
-                android:layout_height="wrap_content" />
-
-
-            <EditText
-                android:id="@+id/nom_entree_utilisateur"
-                android:inputType="text"
-                android:maxLines="1"
-                android:hint="@string/entree_nom"
-                android:layout_width="0dp"
-                android:layout_weight="50"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:weightSum="90"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="20dp"
             android:layout_marginHorizontal="32dp">
+        </Spinner>
 
-            <RadioButton android:id="@+id/radio_pirates"
-                android:drawableStart="@drawable/ic_baseline_flag_24"
-                android:drawableTint="@color/red"
-                android:layout_width="wrap_content"
-                android:layout_weight="30"
-                android:layout_height="wrap_content" />
-            <RadioButton android:id="@+id/radio_ninjas"
-                android:drawableStart="@drawable/ic_baseline_flag_24"
-                android:drawableTint="@color/yellow"
-                android:layout_width="wrap_content"
-                android:layout_weight="30"
-                android:layout_height="wrap_content" />
-            <RadioButton android:id="@+id/radio_ninjass"
-                android:drawableStart="@drawable/ic_baseline_flag_24"
-                android:drawableTint="@color/green"
-                android:layout_width="wrap_content"
-                android:layout_weight="30"
-                android:layout_height="wrap_content" />
-        </RadioGroup>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginHorizontal="32dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/drapeau_vert"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_baseline_flag_24"
+                    android:drawableTint="@color/green" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <RadioButton
+                    android:id="@+id/drapeau_jaune"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_baseline_flag_24"
+                    android:drawableTint="@color/yellow" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <RadioButton
+                    android:id="@+id/drapeau_rouge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_baseline_flag_24"
+                    android:drawableTint="@color/red" />
+            </RadioGroup>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,7 +116,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/btn_prochaine_page_demande_info"
+                android:text="@string/btn_ajouter"
                 />
         </LinearLayout>
     </LinearLayout>

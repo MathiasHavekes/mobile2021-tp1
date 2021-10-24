@@ -21,6 +21,8 @@ public class Compte {
      */
     private final Integer typeCompte;
 
+    private Priorite priorite;
+
     /**
      * Constructeur par défaut
      * @param nom Le nom du compte
@@ -28,11 +30,12 @@ public class Compte {
      * @param photo La photo du compte (a modifier)
      * @param typeCompte Le type de compte
      */
-    public Compte(String nom, String prenom, Byte[] photo, Integer typeCompte) {
+    public Compte(String nom, String prenom, Byte[] photo, Integer typeCompte, Priorite priorite) {
         this.nom = nom;
         this.prenom = prenom;
         this.photo = photo;
         this.typeCompte = typeCompte;
+        this.priorite = priorite;
     }
 
     public String getNom() {
@@ -47,8 +50,16 @@ public class Compte {
         return typeCompte;
     }
 
+    public Priorite getPriorite() {
+        return priorite;
+    }
+
     public Byte[] getPhoto() {
         return photo;
+    }
+
+    public void setPriorite(Priorite priorite) {
+        this.priorite = priorite;
     }
 
     public void setPhoto(Byte[] photo) {

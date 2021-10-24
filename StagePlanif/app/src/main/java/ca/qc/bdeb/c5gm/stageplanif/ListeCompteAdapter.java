@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -29,9 +30,12 @@ public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.
      */
     private OnItemClickListener listener;
 
+    private Context context;
+
     public ListeCompteAdapter(Context context, ArrayList<Compte> listeCompte) {
         inflater = LayoutInflater.from(context);
         this.listeCompte = listeCompte;
+        this.context = context;
     }
 
     /**
@@ -53,7 +57,22 @@ public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.
     @Override
     public void onBindViewHolder(@NonNull ListeCompteHolder holder, int position) {
         Compte compte = listeCompte.get(position);
-        holder.nomEleveView.setText(compte.getPrenom() + " " + compte.getNom());
+        holder.nomEleveView.setText(compte.getNom());
+        holder.prenomEleveView.setText(compte.getPrenom());
+        holder.drapeauView.setColorFilter(ContextCompat.getColor(context, renvoyerCouleur(compte.getPriorite())));
+    }
+
+    private int renvoyerCouleur(Priorite valeurPriorite) {
+        switch (valeurPriorite) {
+            case MINIMUM:
+                return R.color.green;
+            case MOYENNE:
+                return  R.color.yellow;
+            case MAXIMUM:
+                return R.color.red;
+            default:
+                return R.color.black;
+        }
     }
 
     @Override
@@ -74,13 +93,6 @@ public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.
         void OnDrapeauClick(int position, ImageView favoriteView);
 
         /**
-         * Comportement lors d'un clique sur le nom
-         *
-         * @param position position dans le recyclerView de l'item
-         */
-        void onNomClick(int position);
-
-        /**
          * Comportement lors d'un clique sur l'image de l'élève
          *
          * @param position position dans le recyclerView de l'item
@@ -96,6 +108,8 @@ public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.
          * TextView contenant le nom de l'élève
          */
         private final TextView nomEleveView;
+
+        private final TextView prenomEleveView;
         /**
          * ImageView contenant le drapeau
          */
@@ -112,6 +126,7 @@ public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.
         public ListeCompteHolder(@NonNull View itemView, ListeCompteAdapter adapter, final OnItemClickListener listener) {
             super(itemView);
             nomEleveView = itemView.findViewById(R.id.text_nom_eleve);
+            prenomEleveView = itemView.findViewById(R.id.text_prenom_eleve);
             drapeauView = itemView.findViewById(R.id.image_drapeau);
             imageEleveView = itemView.findViewById(R.id.image_eleve);
             this.adapter = adapter;
@@ -124,15 +139,6 @@ public class ListeCompteAdapter extends RecyclerView.Adapter<ListeCompteAdapter.
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         listener.OnDrapeauClick(position, drapeauView);
-                    }
-                }
-            });
-
-            nomEleveView.setOnClickListener(view -> {
-                if (listener != null) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onNomClick(position);
                     }
                 }
             });
