@@ -37,6 +37,7 @@
 
         <activity
             android:name=".DemandeInfoEleve"
+            android:configChanges="orientation|screenSize"
             android:exported="true" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -52,11 +53,13 @@
 
         <activity
             android:name=".GoogleMaps"
+            android:configChanges="orientation|screenSize"
             android:exported="true"
             android:label="@string/title_activity_google_maps"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation|screenSize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

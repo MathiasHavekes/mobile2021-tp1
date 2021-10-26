@@ -1,6 +1,7 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +60,11 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
         holder.drapeauView.setColorFilter(ContextCompat.getColor(context, Utils.renvoyerCouleur(stage.getPriorite())));
         holder.nomEleveView.setText(stage.getEtudiant().getNom());
         holder.prenomEleveView.setText(stage.getEtudiant().getPrenom());
+        holder.imageEleveView.setImageResource(R.drawable.ic_baseline_person_24);
+        if (stage.getEtudiant().getPhoto() != null) {
+            Bitmap photoBitmap = Utils.getImage(stage.getEtudiant().getPhoto());
+            holder.imageEleveView.setImageBitmap(photoBitmap);
+        }
     }
 
     @Override

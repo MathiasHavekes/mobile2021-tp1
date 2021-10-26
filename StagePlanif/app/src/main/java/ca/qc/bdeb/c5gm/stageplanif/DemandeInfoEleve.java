@@ -13,6 +13,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -35,7 +38,6 @@ public class DemandeInfoEleve extends AppCompatActivity implements AdapterView.O
     private ImageView imageView;
     private FloatingActionButton btnPrendrePhoto ;
     private Spinner spinnerNom;
-    private final Integer DEMANDE_CAPTURE_IMAGE = 1;
     private Stockage dbHelper;
     private ArrayList<Compte> comptes = new ArrayList<>();
     private String lienPhotoActuel;
@@ -50,13 +52,13 @@ public class DemandeInfoEleve extends AppCompatActivity implements AdapterView.O
         btnPrendrePhoto = findViewById(R.id.btn_prendre_photo);
         spinnerNom = findViewById(R.id.nom_complet_entre_utilisateur);
         btnPrendrePhoto.setOnClickListener(prendrePhotoOnClickListener);
-        comptes = dbHelper.getEtudiantsSansStage();
+        comptes = dbHelper.getComptes();
         String[] arraySpinner = new String[comptes.size()];
         for (int i = 0; i < comptes.size(); i++) {
             Compte compte = comptes.get(i);
             arraySpinner[i] = compte.getPrenom() + " " + compte.getNom();
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, arraySpinner);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerNom.setAdapter(adapter);
@@ -99,13 +101,15 @@ public class DemandeInfoEleve extends AppCompatActivity implements AdapterView.O
                 }
             });
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == DEMANDE_CAPTURE_IMAGE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageBitmap);
+    public void ajouterStage(View view) {
+        int position = spinnerNom.getSelectedItemPosition();
+        Compte compteSelection = comptes.get(position);
+        Drawable drawable = imageView.getDrawable();
+        if(drawable.getClass() == BitmapDrawable.class){
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+            byte[] photoBytes = Utils.getBytes(bitmap);
+            compteSelection.setPhoto(photoBytes);
+            dbHelper.changerPhotoCompte(compteSelection);
         }
     }
 
@@ -145,25 +149,22 @@ public class DemandeInfoEleve extends AppCompatActivity implements AdapterView.O
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(lienPhotoActuel, bmOptions);
         imageView.setImageBitmap(bitmap);
     }
 
-
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        Compte compteSelection = comptes.get(i);
+        /*compteSelection = comptes.get(i);
         Stage stageTrouve;
         ArrayList<Stage> stages = StockageConnu.getStages();
         for (Stage stage: stages) {
             if (compteSelection.getId() == stage.getEtudiant().getId()) {
                 stageTrouve = stage;
-
                 break;
             }
-        }
+        }*/
     }
 
     @Override

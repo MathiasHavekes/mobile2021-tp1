@@ -113,11 +113,13 @@
             android:layout_marginTop="20dp"
             android:layout_marginHorizontal="32dp"
             >
+
             <Button
+                android:id="@+id/btn_ajouter_stage"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/btn_ajouter"
-                />
+                android:onClick="ajouterStage"
+                android:text="@string/btn_ajouter" />
         </LinearLayout>
     </LinearLayout>
 
