@@ -5,12 +5,32 @@
     android:layout_height="wrap_content"
     android:paddingVertical="5dp">
 
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/image_eleve_wrapper"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:layout_marginHorizontal="24dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:cardCornerRadius="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/image_eleve"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="TODO"
+                android:scaleType="center"
+                android:src="@drawable/ic_launcher_foreground" />
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
         android:layout_marginHorizontal="24dp"
         app:cardCornerRadius="30dp">
 
@@ -27,9 +47,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/image_eleve_wrapper"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="70dp"
-        android:orientation="vertical">
+        android:layout_marginLeft="75dp"
+        android:layout_centerVertical="true">
 
         <TextView
             android:id="@+id/text_nom_eleve"

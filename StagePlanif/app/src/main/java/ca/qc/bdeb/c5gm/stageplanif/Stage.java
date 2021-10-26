@@ -1,6 +1,9 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
-public class Stage {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Stage implements Parcelable {
     /**
      * ID du stage
      */
@@ -31,6 +34,27 @@ public class Stage {
         this.anneeScolaire = anneeScolaire;
         this.priorite = priorite;
     }
+
+    protected Stage(Parcel in) {
+        id = in.readString();
+        etudiant = in.readParcelable(Compte.class.getClassLoader());
+        anneeScolaire = in.readString();
+        professeur = in.readParcelable(Compte.class.getClassLoader());
+        entreprise = in.readParcelable(Compte.class.getClassLoader());
+        priorite = in.readParcelable(Compte.class.getClassLoader());
+    }
+
+    public static final Creator<Stage> CREATOR = new Creator<Stage>() {
+        @Override
+        public Stage createFromParcel(Parcel in) {
+            return new Stage(in);
+        }
+
+        @Override
+        public Stage[] newArray(int size) {
+            return new Stage[size];
+        }
+    };
 
     /**
      * Ajouter un etudiant au stage
@@ -80,6 +104,21 @@ public class Stage {
         return id;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeParcelable(etudiant, i);
+        parcel.writeString(anneeScolaire);
+        parcel.writeParcelable(professeur, i);
+        parcel.writeParcelable(entreprise, i);
+        parcel.writeParcelable(priorite, i);
+    }
+  
     public void setPriorite(Priorite priorite) {
         this.priorite = priorite;
     }

@@ -1,11 +1,13 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public enum Priorite {
+public enum Priorite implements Parcelable{
     MINIMUM(1),
     MOYENNE(2),
     MAXIMUM(4);
@@ -20,10 +22,31 @@ public enum Priorite {
         this.valeur = valeur;
     }
 
+
+    public static final Creator<Priorite> CREATOR = new Creator<Priorite>() {
+        @Override
+        public Priorite createFromParcel(Parcel in) {
+            return Priorite.values()[in.readInt()];
+        }
+
+        @Override
+        public Priorite[] newArray(int size) {
+            return new Priorite[size];
+        }
+    };
+
     public int getValeur() {
         return valeur;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(ordinal());
     /**
      * Cree une priorite aleatoire
      * @return une priorite

@@ -36,7 +36,7 @@ public class MenuSelectionPriorite extends Fragment {
         drapeauVert.setOnClickListener(drapeauVertOnClickListener);
         drapeauJaune.setOnClickListener(drapeauJauneOnClickListener);
         drapeauRouge.setOnClickListener(drapeauRougeOnClickListener);
-        selection = 0;
+        selection = VALEUR_DRAPEAU_VERT + VALEUR_DRAPEAU_JAUNE + VALEUR_DRAPEAU_ROUGE;
     }
 
     private final View.OnClickListener drapeauVertOnClickListener = new View.OnClickListener() {

@@ -1,8 +1,9 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
-import java.util.UUID;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Entreprise {
+public class Entreprise implements Parcelable {
     /**
      * ID de l'entreprise
      */
@@ -37,6 +38,27 @@ public class Entreprise {
         this.codePostal = codePostal;
     }
 
+    protected Entreprise(Parcel in) {
+        id = in.readString();
+        nom = in.readString();
+        adresse = in.readString();
+        ville = in.readString();
+        province = in.readString();
+        codePostal = in.readString();
+    }
+
+    public static final Creator<Entreprise> CREATOR = new Creator<Entreprise>() {
+        @Override
+        public Entreprise createFromParcel(Parcel in) {
+            return new Entreprise(in);
+        }
+
+        @Override
+        public Entreprise[] newArray(int size) {
+            return new Entreprise[size];
+        }
+    };
+
     public String getId() {
         return id;
     }
@@ -59,5 +81,20 @@ public class Entreprise {
 
     public String getCp() {
         return codePostal;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(nom);
+        parcel.writeString(adresse);
+        parcel.writeString(ville);
+        parcel.writeString(province);
+        parcel.writeString(codePostal);
     }
 }
