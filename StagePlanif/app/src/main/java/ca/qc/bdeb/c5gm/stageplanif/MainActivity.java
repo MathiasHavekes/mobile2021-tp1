@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private ListeStageAdapter StageAdapter;
     private Toolbar toolbar;
     private ItemViewModel viewModel;
+    private ArrayList<Integer> selectionPriorites = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
             listeStages.addAll(listeStagesMasques);
             listeStagesMasques.clear();
             trierListeStage(listeStages);
-            ArrayList<Integer> ListePrioritesSelectionnees = calculerPrioritesSelectionnees(selection);
-            filtrerListeCompte(ListePrioritesSelectionnees);
+            selectionPriorites = calculerPrioritesSelectionnees(selection);
+            filtrerListeStage(selectionPriorites);
         });
 
         creationRecyclerView();
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         return ListePrioritesSelectionnees;
     }
 
-    private void filtrerListeCompte(ArrayList<Integer> ListePrioritesSelectionnees) {
+    private void filtrerListeStage(ArrayList<Integer> ListePrioritesSelectionnees) {
         for (Stage s : listeStages) {
             if (!ListePrioritesSelectionnees.contains(s.getPriorite().getValeur())) {
                 listeStagesMasques.add(s);
@@ -105,8 +107,9 @@ public class MainActivity extends AppCompatActivity {
 
         StageAdapter.setOnItemClickListener(new ListeStageAdapter.OnItemClickListener() {
             @Override
-            public void OnDrapeauClick(int position, ImageView favoriteView) {
-                //changerPrioriteEleve(position);
+            public void OnDrapeauClick(int position, ImageView DrapeauView) {
+                changerPrioriteStage(position, DrapeauView);
+                StageAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -116,17 +119,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-   /* private void changerPrioriteEleve(int positionEleve) {
-        int prioriteActuel = listeStages.get(positionEleve).getPriorite().ordinal();
-        int prochainePriorite = prioriteActuel++;
+    private void changerPrioriteStage(int positionStage, ImageView drapeauView) {
+        Stage stage = listeStages.get(positionStage);
+        int prioriteActuel = stage.getPriorite().ordinal();
+        int prochainePriorite = prioriteActuel + 1;
         Priorite[] priorites = Priorite.values();
         prochainePriorite %= priorites.length;
-        listeStages.get(positionEleve).setPriorite(priorites[prochainePriorite]);
-        StageAdapter.notifyItemChanged(positionEleve);
-    }*/
+        stage.setPriorite(priorites[prochainePriorite]);
+        int couleur = ListeStageAdapter.renvoyerCouleur(stage.getPriorite());
+        drapeauView.setColorFilter(ContextCompat.getColor(this.getApplicationContext(), couleur));
+        StageAdapter.notifyItemChanged(positionStage);
+        dbHelper.changerPrioriteStage(stage);
+    }
 
 
-    public void lancerActiviteAjoutEleve(View view) {
+    public void lancerActiviteAjoutStage(View view) {
         Intent intent = new Intent(this, DemandeInfoEleve.class);
         startActivity(intent);
     }
@@ -140,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             int removedItemIndex = viewHolder.getAdapterPosition();
+            dbHelper.deleteStage(listeStages.get(removedItemIndex));
             listeStages.remove(removedItemIndex);
             StageAdapter.notifyItemRemoved(removedItemIndex);
         }

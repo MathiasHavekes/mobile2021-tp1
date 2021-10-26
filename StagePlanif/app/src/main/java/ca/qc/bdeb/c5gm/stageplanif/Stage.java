@@ -32,23 +32,6 @@ public class Stage {
         this.priorite = priorite;
     }
 
-    public Stage(String id, String anneeScolaire, Integer priorite) {
-        this.id = id;
-        this.anneeScolaire = anneeScolaire;
-        switch (priorite) {
-            case 1:
-                this.priorite = Priorite.MINIMUM;
-                break;
-            case 2:
-                this.priorite = Priorite.MOYENNE;
-                break;
-            case 4:
-                this.priorite = Priorite.MAXIMUM;
-                break;
-        }
-
-    }
-
     /**
      * Ajouter un etudiant au stage
      * @param etudiant etudiant du stage
@@ -95,5 +78,9 @@ public class Stage {
 
     public String getId() {
         return id;
+    }
+
+    public void setPriorite(Priorite priorite) {
+        this.priorite = priorite;
     }
 }

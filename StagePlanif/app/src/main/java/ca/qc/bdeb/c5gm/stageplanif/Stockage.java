@@ -20,7 +20,7 @@ public class Stockage extends SQLiteOpenHelper {
     /**
      * numéro actuel de version de BD
      */
-    public static final int DB_VERSION = 3;
+    public static final int DB_VERSION = 1;
     private Context context;
     /**
      * L’unique instance de DbHelper possible
@@ -170,6 +170,7 @@ public class Stockage extends SQLiteOpenHelper {
         listeCompte.add(new Compte(9,"Vargas", "Diego", null, 2));
         listeCompte.add(new Compte(10,"Tremblay", "Geneviève", null, 2));
         listeCompte.add(new Compte(11,"Prades", "Pierre", null, 1));
+        listeCompte.add(new Compte(12,"Paquet-Rapold", "Xavier", null, 2));
         return listeCompte;
     }
 
@@ -210,27 +211,15 @@ public class Stockage extends SQLiteOpenHelper {
      */
     private ArrayList<Stage> creerStages(ArrayList<Entreprise> entreprises, ArrayList<Compte> comptes) {
         ArrayList<Stage> listeStages = new ArrayList<>();
-        for (int i = 0; i < comptes.size() - 1; i++) {
-            Stage stage = new Stage(UUID.randomUUID().toString(),"2021-2022", Priorite.MINIMUM);
+        for (int i = 0; i < comptes.size() - 2; i++) {
+            Stage stage = new Stage(UUID.randomUUID().toString(),"2021-2022", Priorite.randomPriorite());
             stage.addEntreprise(entreprises.get(i));
             stage.addEtudiant(comptes.get(i));
-            stage.addProfesseur(comptes.get(comptes.size() - 1));
+            stage.addProfesseur(comptes.get(comptes.size() - 2));
             listeStages.add(stage);
         }
         return listeStages;
     }
-
-    /**
-     * Méthode qui crée des valeurs de drapeau aléatoire
-     * @return un chiffre soit 1, 2 ou 4
-     */
-    /*public Priorite getPrioriteAleatoire() {
-        Random rand = new Random();
-        return
-        Integer[] drapeaux = new Integer[] {1, 2, 4};
-
-        return drapeaux[rand.nextInt(drapeaux.length)];
-    }*/
 
     /**
      * Méthode qui ajoute les comptes à la base de données
@@ -320,6 +309,40 @@ public class Stockage extends SQLiteOpenHelper {
     }
 
     /**
+     * Recevoir la liste des comptes dans la base de données
+     * @param type type de compte voulu
+     * @return la liste des comptes dans la base de données
+     */
+    public ArrayList<Compte> getComptes(Integer type){
+        SQLiteDatabase db = this.getReadableDatabase(); // On veut lire dans la BD
+        ArrayList<Compte> comptes = new ArrayList<>();
+        // les colonnes retournées par la requête:
+        String[] colonnes = {
+                CompteHelper._ID,
+                CompteHelper.COMPTE_NOM,
+                CompteHelper.COMPTE_PRENOM,
+                CompteHelper.COMPTE_PHOTO,
+                CompteHelper.COMPTE_TYPE_COMPTE
+        };
+        String selection = CompteHelper.COMPTE_TYPE_COMPTE + " = ?";
+        String[] selectionArgs = {String.valueOf(type)};
+        String orderBy = CompteHelper.COMPTE_NOM + " ASC, " + CompteHelper.COMPTE_PRENOM + " ASC";
+        Cursor cursor = db.query(CompteHelper.NOM_TABLE, colonnes, selection, selectionArgs, null, null, orderBy, null);
+        if (cursor != null){
+            cursor.moveToFirst();
+            do {
+                comptes.add(new Compte(cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getBlob(3),
+                        cursor.getInt(4)));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return comptes;
+    }
+
+    /**
      * Recevoir un compte de la base de données en fonction de l'ID
      * @param id l'id du compte
      * @return le compte correspondant à l'id
@@ -334,8 +357,9 @@ public class Stockage extends SQLiteOpenHelper {
                 CompteHelper.COMPTE_PHOTO,
                 CompteHelper.COMPTE_TYPE_COMPTE
         };
-        String selection = CompteHelper._ID + " = " + id;
-        Cursor cursor = db.query(CompteHelper.NOM_TABLE, colonnes, selection, null, null, null, null, null);
+        String selection = CompteHelper._ID + " = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+        Cursor cursor = db.query(CompteHelper.NOM_TABLE, colonnes, selection, selectionArgs, null, null, null, null);
         Compte compte = null;
         if (cursor != null){
             cursor.moveToFirst();
@@ -347,6 +371,28 @@ public class Stockage extends SQLiteOpenHelper {
             cursor.close();
         }
         return compte;
+    }
+
+    public ArrayList<Compte> getEtudiantsSansStage(){
+        ArrayList<Compte> comptes = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase(); // On veut lire dans la BD
+        String query = String.format("SELECT t1.%s, %s, %s, %s, %s FROM %s t1 LEFT JOIN %s t2 ON t2.%s = t1.%s WHERE t2.%s IS NULL AND t1.%s = 2",
+                CompteHelper._ID, CompteHelper.COMPTE_NOM, CompteHelper.COMPTE_PRENOM, CompteHelper.COMPTE_PHOTO,
+                CompteHelper.COMPTE_TYPE_COMPTE, CompteHelper.NOM_TABLE, StageHelper.NOM_TABLE,
+                StageHelper.STAGE_ETUDIANT_ID, CompteHelper._ID, StageHelper.STAGE_ETUDIANT_ID, CompteHelper.COMPTE_TYPE_COMPTE);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null && cursor.getCount() > 0){
+            cursor.moveToFirst();
+            do {
+                comptes.add(new Compte(cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getBlob(3),
+                        cursor.getInt(4)));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return comptes;
     }
 
     /**
@@ -397,8 +443,9 @@ public class Stockage extends SQLiteOpenHelper {
                 EntrepriseHelper.ENTREPRISE_PROVINCE,
                 EntrepriseHelper.ENTREPRISE_CP
         };
-        String selection = EntrepriseHelper._ID + " = \"" + id + "\"";
-        Cursor cursor = db.query(EntrepriseHelper.NOM_TABLE, colonnes, selection, null, null, null, null, null);
+        String selection = EntrepriseHelper._ID + " = ?";
+        String[] selectionArgs = {id};
+        Cursor cursor = db.query(EntrepriseHelper.NOM_TABLE, colonnes, selection, selectionArgs, null, null, null, null);
         Entreprise entreprise = null;
         if (cursor != null){
             cursor.moveToFirst();
@@ -438,7 +485,7 @@ public class Stockage extends SQLiteOpenHelper {
             cursor.moveToFirst();
             do {
                 //Crée un nouveau stage
-                Stage stage = new Stage(cursor.getString(0), cursor.getString(1), cursor.getInt(2));
+                Stage stage = new Stage(cursor.getString(0), cursor.getString(1), Priorite.getPriorite(cursor.getInt(2)));
                 //Verifie si le professeur a ete cree et le cree s'il ne l'a pas ete
                 if(professeur == null) {
                     professeur = getCompte(cursor.getInt(4));
@@ -462,6 +509,24 @@ public class Stockage extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
             cursor.close();
         }
+        StockageConnu.setStages(stages);
         return stages;
+    }
+
+    public boolean changerPrioriteStage(Stage stage) {
+        SQLiteDatabase db= this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
+        String whereClause= StageHelper._ID+ " = ?";
+        String[] whereArgs= {stage.getId()};
+        int nbMAJ= db.update(StageHelper.NOM_TABLE, values, whereClause, whereArgs);
+        return (nbMAJ> 0);
+    }
+
+    public void deleteStage(Stage stage) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String whereClause = StageHelper._ID + " = ?";
+        String[] whereArgs = {String.valueOf(stage.getId())};
+        db.delete(StageHelper.NOM_TABLE, whereClause, whereArgs);
     }
 }
