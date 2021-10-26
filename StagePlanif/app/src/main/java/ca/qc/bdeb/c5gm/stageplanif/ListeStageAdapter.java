@@ -17,6 +17,8 @@ import java.util.ArrayList;
  * Adapte la liste de compte pour le recycler view
  */
 public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.ListeStageHolder> {
+    private final String TYPE_COULEUR = "RGB";
+
     /**
      * La liste des comptes à adapter pour le recycler view
      */
@@ -56,7 +58,7 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
     @Override
     public void onBindViewHolder(@NonNull ListeStageHolder holder, int position) {
         Stage stage = listeStages.get(position);
-        holder.drapeauView.setColorFilter(ContextCompat.getColor(context, renvoyerCouleur(stage.getPriorite())));
+        holder.drapeauView.setColorFilter(ContextCompat.getColor(context, Utils.renvoyerCouleur(stage.getPriorite())));
         holder.nomEleveView.setText(stage.getEtudiant().getPrenom() + " " + stage.getEtudiant().getNom());
     }
 
@@ -83,19 +85,15 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
          * @param position position dans le recyclerView de l'item
          */
         void OnImageEleveClick(int position);
+
+        /**
+         * Comportement lors d'un clique sur le profile du recylcerview d'un élève
+         *
+         * @param position position dans le recyclerView de l'item
+         */
+        void OnItemViewClick(int position);
     }
-    private int renvoyerCouleur(Priorite valeurPriorite) {
-        switch (valeurPriorite) {
-            case MINIMUM:
-                return R.color.green;
-            case MOYENNE:
-                return  R.color.yellow;
-            case MAXIMUM:
-                return R.color.red;
-            default:
-                return R.color.black;
-        }
-    }
+
     /**
      * Classe qui va afficher les views
      */
@@ -141,6 +139,15 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         listener.OnImageEleveClick(position);
+                    }
+                }
+            });
+
+            itemView.setOnClickListener(view -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.OnItemViewClick(position);
                     }
                 }
             });

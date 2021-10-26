@@ -21,11 +21,11 @@
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/drawable/menu_selection_priorite_border.xml" value="0.2546875" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout-w936dp/activity_add_student.xml" value="0.25" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/activity_add_student.xml" value="0.33" />
-        <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/activity_demande_info_eleve.xml" value="0.33" />
+        <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/activity_demande_info_eleve.xml" value="0.8640483383685801" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/activity_demande_info_entreprise.xml" value="0.33967391304347827" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/activity_demande_info_stage.xml" value="0.33697916666666666" />
-        <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/activity_google_maps.xml" value="0.14175257731958762" />
-        <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/activity_main.xml" value="0.9" />
+        <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/activity_google_maps.xml" value="0.25" />
+        <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/app_toolbar.xml" value="0.29846014492753625" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/fragment_first.xml" value="0.3496376811594203" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/fragment_menu_selection_priorite.xml" value="0.3188405797101449" />
@@ -33,7 +33,7 @@
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/fragment_second.xml" value="0.3496376811594203" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/menu_filtre.xml" value="0.25" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/menu_selection_priorite.xml" value="0.33" />
-        <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/student_list_item.xml" value="0.22" />
+        <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/student_list_item.xml" value="0.5" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/switch_item.xml" value="0.3625" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/menu/activity_add_student_menu.xml" value="0.190625" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/menu/activity_google_map_menu.xml" value="0.3625" />

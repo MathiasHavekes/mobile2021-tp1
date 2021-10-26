@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:drawableStart="@drawable/ic_baseline_flag_24"
-        android:drawableTint="@color/green" />
+        android:drawableTint="@color/green"
+        android:checked="true"/>
 
     <CheckBox
         android:id="@+id/drapeau_jaune"
@@ -21,7 +22,8 @@
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_baseline_flag_24"
         android:drawableTint="@color/yellow"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true"
+        android:checked="true"/>
 
     <CheckBox
         android:id="@+id/drapeau_rouge"
@@ -29,5 +31,6 @@
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_baseline_flag_24"
         android:drawableTint="@color/red"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:checked="true"/>
 </RelativeLayout>

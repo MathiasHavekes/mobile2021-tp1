@@ -16,13 +16,15 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
+    private FloatingActionButton btnAjouterEleve;
     private Stockage dbHelper;
-    private ArrayList<Stage> listeStages = new ArrayList<>();
-    private final ArrayList<Stage> listeStagesMasques = new ArrayList<>();
+    private ArrayList<Stage> listeStages;
+    private ArrayList<Stage> listeStagesMasques;
     private RecyclerView recyclerView;
     private ListeStageAdapter StageAdapter;
     private Toolbar toolbar;
@@ -33,57 +35,57 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById((R.id.toolbar));
+        btnAjouterEleve = findViewById(R.id.btn_ajouter_eleve);
         setSupportActionBar(toolbar);
         dbHelper = Stockage.getInstance(getApplicationContext());
         listeStages = dbHelper.getStages();
-        viewModel = new ViewModelProvider(this).get(ItemViewModel.class);
-        viewModel.getSelectedItem().observe(this, selection -> {
-            listeStages.addAll(listeStagesMasques);
-            listeStagesMasques.clear();
-            trierListeStage(listeStages);
-            ArrayList<Integer> ListePrioritesSelectionnees = calculerPrioritesSelectionnees(selection);
-            filtrerListeCompte(ListePrioritesSelectionnees);
-        });
+        listeStagesMasques = new ArrayList<>();
+
+        creationViewModel();
 
         creationRecyclerView();
+        mettreAJourlisteStages();
+        btnAjouterEleve.setOnClickListener(ajouterEleveOnClickListener);
     }
 
-    private ArrayList<Integer> calculerPrioritesSelectionnees(int selection) {
-        ArrayList<Integer> ListePrioritesSelectionnees = new ArrayList<Integer>();
-
-        for (Priorite p : Priorite.values()) {
-            if ((selection & p.getValeur()) > 0) {
-                ListePrioritesSelectionnees.add(p.getValeur());
-            }
-        }
-        return ListePrioritesSelectionnees;
+    private void creationViewModel() {
+        viewModel = new ViewModelProvider(this).get(ItemViewModel.class);
+        viewModel.getSelectedItem().observe(this, selection -> {
+            mettreAJourlisteStages(selection);
+            StageAdapter.notifyDataSetChanged();
+        });
     }
 
-    private void filtrerListeCompte(ArrayList<Integer> ListePrioritesSelectionnees) {
-        for (Stage s : listeStages) {
-            if (!ListePrioritesSelectionnees.contains(s.getPriorite().getValeur())) {
-                listeStagesMasques.add(s);
-            }
-        }
-        listeStages.removeAll(listeStagesMasques);
+    private void mettreAJourlisteStages() {
+        listeStages = Utils.trierListeStages(listeStages, new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
         StageAdapter.notifyDataSetChanged();
     }
 
-    private void trierListeStage(ArrayList<Stage> liste) {
-        Collections.sort(liste, new StageChainedComparateur(
-                new StagePrioriteComparateur(),
-                new StageNomComparateur(),
-                new StagePrenomComparateur()));
+    private void mettreAJourlisteStages(int selection) {
+        listeStages.addAll(listeStagesMasques);
+        listeStagesMasques.clear();
+
+        ArrayList<Integer> listePrioritesSelectionnees = Utils.calculerPrioritesSelectionnees(selection);
+        listeStagesMasques = Utils.filtrerListeStages(listePrioritesSelectionnees, listeStages);
+        listeStages.removeAll(listeStagesMasques);
+        listeStages = Utils.trierListeStages(listeStages, new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
+        StageAdapter.notifyDataSetChanged();
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.passer_sur_carte) {
-            Intent intent = new Intent(this, GoogleMaps.class);
-            startActivity(intent);
+            startGoogleMapActivity();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startGoogleMapActivity() {
+        listeStages.addAll(listeStagesMasques);
+        Intent intent = new Intent(this, GoogleMaps.class);
+        intent.putParcelableArrayListExtra("liste_des_stages", listeStages);
+        startActivity(intent);
     }
 
     @Override
@@ -106,27 +108,29 @@ public class MainActivity extends AppCompatActivity {
         StageAdapter.setOnItemClickListener(new ListeStageAdapter.OnItemClickListener() {
             @Override
             public void OnDrapeauClick(int position, ImageView favoriteView) {
-                //changerPrioriteEleve(position);
+
             }
 
             @Override
             public void OnImageEleveClick(int position) {
 
             }
+
+            @Override
+            public void OnItemViewClick(int position) {
+
+            }
         });
     }
 
-   /* private void changerPrioriteEleve(int positionEleve) {
-        int prioriteActuel = listeStages.get(positionEleve).getPriorite().ordinal();
-        int prochainePriorite = prioriteActuel++;
-        Priorite[] priorites = Priorite.values();
-        prochainePriorite %= priorites.length;
-        listeStages.get(positionEleve).setPriorite(priorites[prochainePriorite]);
-        StageAdapter.notifyItemChanged(positionEleve);
-    }*/
+    private final View.OnClickListener ajouterEleveOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            lancerActiviteAjoutEleve();
+        }
+    };
 
-
-    public void lancerActiviteAjoutEleve(View view) {
+    public void lancerActiviteAjoutEleve() {
         Intent intent = new Intent(this, DemandeInfoEleve.class);
         startActivity(intent);
     }
