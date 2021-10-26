@@ -17,8 +17,6 @@ import java.util.ArrayList;
  * Adapte la liste de compte pour le recycler view
  */
 public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.ListeStageHolder> {
-    private final String TYPE_COULEUR = "RGB";
-
     /**
      * La liste des comptes à adapter pour le recycler view
      */

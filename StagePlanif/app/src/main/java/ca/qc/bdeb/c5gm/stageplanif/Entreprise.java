@@ -28,6 +28,10 @@ public class Entreprise implements Parcelable {
      * Code postal de l'entreprise
      */
     private final String codePostal;
+    /**
+     * Les coordonnées GPS de l'entreprise
+     */
+    private double[] latLng;
 
     public Entreprise(String id, String nom, String adresse, String ville, String province, String codePostal) {
         this.id = id;
@@ -45,6 +49,7 @@ public class Entreprise implements Parcelable {
         ville = in.readString();
         province = in.readString();
         codePostal = in.readString();
+        latLng = in.createDoubleArray();
     }
 
     public static final Creator<Entreprise> CREATOR = new Creator<Entreprise>() {
@@ -83,6 +88,14 @@ public class Entreprise implements Parcelable {
         return codePostal;
     }
 
+    public double[] getLatLng() {
+        return latLng;
+    }
+
+    public void setLatLng(double[] latLng) {
+        this.latLng = latLng;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -96,5 +109,6 @@ public class Entreprise implements Parcelable {
         parcel.writeString(ville);
         parcel.writeString(province);
         parcel.writeString(codePostal);
+        parcel.writeDoubleArray(latLng);
     }
 }

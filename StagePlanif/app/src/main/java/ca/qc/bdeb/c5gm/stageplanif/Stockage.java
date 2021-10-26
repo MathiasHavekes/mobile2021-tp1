@@ -9,7 +9,6 @@ import android.provider.BaseColumns;
 
 import java.text.Normalizer;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.UUID;
 
 public class Stockage extends SQLiteOpenHelper {
@@ -20,7 +19,7 @@ public class Stockage extends SQLiteOpenHelper {
     /**
      * numéro actuel de version de BD
      */
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 3;
     private Context context;
     /**
      * L’unique instance de DbHelper possible

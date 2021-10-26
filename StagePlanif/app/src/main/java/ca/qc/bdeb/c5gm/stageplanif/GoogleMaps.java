@@ -103,30 +103,38 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        activerLaGeoLocatisation();
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
+        activerLaGeoLocatisation();
+        setCoordonneesEntreprise();
         placerMarqueurs();
     }
 
     public void placerMarqueurs() {
         mMap.clear();
         for (Stage s : listeStages) {
-            Address adresseTrouvee = trouverAdresse(s.getEntreprise().getAdresse(), s.getEntreprise().getVille(), s.getEntreprise().getProvince(), s.getEntreprise().getCp());
-            MarkerOptions marqueur = creerMarqueur(adresseTrouvee, s.getPriorite());
+            MarkerOptions marqueur = creerMarqueur(s.getEntreprise().getLatLng(), s.getPriorite(), s.getEntreprise().getNom());
             mMap.addMarker(marqueur);
         }
     }
 
-    private Address trouverAdresse(String adresse, String ville, String province, String codePostale) {
-        StringBuilder adresseComplete = new StringBuilder();
-        adresseComplete.append(adresse + ", " + ville + ", " + province + " " + codePostale);
+    private void setCoordonneesEntreprise() {
+        for (Stage s : listeStages) {
+            StringBuilder adresseComplete = new StringBuilder();
+            adresseComplete.append(s.getEntreprise().getAdresse() + ", " + s.getEntreprise().getVille() + ", " + s.getEntreprise().getProvince() + " " + s.getEntreprise().getCp());
 
+            double[] coordonneesTrouvees = trouverAdressesParGeoCoding(adresseComplete.toString());
+            s.getEntreprise().setLatLng(coordonneesTrouvees);
+        }
+    }
+
+    private double[] trouverAdressesParGeoCoding(String adresse) {
         try {
-            List<Address> listeAdresses = geocoder.getFromLocationName(adresseComplete.toString(), 1);
+            List<Address> listeAdresses = geocoder.getFromLocationName(adresse, 1);
             if (listeAdresses.size() > 0) {
                 Address adresseTrouvee = listeAdresses.get(0);
-                return  adresseTrouvee;
+                double[] coordonnees = {adresseTrouvee.getLatitude(), adresseTrouvee.getLongitude()};
+                return  coordonnees;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -134,11 +142,11 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
         return null;
     }
 
-    private MarkerOptions creerMarqueur(Address adresse, Priorite priorite) {
-        LatLng coordonneesAdresse = new LatLng(adresse.getLatitude(), adresse.getLongitude());
+    private MarkerOptions creerMarqueur(double[] latLng, Priorite priorite, String nomEntreprise) {
+        LatLng coordonneesAdresse = new LatLng(latLng[0], latLng[1]);
         MarkerOptions marqueur = new MarkerOptions();
         marqueur.position(coordonneesAdresse);
-        marqueur.title(adresse.getLocality());
+        marqueur.title(nomEntreprise);
         marqueur.icon(BitmapDescriptorFactory.defaultMarker(renvoyerCouleur(priorite)));
         return marqueur;
     }
