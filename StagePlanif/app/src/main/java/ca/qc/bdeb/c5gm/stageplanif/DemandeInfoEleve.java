@@ -1,12 +1,18 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,7 +38,7 @@ public class DemandeInfoEleve extends AppCompatActivity implements AdapterView.O
     private final Integer DEMANDE_CAPTURE_IMAGE = 1;
     private Stockage dbHelper;
     private ArrayList<Compte> comptes = new ArrayList<>();
-    private String currentPhotoPath;
+    private String lienPhotoActuel;
 
 
     @Override
@@ -65,7 +71,7 @@ public class DemandeInfoEleve extends AppCompatActivity implements AdapterView.O
 
     private void envoyerPrendrePhotoIntent() {
         Intent prendrePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //if (prendrePhotoIntent.resolveActivity(getPackageManager()) != null) {
+        if(prendrePhotoIntent.resolveActivity(getPackageManager()) != null) {
             File fichierPhoto = null;
             try {
                 fichierPhoto = creerFichierImage();
@@ -73,14 +79,25 @@ public class DemandeInfoEleve extends AppCompatActivity implements AdapterView.O
                 // display error state to the user
             }
             if (fichierPhoto != null) {
+                lienPhotoActuel = fichierPhoto.getAbsolutePath();
                 Uri photoURI = FileProvider.getUriForFile(this,
-                        "ca.qc.bdeb.c5gm.stageplanif.photos",
-                        fichierPhoto);
+                        "ca.qc.bdeb.c5gm.stageplanif", fichierPhoto);
                 prendrePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(prendrePhotoIntent, DEMANDE_CAPTURE_IMAGE);
+                envoyerPrendrePhotoIntentLauncher.launch(prendrePhotoIntent);
             }
-        //}
+        }
     }
+
+    ActivityResultLauncher<Intent> envoyerPrendrePhotoIntentLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        setPic();
+                    }
+                }
+            });
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -107,6 +124,33 @@ public class DemandeInfoEleve extends AppCompatActivity implements AdapterView.O
         String currentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
+    private void setPic() {
+        // Get the dimensions of the View
+        int targetW = imageView.getWidth();
+        int targetH = imageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+
+        BitmapFactory.decodeFile(lienPhotoActuel, bmOptions);
+
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(lienPhotoActuel, bmOptions);
+        imageView.setImageBitmap(bitmap);
+    }
+
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
