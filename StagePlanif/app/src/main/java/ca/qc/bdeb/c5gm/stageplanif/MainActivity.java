@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     private final View.OnClickListener ajouterEleveOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            lancerActiviteAjoutEleve();
+            lancerActiviteAjoutStage(view);
         }
     };
   
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         Priorite[] priorites = Priorite.values();
         prochainePriorite %= priorites.length;
         stage.setPriorite(priorites[prochainePriorite]);
-        int couleur = ListeStageAdapter.renvoyerCouleur(stage.getPriorite());
+        int couleur = Utils.renvoyerCouleur(stage.getPriorite());
         drapeauView.setColorFilter(ContextCompat.getColor(this.getApplicationContext(), couleur));
         StageAdapter.notifyItemChanged(positionStage);
         dbHelper.changerPrioriteStage(stage);

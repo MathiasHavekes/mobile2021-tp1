@@ -47,6 +47,8 @@ public enum Priorite implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(ordinal());
+    }
+
     /**
      * Cree une priorite aleatoire
      * @return une priorite
