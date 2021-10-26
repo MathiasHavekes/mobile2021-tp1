@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void lancerActiviteAjoutStage(View view) {
-        Intent intent = new Intent(this, DemandeInfoEleve.class);
+        Intent intent = new Intent(this, DemandeInfoStage.class);
         startActivity(intent);
     }
 
