@@ -59,7 +59,8 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
     public void onBindViewHolder(@NonNull ListeStageHolder holder, int position) {
         Stage stage = listeStages.get(position);
         holder.drapeauView.setColorFilter(ContextCompat.getColor(context, Utils.renvoyerCouleur(stage.getPriorite())));
-        holder.nomEleveView.setText(stage.getEtudiant().getPrenom() + " " + stage.getEtudiant().getNom());
+        holder.nomEleveView.setText(stage.getEtudiant().getNom());
+        holder.prenomEleveView.setText(stage.getEtudiant().getPrenom());
     }
 
     @Override
@@ -93,7 +94,7 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
          */
         void OnItemViewClick(int position);
     }
-
+  
     /**
      * Classe qui va afficher les views
      */
@@ -102,6 +103,10 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
          * TextView contenant le nom de l'élève
          */
         private final TextView nomEleveView;
+        /**
+         * Texte contenant le prenom de l'eleve
+         */
+        private final TextView prenomEleveView;
         /**
          * ImageView contenant le drapeau
          */
@@ -120,6 +125,7 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
             nomEleveView = itemView.findViewById(R.id.text_nom_eleve);
             drapeauView = itemView.findViewById(R.id.image_drapeau);
             imageEleveView = itemView.findViewById(R.id.image_eleve);
+            prenomEleveView = itemView.findViewById(R.id.text_prenom_eleve);
             this.adapter = adapter;
             setListeners(listener);
         }

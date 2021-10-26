@@ -68,8 +68,8 @@
             <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginHorizontal="32dp"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -82,7 +82,7 @@
                 <Space
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <RadioButton
                     android:id="@+id/drapeau_jaune"
@@ -94,7 +94,7 @@
                 <Space
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <RadioButton
                     android:id="@+id/drapeau_rouge"

@@ -35,23 +35,6 @@ public class Stage implements Parcelable {
         this.priorite = priorite;
     }
 
-    public Stage(String id, String anneeScolaire, Integer priorite) {
-        this.id = id;
-        this.anneeScolaire = anneeScolaire;
-        switch (priorite) {
-            case 1:
-                this.priorite = Priorite.MINIMUM;
-                break;
-            case 2:
-                this.priorite = Priorite.MOYENNE;
-                break;
-            case 4:
-                this.priorite = Priorite.MAXIMUM;
-                break;
-        }
-
-    }
-
     protected Stage(Parcel in) {
         id = in.readString();
         etudiant = in.readParcelable(Compte.class.getClassLoader());
@@ -134,5 +117,9 @@ public class Stage implements Parcelable {
         parcel.writeParcelable(professeur, i);
         parcel.writeParcelable(entreprise, i);
         parcel.writeParcelable(priorite, i);
+    }
+  
+    public void setPriorite(Priorite priorite) {
+        this.priorite = priorite;
     }
 }
