@@ -102,5 +102,4 @@
                 android:drawableTint="@color/red" />
         </RadioGroup>
     </RelativeLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

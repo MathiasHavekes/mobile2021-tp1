@@ -24,14 +24,21 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         android:name="ca.qc.bdeb.c5gm.stageplanif.MenuSelectionPriorite"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_eleves"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_menu_selection_priorite" />
+        app:layout_constraintTop_toBottomOf="@+id/fragment_menu_selection_priorite">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_eleves"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_ajouter_eleve"

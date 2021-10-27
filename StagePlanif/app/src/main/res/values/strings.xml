@@ -21,6 +21,4 @@
     <string name="ville_entreprise">Ville</string>
     <string name="code_postale_entreprise">Code Postale</string>
     <string name="province_entreprise">Province</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

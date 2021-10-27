@@ -16,12 +16,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    private SwipeRefreshLayout swipeRefreshLayout;
     private FloatingActionButton btnAjouterEleve;
     private Stockage dbHelper;
     private ArrayList<Stage> listeStages;
@@ -31,12 +33,14 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private SelectionViewModel viewModel;
     private ArrayList<Integer> selectionPriorites = new ArrayList<>();
+    private int selection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById((R.id.toolbar));
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         btnAjouterEleve = findViewById(R.id.btn_ajouter_eleve);
         setSupportActionBar(toolbar);
         dbHelper = Stockage.getInstance(getApplicationContext());
@@ -44,15 +48,27 @@ public class MainActivity extends AppCompatActivity {
         listeStagesMasques = new ArrayList<>();
 
         creationViewModel();
-
+        creationSwipeRefreshLayout();
         creationRecyclerView();
         mettreAJourlisteStages();
         btnAjouterEleve.setOnClickListener(ajouterEleveOnClickListener);
     }
 
+    private void creationSwipeRefreshLayout() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mettreAJourlisteStages(selection);
+                StageAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
     private void creationViewModel() {
         viewModel = new ViewModelProvider(this).get(SelectionViewModel.class);
         viewModel.getSelectedItem().observe(this, selection -> {
+            this.selection = selection;
             mettreAJourlisteStages(selection);
             StageAdapter.notifyDataSetChanged();
         });

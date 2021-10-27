@@ -16,15 +16,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -40,6 +44,7 @@ import java.util.Date;
 public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSelectedListener {
     private ImageView imageView;
     private FloatingActionButton btnPrendrePhoto ;
+    private Button btnSuivant;
     private Spinner spinnerNom;
     private RadioGroup radioPriorite;
     private Stockage dbHelper;
@@ -67,6 +72,7 @@ public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSele
         View view = inflater.inflate(R.layout.fragment_demande_info_eleve, container, false);
         imageView = view.findViewById(R.id.image_eleve_profile);
         btnPrendrePhoto = view.findViewById(R.id.btn_prendre_photo);
+        btnSuivant = view.findViewById(R.id.btn_suivant);
         spinnerNom = view.findViewById(R.id.nom_complet_entre_utilisateur);
         radioPriorite = view.findViewById(R.id.radio_group_drapeau);
         radioPriorite.setOnCheckedChangeListener(radioGroupOnClickListener);
@@ -95,6 +101,7 @@ public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSele
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider(requireActivity()).get(InfoStageViewModel.class);
         btnPrendrePhoto.setOnClickListener(prendrePhotoOnClickListener);
         spinnerNom.setOnItemSelectedListener(this);
         viewModel = new ViewModelProvider(requireActivity()).get(InfoStageViewModel.class);
@@ -187,6 +194,7 @@ public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSele
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(lienPhotoActuel, bmOptions);
         viewModel.setImage(bitmap);
