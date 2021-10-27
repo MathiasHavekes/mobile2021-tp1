@@ -21,4 +21,12 @@
     <string name="ville_entreprise">Ville</string>
     <string name="code_postale_entreprise">Code Postale</string>
     <string name="province_entreprise">Province</string>
+
+    <string name="titre_avertissement">Avertissement</string>
+    <string name="titre_erreur">Erreur</string>
+    <string name="message_erreur">Veuillez remplir tous les champs</string>
+    <string name="message_avertissement">Voulez-vous annuler les modifications apportes ?</string>
+    <string name="btn_ok">ok</string>
+    <string name="message_oui">Oui</string>
+    <string name="annuler_message">Annuler</string>
 </resources>

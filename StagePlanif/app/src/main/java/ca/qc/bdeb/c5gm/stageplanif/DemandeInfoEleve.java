@@ -43,7 +43,7 @@ import java.util.Date;
 
 public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSelectedListener {
     private ImageView imageView;
-    private FloatingActionButton btnPrendrePhoto ;
+    private FloatingActionButton btnPrendrePhoto;
     private Button btnSuivant;
     private Spinner spinnerNom;
     private RadioGroup radioPriorite;
