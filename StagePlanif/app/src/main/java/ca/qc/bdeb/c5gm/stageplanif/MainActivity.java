@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -136,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void OnDrapeauClick(int position, ImageView DrapeauView) {
                 changerPrioriteStage(position, DrapeauView);
-                StageAdapter.notifyDataSetChanged();
+                StageAdapter.notifyItemChanged(position);
             }
 
             @Override
@@ -145,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void OnItemViewClick(int position) {
-
+            public void OnItemViewClick(View view, int position) {
+                lancerActiviteAjoutStage(view, listeStages.get(position));
             }
         });
     }
@@ -177,6 +178,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void lancerActiviteAjoutStage(View view, Stage stage) {
+        Intent intent = new Intent(this, DemandeInfoStage.class);
+        intent.putExtra("stage", stage);
+        startActivity(intent);
+    }
+
     ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -191,4 +198,5 @@ public class MainActivity extends AppCompatActivity {
             StageAdapter.notifyItemRemoved(removedItemIndex);
         }
     };
+
 }

@@ -96,7 +96,7 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
          *
          * @param position position dans le recyclerView de l'item
          */
-        void OnItemViewClick(int position);
+        void OnItemViewClick(View view, int position);
     }
   
     /**
@@ -157,7 +157,7 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
                 if (listener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        listener.OnItemViewClick(position);
+                        listener.OnItemViewClick(view, position);
                     }
                 }
             });

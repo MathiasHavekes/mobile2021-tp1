@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
@@ -28,13 +29,20 @@ public class DemandeInfoStage extends AppCompatActivity {
     private Bitmap photo;
     private Entreprise entreprise;
     private Compte eleve;
+    private Stage stage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_demande_info_stage);
+        Intent intent = getIntent();
 
+        if (intent.hasExtra("stage")) {
+            stage = intent.getParcelableExtra("stage");
+        } else {
+            // Do something else
+        }
         demandeInfoFragment = findViewById(R.id.fragment_demande_info);
         Fragment fragment = new DemandeInfoEleve();
         changerFragment(fragment);
