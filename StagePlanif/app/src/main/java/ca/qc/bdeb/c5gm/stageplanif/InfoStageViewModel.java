@@ -10,6 +10,7 @@ public class InfoStageViewModel extends ViewModel {
     private final MutableLiveData<Priorite> priorite = new MutableLiveData<>();
     private final MutableLiveData<Bitmap> photo = new MutableLiveData<>();
     private final MutableLiveData<Compte> compte = new MutableLiveData<>();
+    private final MutableLiveData<Entreprise> entreprise = new MutableLiveData<>();
 
     public void setPriorite(Priorite selection) {
         priorite.setValue(selection);
@@ -23,6 +24,10 @@ public class InfoStageViewModel extends ViewModel {
         this.compte.setValue(compte);
     }
 
+    public void setEntreprise(Entreprise entreprise) {
+        this.entreprise.setValue(entreprise);
+    }
+
     public LiveData<Priorite> getPriorite() {
         return priorite;
     }
@@ -33,5 +38,8 @@ public class InfoStageViewModel extends ViewModel {
 
     public LiveData<Compte> getCompte() {
         return compte;
+    }
+    public LiveData<Entreprise> getEntreprise() {
+        return entreprise;
     }
 }

@@ -44,7 +44,6 @@ import java.util.Date;
 public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSelectedListener {
     private ImageView imageView;
     private FloatingActionButton btnPrendrePhoto;
-    private Button btnSuivant;
     private Spinner spinnerNom;
     private RadioGroup radioPriorite;
     private Stockage dbHelper;
@@ -72,7 +71,6 @@ public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSele
         View view = inflater.inflate(R.layout.fragment_demande_info_eleve, container, false);
         imageView = view.findViewById(R.id.image_eleve_profile);
         btnPrendrePhoto = view.findViewById(R.id.btn_prendre_photo);
-        btnSuivant = view.findViewById(R.id.btn_suivant);
         spinnerNom = view.findViewById(R.id.nom_complet_entre_utilisateur);
         radioPriorite = view.findViewById(R.id.radio_group_drapeau);
         radioPriorite.setOnCheckedChangeListener(radioGroupOnClickListener);
@@ -104,7 +102,6 @@ public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSele
         viewModel = new ViewModelProvider(requireActivity()).get(InfoStageViewModel.class);
         btnPrendrePhoto.setOnClickListener(prendrePhotoOnClickListener);
         spinnerNom.setOnItemSelectedListener(this);
-        viewModel = new ViewModelProvider(requireActivity()).get(InfoStageViewModel.class);
     }
 
     private final RadioGroup.OnCheckedChangeListener radioGroupOnClickListener = new RadioGroup.OnCheckedChangeListener() {

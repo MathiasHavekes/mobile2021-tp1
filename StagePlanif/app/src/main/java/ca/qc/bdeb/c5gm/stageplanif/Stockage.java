@@ -411,7 +411,8 @@ public class Stockage extends SQLiteOpenHelper {
                 EntrepriseHelper.ENTREPRISE_PROVINCE,
                 EntrepriseHelper.ENTREPRISE_CP
         };
-        Cursor cursor = db.query(EntrepriseHelper.NOM_TABLE, colonnes, null, null, null, null, null, null);
+        String orderBy = EntrepriseHelper.ENTREPRISE_NOM + " ASC";
+        Cursor cursor = db.query(EntrepriseHelper.NOM_TABLE, colonnes, null, null, null, null, orderBy, null);
         if (cursor != null){
             cursor.moveToFirst();
             do {
@@ -538,5 +539,17 @@ public class Stockage extends SQLiteOpenHelper {
         String whereClause = StageHelper._ID + " = ?";
         String[] whereArgs = {String.valueOf(stage.getId())};
         db.delete(StageHelper.NOM_TABLE, whereClause, whereArgs);
+    }
+
+    public void createStage(Stage stage) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(StageHelper._ID, stage.getId());
+        values.put(StageHelper.STAGE_ENTREPRISE_ID, stage.getEntreprise().getId()); // Nom du client
+        values.put(StageHelper.STAGE_ETUDIANT_ID, stage.getEtudiant().getId()); // #tel du client
+        values.put(StageHelper.STAGE_PROFESSEUR_ID, stage.getProfesseur().getId());
+        values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, stage.getAnneeScolaire());
+        values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
+        db.insert(StageHelper.NOM_TABLE, null, values);
     }
 }

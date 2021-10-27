@@ -15,6 +15,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 public class DemandeInfoStage extends AppCompatActivity {
     private FragmentContainerView demandeInfoFragment;
     private Button boutonSuivant;
@@ -23,7 +26,8 @@ public class DemandeInfoStage extends AppCompatActivity {
     private Context context;
     private Priorite priorite;
     private Bitmap photo;
-    private Compte compte;
+    private Entreprise entreprise;
+    private Compte eleve;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +77,13 @@ public class DemandeInfoStage extends AppCompatActivity {
             this.priorite = priorite;
         });
         viewModel.getCompte().observe(this, compte -> {
-            this.compte = compte;
+            this.eleve = compte;
         });
         viewModel.getPhoto().observe(this, photo -> {
             this.photo = photo;
+        });
+        viewModel.getEntreprise().observe(this, entreprise -> {
+            this.entreprise = entreprise;
         });
     }
 
@@ -91,7 +98,7 @@ public class DemandeInfoStage extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if (boutonSuivant.getText() == getResources().getString(R.string.btn_suivant)) {
-                if (priorite == null || compte == null) {
+                if (priorite == null || eleve == null) {
                     AlertDialog alertDialog = new AlertDialog.Builder(context).create();
                     alertDialog.setTitle(R.string.titre_erreur);
                     alertDialog.setMessage(getString(R.string.message_erreur));
@@ -109,7 +116,18 @@ public class DemandeInfoStage extends AppCompatActivity {
                 Fragment fragment = new DemandeInfoEntreprise();
                 changerFragment(fragment);
             } else if (boutonSuivant.getText() == getResources().getString(R.string.btn_terminer)) {
-
+                Stockage dbHelper = Stockage.getInstance(context);
+                ArrayList<Compte> professeurs = dbHelper.getComptes(1);
+                Stage stage = new Stage(UUID.randomUUID().toString(), "2021-2022", priorite);
+                if(photo != null) {
+                    eleve.setPhoto(Utils.getBytes(photo));
+                }
+                stage.addEntreprise(entreprise);
+                stage.addEtudiant(eleve);
+                stage.addProfesseur(professeurs.get(0));
+                dbHelper.createStage(stage);
+                dbHelper.changerPhotoCompte(eleve);
+                finish();
             }
         }
     };

@@ -54,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
         btnAjouterEleve.setOnClickListener(ajouterEleveOnClickListener);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        listeStages = dbHelper.getStages();
+        creationRecyclerView();
+        mettreAJourlisteStages();
+        StageAdapter.notifyDataSetChanged();
+    }
+
     private void creationSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

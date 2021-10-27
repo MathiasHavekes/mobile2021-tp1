@@ -7,7 +7,7 @@
     tools:context=".DemandeInfoEntreprise">
 
     <Spinner
-        android:id="@+id/nom_entreprise_entre_utilisateur"
+        android:id="@+id/spinner_entreprise"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/adresse_entreprise_entre_utilisateur"
+        android:id="@+id/text_adresse"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
@@ -27,10 +27,10 @@
         android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nom_entreprise_entre_utilisateur" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_entreprise" />
 
     <EditText
-        android:id="@+id/ville_entreprise_entre_utilisateur"
+        android:id="@+id/texte_ville"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
@@ -41,10 +41,10 @@
         android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/adresse_entreprise_entre_utilisateur" />
+        app:layout_constraintTop_toBottomOf="@+id/text_adresse" />
 
     <EditText
-        android:id="@+id/code_postale_entreprise_entre_utilisateur"
+        android:id="@+id/text_cp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
@@ -55,10 +55,10 @@
         android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ville_entreprise_entre_utilisateur" />
+        app:layout_constraintTop_toBottomOf="@+id/texte_ville" />
 
     <EditText
-        android:id="@+id/province_entreprise_entre_utilisateur"
+        android:id="@+id/text_province"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
@@ -69,5 +69,5 @@
         android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/code_postale_entreprise_entre_utilisateur" />
+        app:layout_constraintTop_toBottomOf="@+id/text_cp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
