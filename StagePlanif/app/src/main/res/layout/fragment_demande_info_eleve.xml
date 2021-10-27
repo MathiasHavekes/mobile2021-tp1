@@ -65,6 +65,7 @@
         android:layout_marginTop="32dp">
 
         <RadioGroup
+            android:id="@+id/radio_group_drapeau"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -101,20 +102,5 @@
                 android:drawableTint="@color/red" />
         </RadioGroup>
     </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginVertical="32dp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <Button
-            android:id="@+id/btn_suivant"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_suivant" />
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

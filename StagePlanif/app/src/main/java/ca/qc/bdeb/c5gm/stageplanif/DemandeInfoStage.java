@@ -17,7 +17,7 @@ public class DemandeInfoStage extends AppCompatActivity {
         setContentView(R.layout.activity_demande_info_stage);
 
         demandeInfoFragment = findViewById(R.id.fragment_demande_info);
-        Fragment fragment = DemandeInfoEleve.newInstance(demandeInfoFragment.getId());
+        Fragment fragment = new DemandeInfoEleve();
 
         FragmentManager fragmentManger = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManger.beginTransaction();

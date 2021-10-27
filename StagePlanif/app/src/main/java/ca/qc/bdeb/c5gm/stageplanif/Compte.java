@@ -40,21 +40,6 @@ public class Compte implements Parcelable {
         this.typeCompte = typeCompte;
     }
 
-    /**
-     * Constructeur par défaut
-     * @param nom Le nom du compte
-     * @param prenom Le prénom du compte
-     * @param photo La photo du compte (a modifier)
-     * @param typeCompte Le type de compte
-     */
-    public Compte(String nom, String prenom, byte[] photo, Integer typeCompte) {
-        this.Id = null;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.photo = photo;
-        this.typeCompte = typeCompte;
-    }
-
     protected Compte(Parcel in) {
         nom = in.readString();
         prenom = in.readString();

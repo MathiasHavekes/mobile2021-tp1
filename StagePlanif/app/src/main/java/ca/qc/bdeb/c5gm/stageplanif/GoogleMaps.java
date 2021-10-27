@@ -41,7 +41,7 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
     private Geocoder geocoder;
     private ActivityGoogleMapsBinding binding;
     private Toolbar toolbar;
-    private ItemViewModel viewModel;
+    private SelectionViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,7 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
     }
 
     private void creationViewModel() {
-        viewModel = new ViewModelProvider(this).get(ItemViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SelectionViewModel.class);
         viewModel.getSelectedItem().observe(this, selection -> {
             mettreAJourlisteStages(selection);
             placerMarqueurs();

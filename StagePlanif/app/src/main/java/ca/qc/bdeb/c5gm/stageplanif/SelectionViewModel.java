@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ItemViewModel extends ViewModel {
+public class SelectionViewModel extends ViewModel {
     private final MutableLiveData<Integer> selectedItem = new MutableLiveData<Integer>();
 
     public void selectItem(Integer selection) {

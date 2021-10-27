@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ListeStageAdapter StageAdapter;
     private Toolbar toolbar;
-    private ItemViewModel viewModel;
+    private SelectionViewModel viewModel;
     private ArrayList<Integer> selectionPriorites = new ArrayList<>();
 
     @Override
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void creationViewModel() {
-        viewModel = new ViewModelProvider(this).get(ItemViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SelectionViewModel.class);
         viewModel.getSelectedItem().observe(this, selection -> {
             mettreAJourlisteStages(selection);
             StageAdapter.notifyDataSetChanged();

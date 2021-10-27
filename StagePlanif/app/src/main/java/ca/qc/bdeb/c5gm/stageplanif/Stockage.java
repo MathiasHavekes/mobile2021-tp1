@@ -170,6 +170,7 @@ public class Stockage extends SQLiteOpenHelper {
         listeCompte.add(new Compte(10,"Tremblay", "Geneviève", null, 2));
         listeCompte.add(new Compte(11,"Prades", "Pierre", null, 1));
         listeCompte.add(new Compte(12,"Paquet-Rapold", "Xavier", null, 2));
+        listeCompte.add(new Compte(13,"Charlebois", "Robert", null, 2));
         return listeCompte;
     }
 
@@ -210,11 +211,11 @@ public class Stockage extends SQLiteOpenHelper {
      */
     private ArrayList<Stage> creerStages(ArrayList<Entreprise> entreprises, ArrayList<Compte> comptes) {
         ArrayList<Stage> listeStages = new ArrayList<>();
-        for (int i = 0; i < comptes.size() - 2; i++) {
+        for (int i = 0; i < comptes.size() - 3; i++) {
             Stage stage = new Stage(UUID.randomUUID().toString(),"2021-2022", Priorite.randomPriorite());
             stage.addEntreprise(entreprises.get(i));
             stage.addEtudiant(comptes.get(i));
-            stage.addProfesseur(comptes.get(comptes.size() - 2));
+            stage.addProfesseur(comptes.get(comptes.size() - 3));
             listeStages.add(stage);
         }
         return listeStages;
@@ -519,6 +520,16 @@ public class Stockage extends SQLiteOpenHelper {
         String whereClause= StageHelper._ID+ " = ?";
         String[] whereArgs= {stage.getId()};
         int nbMAJ= db.update(StageHelper.NOM_TABLE, values, whereClause, whereArgs);
+        return (nbMAJ> 0);
+    }
+
+    public boolean changerPhotoCompte(Compte compte) {
+        SQLiteDatabase db= this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(CompteHelper.COMPTE_PHOTO, compte.getPhoto());
+        String whereClause= CompteHelper._ID+ " = ?";
+        String[] whereArgs= {String.valueOf(compte.getId())};
+        int nbMAJ= db.update(CompteHelper.NOM_TABLE, values, whereClause, whereArgs);
         return (nbMAJ> 0);
     }
 

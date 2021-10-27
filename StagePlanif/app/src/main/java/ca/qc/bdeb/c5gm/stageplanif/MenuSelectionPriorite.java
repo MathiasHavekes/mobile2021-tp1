@@ -18,7 +18,7 @@ public class MenuSelectionPriorite extends Fragment {
     private final int VALEUR_DRAPEAU_ROUGE = Priorite.MAXIMUM.getValeur();
     private CheckBox drapeauVert, drapeauJaune, drapeauRouge;
     private int selection;
-    private ItemViewModel viewModel;
+    private SelectionViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class MenuSelectionPriorite extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(SelectionViewModel.class);
         drapeauVert.setOnClickListener(drapeauVertOnClickListener);
         drapeauJaune.setOnClickListener(drapeauJauneOnClickListener);
         drapeauRouge.setOnClickListener(drapeauRougeOnClickListener);

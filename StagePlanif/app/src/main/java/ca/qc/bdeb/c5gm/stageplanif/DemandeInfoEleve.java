@@ -16,19 +16,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,34 +37,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class DemandeInfoEleve extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-
-    private int fragmnentARemplacer;
-
+public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSelectedListener {
     private ImageView imageView;
     private FloatingActionButton btnPrendrePhoto ;
-    private Button btnSuivant;
     private Spinner spinnerNom;
+    private RadioGroup radioPriorite;
     private Stockage dbHelper;
     private ArrayList<Compte> comptes = new ArrayList<>();
     private String lienPhotoActuel;
-    private ItemViewModel viewModel;
-
-    public static DemandeInfoEleve newInstance(int fragmnentARemplacer) {
-        DemandeInfoEleve fragment = new DemandeInfoEleve();
-        Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, fragmnentARemplacer);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private InfoStageViewModel viewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            fragmnentARemplacer = getArguments().getInt(ARG_PARAM1);
-        }
         dbHelper = Stockage.getInstance(getActivity().getApplicationContext());
         comptes = dbHelper.getEtudiantsSansStage();
     }
@@ -77,30 +61,24 @@ public class DemandeInfoEleve extends Fragment {
         }
     };
 
-    private final View.OnClickListener passerFragmentSuivantOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            passerFragmentSuivant();
-        }
-    };
-
-    private void passerFragmentSuivant() {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(fragmnentARemplacer, new DemandeInfoEntreprise());
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_demande_info_eleve, container, false);
         imageView = view.findViewById(R.id.image_eleve_profile);
         btnPrendrePhoto = view.findViewById(R.id.btn_prendre_photo);
-        btnSuivant = view.findViewById(R.id.btn_suivant);
         spinnerNom = view.findViewById(R.id.nom_complet_entre_utilisateur);
-
+        radioPriorite = view.findViewById(R.id.radio_group_drapeau);
+        radioPriorite.setOnCheckedChangeListener(radioGroupOnClickListener);
+        if (comptes.size() > 0) {
+            Compte compte = comptes.get(0);
+            if (compte.getPhoto() != null) {
+                Bitmap photoBitmap = Utils.getImage(compte.getPhoto());
+                imageView.setImageBitmap(photoBitmap);
+            } else {
+                imageView.setImageResource(R.drawable.ic_baseline_person_24);
+            }
+        }
         String[] arraySpinner = new String[comptes.size()];
         for (int i = 0; i < comptes.size(); i++) {
             Compte compte = comptes.get(i);
@@ -117,10 +95,30 @@ public class DemandeInfoEleve extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class);
         btnPrendrePhoto.setOnClickListener(prendrePhotoOnClickListener);
-        btnSuivant.setOnClickListener(passerFragmentSuivantOnClickListener);
+        spinnerNom.setOnItemSelectedListener(this);
+        viewModel = new ViewModelProvider(requireActivity()).get(InfoStageViewModel.class);
     }
+
+    private final RadioGroup.OnCheckedChangeListener radioGroupOnClickListener = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            int selectedId = radioPriorite.getCheckedRadioButtonId();
+            Priorite priorite;
+            switch (selectedId) {
+                case R.id.drapeau_vert:
+                    priorite = Priorite.MINIMUM;
+                    break;
+                case R.id.drapeau_jaune:
+                    priorite = Priorite.MOYENNE;
+                    break;
+                default:
+                    priorite = Priorite.MAXIMUM;
+                    break;
+            }
+            viewModel.setPriorite(priorite);
+        }
+    };
 
     private void envoyerPrendrePhotoIntent() {
         Intent prendrePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -165,7 +163,7 @@ public class DemandeInfoEleve extends Fragment {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        String currentPhotoPath = image.getAbsolutePath();
+        image.getAbsolutePath();
         return image;
     }
 
@@ -189,9 +187,28 @@ public class DemandeInfoEleve extends Fragment {
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(lienPhotoActuel, bmOptions);
+        viewModel.setImage(bitmap);
         imageView.setImageBitmap(bitmap);
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        Compte compteSelectionne = comptes.get(i);
+        viewModel.setCompte(compteSelectionne);
+        if (compteSelectionne.getPhoto() != null) {
+            Bitmap photoBitmap = Utils.getImage(compteSelectionne.getPhoto());
+            imageView.setImageBitmap(photoBitmap);
+        } else {
+            imageView.setImageResource(R.drawable.ic_baseline_person_24);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+
 }
