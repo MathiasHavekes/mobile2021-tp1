@@ -10,7 +10,7 @@ import java.util.List;
  * L'ordre dans lequel les comparateurs sont recu dans le constructeur défini la facon dont les stages seront triée
  */
 public class StageChainedComparateur implements Comparator<Stage> {
-    private List<Comparator<Stage>> listComparators;
+    private final List<Comparator<Stage>> listComparators;
 
     public StageChainedComparateur(Comparator<Stage>... comparators) {
         this.listComparators = Arrays.asList(comparators);

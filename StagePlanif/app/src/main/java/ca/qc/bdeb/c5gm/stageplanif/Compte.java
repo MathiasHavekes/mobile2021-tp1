@@ -4,9 +4,20 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Le compte sont le type de donnees utilise pour le recycler view
+ * Le compte sont les comptes des eleves et des enseignants
  */
 public class Compte implements Parcelable {
+    public static final Creator<Compte> CREATOR = new Creator<Compte>() {
+        @Override
+        public Compte createFromParcel(Parcel in) {
+            return new Compte(in);
+        }
+
+        @Override
+        public Compte[] newArray(int size) {
+            return new Compte[size];
+        }
+    };
     private final Integer id;
     /**
      * Le nom du compte
@@ -17,19 +28,20 @@ public class Compte implements Parcelable {
      */
     private final String prenom;
     /**
-     * La photo du compte
-     */
-    private byte[] photo;
-    /**
      * Le type de compte
      */
     private final Integer typeCompte;
+    /**
+     * La photo du compte
+     */
+    private byte[] photo;
 
     /**
      * Constructeur par défaut
-     * @param nom Le nom du compte
-     * @param prenom Le prénom du compte
-     * @param photo La photo du compte (a modifier)
+     *
+     * @param nom        Le nom du compte
+     * @param prenom     Le prénom du compte
+     * @param photo      La photo du compte (a modifier)
      * @param typeCompte Le type de compte
      */
     public Compte(Integer id, String nom, String prenom, byte[] photo, Integer typeCompte) {
@@ -40,6 +52,9 @@ public class Compte implements Parcelable {
         this.typeCompte = typeCompte;
     }
 
+    /**
+     * Implémentation de parcelable
+     */
     protected Compte(Parcel in) {
         nom = in.readString();
         prenom = in.readString();
@@ -75,18 +90,6 @@ public class Compte implements Parcelable {
         }
     }
 
-    public static final Creator<Compte> CREATOR = new Creator<Compte>() {
-        @Override
-        public Compte createFromParcel(Parcel in) {
-            return new Compte(in);
-        }
-
-        @Override
-        public Compte[] newArray(int size) {
-            return new Compte[size];
-        }
-    };
-
     public String getNom() {
         return nom;
     }
@@ -115,4 +118,5 @@ public class Compte implements Parcelable {
     public Integer getId() {
         return id;
     }
+
 }

@@ -19,7 +19,7 @@ public enum Priorite implements Parcelable{
             Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
     private static final Random RANDOM = new Random();
-    private int valeur;
+    private final int valeur;
 
     Priorite(int valeur) {
         this.valeur = valeur;

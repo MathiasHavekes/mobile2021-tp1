@@ -25,19 +25,22 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
      */
     private final ArrayList<Stage> listeStages;
     /**
-     * La liste des stages à ne pas afficher
-     */
-    private ArrayList<Stage> listeStagesMasques;
-    /**
      * Un layout inflater
      */
     private final LayoutInflater inflater;
     /**
+     * La liste des stages à ne pas afficher
+     */
+    private ArrayList<Stage> listeStagesMasques;
+    /**
      * Les listener de cliques
      */
     private OnItemClickListener listener;
+    /**
+     * Contexte de l'activitee
+     */
+    private final Context context;
 
-    private Context context;
     public ListeStageAdapter(Context context, ArrayList<Stage> listeStages) {
         inflater = LayoutInflater.from(context);
         this.listeStages = listeStages;
@@ -67,23 +70,14 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
         holder.drapeauView.setColorFilter(ContextCompat.getColor(context, Utils.renvoyerCouleur(stage.getPriorite())));
         holder.nomEleveView.setText(stage.getEtudiant().getNom());
         holder.prenomEleveView.setText(stage.getEtudiant().getPrenom());
-        if (stage.getEtudiant().getPhoto() != null) {
-            ImageView imageView = holder.imageEleveView;
-            Bitmap bitmap = Utils.getImage(stage.getEtudiant().getPhoto());
-            imageView.setImageBitmap(bitmap);
-        } else {
-            holder.imageEleveView.setImageResource(R.drawable.ic_baseline_person_24);
-        }
-        holder.imageEleveView.post(new Runnable() {
-            @Override
-            public void run() {
-                if (stage.getEtudiant().getPhoto() != null) {
-                    ImageView imageView = holder.imageEleveView;
-                    Bitmap bitmap = Utils.getImageAjustee(stage.getEtudiant().getPhoto(), imageView.getWidth(), imageView.getHeight());
-                    imageView.setImageBitmap(bitmap);
-                } else {
-                    holder.imageEleveView.setImageResource(R.drawable.ic_baseline_person_24);
-                }
+        //Creation d'un evenement qui met les images ajustees dans le recyclerView lorsque ceux-ci sont crees
+        holder.imageEleveView.post(() -> {
+            if (stage.getEtudiant().getPhoto() != null) {
+                ImageView imageView = holder.imageEleveView;
+                Bitmap bitmap = Utils.getImageAjustee(stage.getEtudiant().getPhoto(), imageView.getWidth(), imageView.getHeight());
+                imageView.setImageBitmap(bitmap);
+            } else {
+                holder.imageEleveView.setImageResource(R.drawable.ic_baseline_person_24);
             }
         });
     }
@@ -91,6 +85,29 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
     @Override
     public int getItemCount() {
         return listeStages.size();
+    }
+
+    /**
+     * Trie la liste de stage
+     *
+     * @param comparators les comparateurs utilises pour trier
+     */
+    protected void trierListeStages(Comparator<Stage>... comparators) {
+        Collections.sort(listeStages, new StageChainedComparateur(comparators));
+    }
+
+    /**
+     * Filtrer la liste de stage en fonction des priorites choisies
+     *
+     * @param selectionPriorites priorites choisis
+     */
+    protected void filtrerListeStages(int selectionPriorites) {
+        listeStages.addAll(listeStagesMasques);
+        listeStagesMasques.clear();
+
+        ArrayList<Integer> listePrioritesSelectionnees = Utils.calculerPrioritesSelectionnees(selectionPriorites);
+        listeStagesMasques = Utils.filtrerListeStages(listePrioritesSelectionnees, listeStages);
+        listeStages.removeAll(listeStagesMasques);
     }
 
     /**
@@ -112,7 +129,7 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
          */
         void OnItemViewClick(View view, int position);
     }
-  
+
     /**
      * Classe qui va afficher les views
      */
@@ -168,19 +185,6 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
             });
         }
 
-    }
-
-    protected void trierListeStages(Comparator<Stage>... comparators) {
-        Collections.sort(listeStages, new StageChainedComparateur(comparators));
-    }
-
-    protected void filtrerListeStages(int selectionPriorites) {
-        listeStages.addAll(listeStagesMasques);
-        listeStagesMasques.clear();
-
-        ArrayList<Integer> listePrioritesSelectionnees = Utils.calculerPrioritesSelectionnees(selectionPriorites);
-        listeStagesMasques = Utils.filtrerListeStages(listePrioritesSelectionnees, listeStages);
-        listeStages.removeAll(listeStagesMasques);
     }
 
 }

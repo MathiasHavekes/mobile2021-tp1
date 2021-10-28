@@ -59,14 +59,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void creationSwipeRefreshLayout() {
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                StageAdapter.filtrerListeStages(selectionPriorites);
-                StageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
-                StageAdapter.notifyDataSetChanged();
-                swipeRefreshLayout.setRefreshing(false);
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            StageAdapter.filtrerListeStages(selectionPriorites);
+            StageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
+            StageAdapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
         });
     }
 
@@ -132,12 +129,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private final View.OnClickListener ajouterEleveOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            lancerActiviteAjoutStage(view);
-        }
-    };
+    private final View.OnClickListener ajouterEleveOnClickListener = view -> lancerActiviteAjoutStage(view);
   
     private void changerPrioriteStage(int positionStage, ImageView drapeauView) {
         Stage stage = listeStages.get(positionStage);
@@ -158,16 +150,13 @@ public class MainActivity extends AppCompatActivity {
         envoyerInfoStageActivity.launch(intent);
     }
 
-    ActivityResultLauncher<Intent> envoyerInfoStageActivity = registerForActivityResult(
+    final ActivityResultLauncher<Intent> envoyerInfoStageActivity = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent intent = result.getData();
-                        Stage stage = intent.getParcelableExtra("stage");
-                        mettreDansRV(stage);
-                    }
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent intent = result.getData();
+                    Stage stage = intent.getParcelableExtra("stage");
+                    mettreDansRV(stage);
                 }
             });
 
@@ -194,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         envoyerInfoStageActivity.launch(intent);
     }
 
-    ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+    final ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;
@@ -206,22 +195,16 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.setTitle(R.string.titre_avertissement);
             alertDialog.setMessage(getString(R.string.message_supprimer));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.message_oui),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            int indexEnleve = viewHolder.getAdapterPosition();
-                            dbHelper.deleteStage(listeStages.get(indexEnleve));
-                            listeStages.remove(indexEnleve);
-                            StageAdapter.notifyItemRemoved(indexEnleve);
-                        }
+                    (dialogInterface, i) -> {
+                        int indexEnleve = viewHolder.getAdapterPosition();
+                        dbHelper.deleteStage(listeStages.get(indexEnleve));
+                        listeStages.remove(indexEnleve);
+                        StageAdapter.notifyItemRemoved(indexEnleve);
                     });
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.annuler_message),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            int indexEnleve = viewHolder.getAdapterPosition();
-                            StageAdapter.notifyItemChanged(indexEnleve);
-                        }
+                    (dialogInterface, i) -> {
+                        int indexEnleve = viewHolder.getAdapterPosition();
+                        StageAdapter.notifyItemChanged(indexEnleve);
                     });
             alertDialog.show();
             return;
