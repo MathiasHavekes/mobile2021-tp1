@@ -1,7 +1,10 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
@@ -21,6 +24,7 @@ import java.util.UUID;
 
 public class DemandeInfoStage extends AppCompatActivity {
     private FragmentContainerView demandeInfoFragment;
+    private Toolbar toolbar;
     private Button boutonSuivant;
     private Button boutonAnnuler;
     private InfoStageViewModel viewModel;
@@ -100,6 +104,10 @@ public class DemandeInfoStage extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManger.beginTransaction();
         fragmentTransaction.replace(demandeInfoFragment.getId(), fragment);
         fragmentTransaction.commit();
+
+        toolbar = findViewById((R.id.toolbar));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private final View.OnClickListener suivantClique = new View.OnClickListener() {

@@ -6,8 +6,8 @@
     <string name="msg_bouton_filtre">TODO</string>
     <string name="msg_nom">Nom de l\'eleve</string>
     <string name="msg_prenom">Prénom de l\'eleve</string>
-    <string name="title_activity_google_maps">GoogleMaps</string>
-    <string name="title_activity_add_student">activity_add_student</string>
+    <string name="titre_activity_google_maps">GoogleMaps</string>
+    <string name="titre_activity_demande_info_stage">Infos Stage</string>
 
     <string name="btn_suivant">Suivant</string>
     <string name="btn_terminer">Terminer</string>

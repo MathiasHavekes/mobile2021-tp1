@@ -9,6 +9,7 @@
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.146875" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/drawable/ic_baseline_view_list_24.xml" value="0.146875" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/drawable/ic_launcher_background.xml" value="0.146875" />
+        <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.36354166666666665" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/drawable/menu_selection_priorite_border.xml" value="0.2546875" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout-w936dp/activity_add_student.xml" value="0.25" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/activity_add_student.xml" value="0.33" />
@@ -27,8 +28,12 @@
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/student_list_item.xml" value="0.5" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/layout/switch_item.xml" value="0.3625" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/menu/activity_add_student_menu.xml" value="0.190625" />
+        <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/menu/activity_demande_info_stage_menu.xml" value="0.34739583333333335" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/menu/activity_google_map_menu.xml" value="0.3625" />
         <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/menu/activity_main_menu.xml" value="0.33" />
+        <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/menu/empty_menu.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.36354166666666665" />
+        <entry key="..\:/Users/Mathias/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.36354166666666665" />
         <entry key="..\:/Users/xpaqu/OneDrive/Bureau/mobile2021-tp1/StagePlanif/app/src/main/res/layout/fragment_demande_info_entreprise.xml" value="0.1490036231884058" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.5213541666666667" />
         <entry key="app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.3140625" />

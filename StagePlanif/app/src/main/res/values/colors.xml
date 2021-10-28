@@ -4,8 +4,14 @@
     <color name="primaryLightColor">#5e92f3</color>
     <color name="primaryDarkColor">#003c8f</color>
     <color name="primaryTextColor">#ffffff</color>
-    <color name="black">#FF000000</color>
-    <color name="red">#B00020</color>
-    <color name="yellow">#FFD600</color>
-    <color name="green">#00C853</color>
+
+    <color name="secondaryColor">#00838f</color>
+    <color name="secondaryLightColor">#4fb3bf</color>
+    <color name="secondaryDarkColor">#005662</color>
+    <color name="secondaryTextColor">#ffffff</color>
+
+    <color name="black">#000000</color>
+    <color name="red">#cc3300</color>
+    <color name="yellow">#ffcc00</color>
+    <color name="green">#339900</color>
 </resources>

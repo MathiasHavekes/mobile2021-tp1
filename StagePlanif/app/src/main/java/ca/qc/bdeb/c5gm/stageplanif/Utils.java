@@ -3,6 +3,8 @@ package ca.qc.bdeb.c5gm.stageplanif;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,6 +48,19 @@ public class Utils {
                 return R.color.red;
             default:
                 return R.color.black;
+        }
+    }
+
+    public static float renvoyerCouleurHSV(Priorite priorite) {
+        switch (priorite) {
+            case MINIMUM:
+                return BitmapDescriptorFactory.HUE_GREEN;
+            case MOYENNE:
+                return BitmapDescriptorFactory.HUE_YELLOW;
+            case MAXIMUM:
+                return BitmapDescriptorFactory.HUE_RED;
+            default:
+                return BitmapDescriptorFactory.HUE_BLUE;
         }
     }
 

@@ -214,6 +214,4 @@ public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSele
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
-
-
 }

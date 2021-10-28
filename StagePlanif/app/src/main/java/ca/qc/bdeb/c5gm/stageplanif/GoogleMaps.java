@@ -2,15 +2,12 @@ package ca.qc.bdeb.c5gm.stageplanif;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.os.Looper;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,10 +16,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -32,13 +37,17 @@ import java.util.List;
 
 import ca.qc.bdeb.c5gm.stageplanif.databinding.ActivityGoogleMapsBinding;
 
-public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class GoogleMaps extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback, OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-
+    private static final float ZOOM_PAR_DEFAUT = 14f;
     private ArrayList<Stage> listeStages;
     private ArrayList<Stage> listeStagesMasques;
     private GoogleMap mMap;
     private Geocoder geocoder;
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationCallback locationCallback;
+    private LocationRequest locationRequest;
+    private boolean demandeLocalisationMiseAJour;
     private ActivityGoogleMapsBinding binding;
     private Toolbar toolbar;
     private SelectionViewModel viewModel;
@@ -48,7 +57,9 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         binding = ActivityGoogleMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        demandeLocalisationMiseAJour = true;
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         geocoder = new Geocoder(this);
 
         listeStages = getIntent().getParcelableArrayListExtra("liste_des_stages");
@@ -62,7 +73,35 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        creationLocationRequest();
         creationViewModel();
+        creationLocationCallBack();
+    }
+
+    private void creationLocationRequest() {
+        locationRequest = LocationRequest.create();
+        locationRequest.setInterval(4000);
+        locationRequest.setFastestInterval(2000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+
+    private void creationLocationCallBack() {
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(latLng).zoom(ZOOM_PAR_DEFAUT).build();
+                    CameraUpdate update = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                    mMap.animateCamera(update);
+                }
+            }
+        };
+
     }
 
     private void creationViewModel() {
@@ -82,27 +121,10 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
         listeStages.removeAll(listeStagesMasques);
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.activity_google_map_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.passer_sur_carte) {
-            Intent intent = new Intent(this, GoogleMaps.class);
-            startActivity(intent);
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
         activerLaGeoLocatisation();
@@ -134,7 +156,7 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
             if (listeAdresses.size() > 0) {
                 Address adresseTrouvee = listeAdresses.get(0);
                 double[] coordonnees = {adresseTrouvee.getLatitude(), adresseTrouvee.getLongitude()};
-                return  coordonnees;
+                return coordonnees;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -147,21 +169,8 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
         MarkerOptions marqueur = new MarkerOptions();
         marqueur.position(coordonneesAdresse);
         marqueur.title(nomEntreprise);
-        marqueur.icon(BitmapDescriptorFactory.defaultMarker(renvoyerCouleur(priorite)));
+        marqueur.icon(BitmapDescriptorFactory.defaultMarker(Utils.renvoyerCouleurHSV(priorite)));
         return marqueur;
-    }
-
-    private float renvoyerCouleur(Priorite priorite) {
-        switch (priorite) {
-            case MINIMUM:
-                return BitmapDescriptorFactory.HUE_GREEN;
-            case MOYENNE:
-                return BitmapDescriptorFactory.HUE_YELLOW;
-            case MAXIMUM:
-                return BitmapDescriptorFactory.HUE_RED;
-            default:
-                return BitmapDescriptorFactory.HUE_BLUE;
-        }
     }
 
     @Override
@@ -170,7 +179,7 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
 
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             return;
-        } else  {
+        } else {
             activerLaGeoLocatisation();
         }
     }
@@ -190,13 +199,40 @@ public class GoogleMaps extends AppCompatActivity implements OnMapReadyCallback,
 
     @Override
     public boolean onMyLocationButtonClick() {
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(ZOOM_PAR_DEFAUT));
         return false;
     }
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
         StringBuilder positionActuel = new StringBuilder();
-        positionActuel.append("Position actuel:\n" + "Lat : " +  location.getLatitude() + " Lng : " + location.getLongitude());
+        positionActuel.append("Position actuel:\n" + "Lat : " + location.getLatitude() + " Lng : " + location.getLongitude());
         Toast.makeText(this, positionActuel.toString(), Toast.LENGTH_LONG).show();
     }
+
+    @SuppressLint("MissingPermission")
+    private void startLocationUpdates() {
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+                locationCallback,
+                Looper.getMainLooper());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (demandeLocalisationMiseAJour) {
+            startLocationUpdates();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
+    private void stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback);
+    }
+
 }
