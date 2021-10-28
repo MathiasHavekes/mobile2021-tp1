@@ -31,4 +31,7 @@
     <string name="btn_ok">ok</string>
     <string name="message_oui">Oui</string>
     <string name="annuler_message">Annuler</string>
+
+    <string name="image_eleve_description">Image de l\'élève</string>
+    <string name="btn_prendre_photo_description">Bouton prise de photo</string>
 </resources>

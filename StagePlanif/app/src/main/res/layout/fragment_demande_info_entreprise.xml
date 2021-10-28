@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -31,7 +30,8 @@
                 android:ems="10"
                 android:enabled="false"
                 android:hint="@string/adresse_entreprise"
-                android:inputType="text" />
+                android:inputType="text"
+                android:autofillHints="@string/adresse_entreprise" />
 
             <EditText
                 android:id="@+id/texte_ville"
@@ -42,7 +42,8 @@
                 android:ems="10"
                 android:enabled="false"
                 android:hint="@string/ville_entreprise"
-                android:inputType="text" />
+                android:inputType="text"
+                android:autofillHints="@string/ville_entreprise" />
 
             <EditText
                 android:id="@+id/text_cp"
@@ -53,7 +54,8 @@
                 android:ems="10"
                 android:enabled="false"
                 android:hint="@string/code_postale_entreprise"
-                android:inputType="text" />
+                android:inputType="text"
+                android:autofillHints="@string/code_postale_entreprise" />
 
             <EditText
                 android:id="@+id/text_province"
@@ -64,7 +66,8 @@
                 android:ems="10"
                 android:enabled="false"
                 android:hint="@string/province_entreprise"
-                android:inputType="text" />
+                android:inputType="text"
+                android:autofillHints="@string/province_entreprise" />
         </LinearLayout>
     </ScrollView>
 
