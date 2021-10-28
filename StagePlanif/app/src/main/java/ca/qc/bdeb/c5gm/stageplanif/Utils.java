@@ -85,4 +85,24 @@ public class Utils {
 
         return totalValeursPriorite;
     }
+
+    public static Bitmap getImageAjustee(byte[] photo, int targetW, int targetH) {
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+
+        BitmapFactory.decodeByteArray(photo, 0, photo.length, bmOptions);
+
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(photo, 0, photo.length, bmOptions);
+        return bitmap;
+    }
 }

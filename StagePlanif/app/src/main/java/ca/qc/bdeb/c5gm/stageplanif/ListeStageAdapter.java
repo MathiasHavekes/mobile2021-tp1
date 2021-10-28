@@ -2,9 +2,13 @@ package ca.qc.bdeb.c5gm.stageplanif;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -69,8 +73,15 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
         holder.prenomEleveView.setText(stage.getEtudiant().getPrenom());
         holder.imageEleveView.setImageResource(R.drawable.ic_baseline_person_24);
         if (stage.getEtudiant().getPhoto() != null) {
-            Bitmap photoBitmap = Utils.getImage(stage.getEtudiant().getPhoto());
-            holder.imageEleveView.setImageBitmap(photoBitmap);
+            final ViewTreeObserver observer = holder.imageEleveView.getViewTreeObserver();
+            observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    ImageView imageView = holder.imageEleveView;
+                    Bitmap bitmap = Utils.getImageAjustee(stage.getEtudiant().getPhoto(), imageView.getWidth(), imageView.getHeight());
+                    imageView.setImageBitmap(bitmap);
+                }
+            });
         }
     }
 

@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                StageAdapter.filtrerListeStages(selectionPriorites);
                 StageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
                 StageAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
