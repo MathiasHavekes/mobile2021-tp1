@@ -15,14 +15,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class DemandeInfoStage extends AppCompatActivity {
+public class InfoStageActivity extends AppCompatActivity {
     private FragmentContainerView demandeInfoFragment;
     private Toolbar toolbar;
     private Button boutonSuivant;
@@ -40,7 +39,7 @@ public class DemandeInfoStage extends AppCompatActivity {
 
         setContentView(R.layout.activity_demande_info_stage);
         demandeInfoFragment = findViewById(R.id.fragment_demande_info);
-        Fragment fragment = new DemandeInfoEleve();
+        Fragment fragment = new InfoEleveFragment();
         context = this;
         creationViewModel();
         Intent intent = getIntent();
@@ -114,7 +113,7 @@ public class DemandeInfoStage extends AppCompatActivity {
                     afficherMessage();
                 }
                 boutonSuivant.setText(getResources().getString(R.string.btn_terminer));
-                Fragment fragment = new DemandeInfoEntreprise();
+                Fragment fragment = new InfoEntrepriseFragment();
                 changerFragment(fragment);
             } else if (boutonSuivant.getText() == getResources().getString(R.string.btn_terminer)) {
                 Stockage dbHelper = Stockage.getInstance(context);

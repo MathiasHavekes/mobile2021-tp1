@@ -37,7 +37,7 @@ import java.util.List;
 
 import ca.qc.bdeb.c5gm.stageplanif.databinding.ActivityGoogleMapsBinding;
 
-public class GoogleMaps extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback, OnMapReadyCallback {
+public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback, OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final float ZOOM_PAR_DEFAUT = 14f;
     private ArrayList<Stage> listeStages;

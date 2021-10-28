@@ -16,7 +16,7 @@ import android.widget.Spinner;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class DemandeInfoEntreprise extends Fragment {
+public class InfoEntrepriseFragment extends Fragment {
     private ArrayList<Entreprise> entreprises;
     private Spinner spinnerEntreprise;
     private EditText texteAdresse;

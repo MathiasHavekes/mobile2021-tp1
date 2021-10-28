@@ -49,13 +49,13 @@
             android:value="${MAPS_API_KEY}" />
 
         <activity
-            android:name=".GoogleMaps"
+            android:name=".GoogleMapsActivity"
             android:exported="true"
             android:label="@string/titre_activity_google_maps"
             android:parentActivityName=".MainActivity" />
 
         <activity
-            android:name=".DemandeInfoStage"
+            android:name=".InfoStageActivity"
             android:exported="true"
             android:label="@string/titre_activity_demande_info_stage"
             android:parentActivityName=".MainActivity" />

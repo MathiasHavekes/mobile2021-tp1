@@ -12,17 +12,27 @@ public class InfoStageViewModel extends ViewModel {
     private final MutableLiveData<Compte> compte = new MutableLiveData<>();
     private final MutableLiveData<Entreprise> entreprise = new MutableLiveData<>();
     private Stage stage;
+    private Boolean changements;
 
     public void setPriorite(Priorite selection) {
-        priorite.setValue(selection);
+        if (priorite.getValue() != selection) {
+            priorite.setValue(selection);
+            changements = true;
+        }
     }
 
     public void setImage(Bitmap photo) {
-        this.photo.setValue(photo);
+        if (this.photo.getValue() != photo) {
+            this.photo.setValue(photo);
+            changements = true;
+        }
     }
 
     public void setCompte(Compte compte) {
-        this.compte.setValue(compte);
+        if (this.compte.getValue() != compte) {
+            this.compte.setValue(compte);
+            changements = true;
+        }
     }
 
     public void setEntreprise(Entreprise entreprise) {

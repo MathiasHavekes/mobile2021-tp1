@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void startGoogleMapActivity() {
         listeStages.addAll(listeStagesMasques);
-        Intent intent = new Intent(this, GoogleMaps.class);
+        Intent intent = new Intent(this, GoogleMapsActivity.class);
         intent.putParcelableArrayListExtra("liste_des_stages", listeStages);
         startActivity(intent);
     }
@@ -174,12 +173,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void lancerActiviteAjoutStage(View view) {
-        Intent intent = new Intent(this, DemandeInfoStage.class);
+        Intent intent = new Intent(this, InfoStageActivity.class);
         startActivity(intent);
     }
 
     public void lancerActiviteAjoutStage(View view, Stage stage) {
-        Intent intent = new Intent(this, DemandeInfoStage.class);
+        Intent intent = new Intent(this, InfoStageActivity.class);
         intent.putExtra("stage", stage);
         startActivity(intent);
     }

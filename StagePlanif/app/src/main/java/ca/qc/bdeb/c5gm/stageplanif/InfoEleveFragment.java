@@ -36,7 +36,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSelectedListener {
+public class InfoEleveFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     private ImageView imageView;
     private FloatingActionButton btnPrendrePhoto;
     private Spinner spinnerNom;

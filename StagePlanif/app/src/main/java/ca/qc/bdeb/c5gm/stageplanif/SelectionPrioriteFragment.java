@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 
-public class MenuSelectionPriorite extends Fragment {
+public class SelectionPrioriteFragment extends Fragment {
     private final int VALEUR_DRAPEAU_VERT = Priorite.MINIMUM.getValeur();
     private final int VALEUR_DRAPEAU_JAUNE = Priorite.MOYENNE.getValeur();
     private final int VALEUR_DRAPEAU_ROUGE = Priorite.MAXIMUM.getValeur();
