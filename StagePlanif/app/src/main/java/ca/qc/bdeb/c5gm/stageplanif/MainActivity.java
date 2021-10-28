@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         dbHelper = Stockage.getInstance(getApplicationContext());
         listeStages = dbHelper.getStages();
-        selectionPriorites = Utils.renvoyerTotalValeursPriorite();
+        selectionPriorites = Priorite.getTotalValeursPriorites();
 
         creationViewModel();
         creationSwipeRefreshLayout();

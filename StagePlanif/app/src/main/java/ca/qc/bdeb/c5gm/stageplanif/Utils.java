@@ -7,8 +7,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class Utils {
     public static ArrayList<Integer> calculerPrioritesSelectionnees(int selection) {
@@ -44,11 +42,13 @@ public class Utils {
         return listeStagesMasques;
     }
 
-    public static ArrayList<Stage> trierListeStages(ArrayList<Stage> listeStages, Comparator<Stage>... comparators) {
-        Collections.sort(listeStages, new StageChainedComparateur(comparators));
-        return listeStages;
-    }
-
+    /**
+     * Renvoie une couleur en fonction de la priorite passée en paramètre
+     * Priorité minimum = vert, Priorité moyenne = jaune, Priorité maximum = Rouge
+     * Sinon renvoie du noir
+     * @param priorite
+     * @return la couleur en format RGB (int)
+     */
     public static int renvoyerCouleur(Priorite priorite) {
         switch (priorite) {
             case MINIMUM:
@@ -62,6 +62,13 @@ public class Utils {
         }
     }
 
+    /**
+     * Renvoie une couleur en fonction de la priorite passée en paramètre
+     * Priorité minimum = vert, Priorité moyenne = jaune, Priorité maximum = Rouge
+     * Sinon renvoie du bleu
+     * @param priorite
+     * @return la couleur en format HSV (float)
+     */
     public static float renvoyerCouleurHSV(Priorite priorite) {
         switch (priorite) {
             case MINIMUM:
@@ -85,16 +92,6 @@ public class Utils {
     // convert from byte array to bitmap
     public static Bitmap getImage(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
-    }
-
-    public static int renvoyerTotalValeursPriorite() {
-        int totalValeursPriorite = 0;
-
-        for(Priorite p : Priorite.values()) {
-            totalValeursPriorite += p.getValeur();
-        }
-
-        return totalValeursPriorite;
     }
 
     public static Bitmap getImageAjustee(byte[] photo, int targetW, int targetH) {

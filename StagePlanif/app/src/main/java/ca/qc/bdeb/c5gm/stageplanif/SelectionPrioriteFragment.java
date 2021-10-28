@@ -1,16 +1,15 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
 
 public class SelectionPrioriteFragment extends Fragment {
     private final int VALEUR_DRAPEAU_VERT = Priorite.MINIMUM.getValeur();
@@ -36,7 +35,7 @@ public class SelectionPrioriteFragment extends Fragment {
         drapeauVert.setOnClickListener(drapeauVertOnClickListener);
         drapeauJaune.setOnClickListener(drapeauJauneOnClickListener);
         drapeauRouge.setOnClickListener(drapeauRougeOnClickListener);
-        selection = VALEUR_DRAPEAU_VERT + VALEUR_DRAPEAU_JAUNE + VALEUR_DRAPEAU_ROUGE;
+        selection = Priorite.getTotalValeursPriorites();
     }
 
     private final View.OnClickListener drapeauVertOnClickListener = new View.OnClickListener() {
