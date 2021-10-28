@@ -1,5 +1,6 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -49,13 +54,6 @@ public class MainActivity extends AppCompatActivity {
         creationSwipeRefreshLayout();
         creationRecyclerView();
         btnAjouterEleve.setOnClickListener(ajouterEleveOnClickListener);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        listeStages = dbHelper.getStages();
-        creationRecyclerView();
     }
 
     private void creationSwipeRefreshLayout() {
@@ -150,13 +148,45 @@ public class MainActivity extends AppCompatActivity {
 
     public void lancerActiviteAjoutStage(View view) {
         Intent intent = new Intent(this, InfoStageActivity.class);
-        startActivity(intent);
+        //startActivity(intent);
+        envoyerInfoStageActivity.launch(intent);
+    }
+
+    ActivityResultLauncher<Intent> envoyerInfoStageActivity = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent intent = result.getData();
+                        Stage stage = intent.getParcelableExtra("stage");
+                        mettreDansRV(stage);
+                    }
+                }
+            });
+
+    private void mettreDansRV(Stage stage) {
+        for (int i = 0; i < listeStages.size(); i++) {
+            Stage lStage = listeStages.get(i);
+            if (lStage.getId().equals(stage.getId())) {
+                listeStages.set(i, stage);
+                StageAdapter.filtrerListeStages(selectionPriorites);
+                StageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
+                StageAdapter.notifyDataSetChanged();
+                return;
+            }
+        }
+        listeStages.add(stage);
+        StageAdapter.filtrerListeStages(selectionPriorites);
+        StageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
+        StageAdapter.notifyDataSetChanged();
     }
 
     public void lancerActiviteAjoutStage(View view, Stage stage) {
         Intent intent = new Intent(this, InfoStageActivity.class);
         intent.putExtra("stage", stage);
-        startActivity(intent);
+        //startActivity(intent);
+        envoyerInfoStageActivity.launch(intent);
     }
 
     ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {

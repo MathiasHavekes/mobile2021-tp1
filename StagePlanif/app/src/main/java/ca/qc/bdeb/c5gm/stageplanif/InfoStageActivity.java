@@ -58,7 +58,7 @@ public class InfoStageActivity extends AppCompatActivity {
     private final View.OnClickListener annulerClique = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (stageModifie() || ! photoEgal()) {
+            if (stageModifie()) {
                 AlertDialog alertDialog = new AlertDialog.Builder(context).create();
                 alertDialog.setTitle(R.string.titre_avertissement);
                 alertDialog.setMessage(getString(R.string.message_avertissement));
@@ -73,11 +73,13 @@ public class InfoStageActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                setResult(RESULT_CANCELED);
                                 finish();
                             }
                         });
                 alertDialog.show();
             } else {
+                setResult(RESULT_CANCELED);
                 finish();
             }
         }
@@ -124,8 +126,10 @@ public class InfoStageActivity extends AppCompatActivity {
             } else if (boutonSuivant.getText() == getResources().getString(R.string.btn_terminer)) {
                 Stockage dbHelper = Stockage.getInstance(context);
                 if (stageStockage == null) {
-                    ajouterStage(dbHelper);
+                    stageStockage = ajouterStage(dbHelper);
+                    creerIntent();
                     finish();
+                    return;
                 }
                 if (!stageModifie() && photoEgal()) {
                     afficherMessage(getString(R.string.message_modification));
@@ -140,25 +144,41 @@ public class InfoStageActivity extends AppCompatActivity {
                     stageStockage.addEntreprise(entreprise);
                     dbHelper.modifierStage(stageStockage);
                 }
+                creerIntent();
                 finish();
             }
         }
     };
 
+    private void creerIntent() {
+        Intent intent = new Intent();
+        intent.putExtra("stage", stageStockage);
+        setResult(RESULT_OK, intent);
+    }
+
     private Boolean photoEgal() {
-        return (photo == null && stageStockage.getEtudiant().getPhoto() != null) ^ Arrays.equals(photo, etudiant.getPhoto());
+        if(stageStockage != null) {
+            return (photo == null && stageStockage.getEtudiant().getPhoto() != null) ^ Arrays.equals(photo, etudiant.getPhoto());
+        }
+        return photo != null;
     }
 
     private Boolean stageModifie() {
-        boolean prioEgal = stageStockage.getPriorite() == priorite;
-        if (entreprise != null) {
-            boolean entrepriseEgal = stageStockage.getEntreprise().getId().equals(entreprise.getId());
-            return ! (entrepriseEgal && prioEgal && photoEgal());
+        if(stageStockage != null) {
+            boolean prioEgal = stageStockage.getPriorite() == priorite;
+            if (entreprise != null) {
+                boolean entrepriseEgal = stageStockage.getEntreprise().getId().equals(entreprise.getId());
+                return ! (entrepriseEgal && prioEgal && photoEgal());
+            }
+            return ! (prioEgal && photoEgal());
         }
-        return ! (prioEgal && photoEgal());
+        if (entreprise != null) {
+            return ! photoEgal() && entreprise != null && priorite != null;
+        }
+        return photoEgal() && priorite != null;
     }
 
-    private void ajouterStage(Stockage dbHelper) {
+    private Stage ajouterStage(Stockage dbHelper) {
         ArrayList<Compte> professeurs = dbHelper.getComptes(1);
         Stage stage = new Stage(UUID.randomUUID().toString(), "2021-2022", priorite);
         etudiant.setPhoto(photo);
@@ -167,6 +187,7 @@ public class InfoStageActivity extends AppCompatActivity {
         stage.addProfesseur(professeurs.get(0));
         dbHelper.createStage(stage);
         dbHelper.changerPhotoCompte(etudiant);
+        return stage;
     }
 
     private void afficherMessage(String message) {
