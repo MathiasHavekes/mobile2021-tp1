@@ -33,6 +33,17 @@ public class Utils {
         return listeStagesMasques;
     }
 
+    public static ArrayList<GoogleMapsObject> filtrerListeGoogleMapsObject(ArrayList<Integer> ListePrioritesSelectionnees, ArrayList<GoogleMapsObject> listeStages) {
+        ArrayList<GoogleMapsObject> listeStagesMasques = new ArrayList<>();
+
+        for (GoogleMapsObject s : listeStages) {
+            if (!ListePrioritesSelectionnees.contains(s.getPriorite().getValeur())) {
+                listeStagesMasques.add(s);
+            }
+        }
+        return listeStagesMasques;
+    }
+
     public static ArrayList<Stage> trierListeStages(ArrayList<Stage> listeStages, Comparator<Stage>... comparators) {
         Collections.sort(listeStages, new StageChainedComparateur(comparators));
         return listeStages;
@@ -105,4 +116,5 @@ public class Utils {
         Bitmap bitmap = BitmapFactory.decodeByteArray(photo, 0, photo.length, bmOptions);
         return bitmap;
     }
+
 }

@@ -38,8 +38,8 @@ import java.util.List;
 public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback, OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final float ZOOM_PAR_DEFAUT = 14f;
-    private ArrayList<Stage> listeStages;
-    private ArrayList<Stage> listeStagesMasques;
+    private ArrayList<GoogleMapsObject> listeStages;
+    private ArrayList<GoogleMapsObject> listeStagesMasques;
     private GoogleMap mMap;
     private Geocoder geocoder;
     private FusedLocationProviderClient fusedLocationClient;
@@ -113,7 +113,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.O
         listeStagesMasques.clear();
 
         ArrayList<Integer> listePrioritesSelectionnees = Utils.calculerPrioritesSelectionnees(selection);
-        listeStagesMasques = Utils.filtrerListeStages(listePrioritesSelectionnees, listeStages);
+        listeStagesMasques = Utils.filtrerListeGoogleMapsObject(listePrioritesSelectionnees, listeStages);
         listeStages.removeAll(listeStagesMasques);
     }
 
@@ -130,14 +130,14 @@ public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.O
 
     public void placerMarqueurs() {
         mMap.clear();
-        for (Stage s : listeStages) {
+        for (GoogleMapsObject s : listeStages) {
             MarkerOptions marqueur = creerMarqueur(s.getEntreprise().getLatLng(), s.getPriorite(), s.getEntreprise().getNom());
             mMap.addMarker(marqueur);
         }
     }
 
     private void setCoordonneesEntreprise() {
-        for (Stage s : listeStages) {
+        for (GoogleMapsObject s : listeStages) {
             StringBuilder adresseComplete = new StringBuilder();
             adresseComplete.append(s.getEntreprise().getAdresse() + ", " + s.getEntreprise().getVille() + ", " + s.getEntreprise().getProvince() + " " + s.getEntreprise().getCp());
 

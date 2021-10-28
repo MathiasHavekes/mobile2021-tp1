@@ -40,8 +40,8 @@ public class Stage implements Parcelable {
         etudiant = in.readParcelable(Compte.class.getClassLoader());
         anneeScolaire = in.readString();
         professeur = in.readParcelable(Compte.class.getClassLoader());
-        entreprise = in.readParcelable(Compte.class.getClassLoader());
-        priorite = in.readParcelable(Compte.class.getClassLoader());
+        entreprise = in.readParcelable(Entreprise.class.getClassLoader());
+        priorite = in.readParcelable(Priorite.class.getClassLoader());
     }
 
     public static final Creator<Stage> CREATOR = new Creator<Stage>() {
@@ -121,5 +121,9 @@ public class Stage implements Parcelable {
   
     public void setPriorite(Priorite priorite) {
         this.priorite = priorite;
+    }
+
+    public GoogleMapsObject getGoogleMapsObject() {
+        return new GoogleMapsObject(this.getEntreprise(), etudiant.getNom(), etudiant.getPrenom(), this.getPriorite());
     }
 }

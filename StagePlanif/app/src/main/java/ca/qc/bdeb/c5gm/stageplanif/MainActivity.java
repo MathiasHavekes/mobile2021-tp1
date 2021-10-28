@@ -1,6 +1,7 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -89,7 +91,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void startGoogleMapActivity() {
         Intent intent = new Intent(this, GoogleMapsActivity.class);
-        intent.putParcelableArrayListExtra("liste_des_stages", listeStages);
+        ArrayList<GoogleMapsObject> googleMapsObjects = new ArrayList<>();
+        for (Stage stage: listeStages) {
+            googleMapsObjects.add(stage.getGoogleMapsObject());
+        }
+        intent.putParcelableArrayListExtra("liste_des_stages", googleMapsObjects);
         startActivity(intent);
     }
 
@@ -149,7 +155,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void lancerActiviteAjoutStage(View view) {
         Intent intent = new Intent(this, InfoStageActivity.class);
-        //startActivity(intent);
         envoyerInfoStageActivity.launch(intent);
     }
 
@@ -186,7 +191,6 @@ public class MainActivity extends AppCompatActivity {
     public void lancerActiviteAjoutStage(View view, Stage stage) {
         Intent intent = new Intent(this, InfoStageActivity.class);
         intent.putExtra("stage", stage);
-        //startActivity(intent);
         envoyerInfoStageActivity.launch(intent);
     }
 
@@ -198,10 +202,30 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            int removedItemIndex = viewHolder.getAdapterPosition();
-            dbHelper.deleteStage(listeStages.get(removedItemIndex));
-            listeStages.remove(removedItemIndex);
-            StageAdapter.notifyItemRemoved(removedItemIndex);
+            AlertDialog alertDialog = new AlertDialog.Builder(viewHolder.itemView.getContext()).create();
+            alertDialog.setTitle(R.string.titre_avertissement);
+            alertDialog.setMessage(getString(R.string.message_supprimer));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.message_oui),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            int indexEnleve = viewHolder.getAdapterPosition();
+                            dbHelper.deleteStage(listeStages.get(indexEnleve));
+                            listeStages.remove(indexEnleve);
+                            StageAdapter.notifyItemRemoved(indexEnleve);
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.annuler_message),
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            int indexEnleve = viewHolder.getAdapterPosition();
+                            StageAdapter.notifyItemChanged(indexEnleve);
+                        }
+                    });
+            alertDialog.show();
+            return;
+
         }
     };
 

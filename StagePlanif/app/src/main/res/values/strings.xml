@@ -26,6 +26,7 @@
     <string name="titre_erreur">Erreur</string>
     <string name="message_erreur">Veuillez remplir tous les champs</string>
     <string name="message_modification">Veuillez modifier un champ pour enregistrer</string>
+    <string name="message_supprimer">Voulez-vous supprimer cet item ?</string>
     <string name="message_avertissement">Voulez-vous annuler les modifications apportes ?</string>
     <string name="btn_ok">ok</string>
     <string name="message_oui">Oui</string>
