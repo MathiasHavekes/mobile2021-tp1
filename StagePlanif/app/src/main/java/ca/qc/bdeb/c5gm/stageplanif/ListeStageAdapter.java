@@ -13,15 +13,21 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
- * Adapte la liste de compte pour le recycler view
+ * Adapte la liste de stage pour le recycler view
  */
 public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.ListeStageHolder> {
     /**
-     * La liste des comptes à adapter pour le recycler view
+     * La liste des stages à adapter pour le recycler view
      */
     private final ArrayList<Stage> listeStages;
+    /**
+     * La liste des stages à ne pas afficher
+     */
+    private ArrayList<Stage> listeStagesMasques;
     /**
      * Un layout inflater
      */
@@ -36,6 +42,7 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
         inflater = LayoutInflater.from(context);
         this.listeStages = listeStages;
         this.context = context;
+        listeStagesMasques = new ArrayList<>();
     }
 
     /**
@@ -83,13 +90,6 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
          * @param favoriteView l'item qui a ete clique
          */
         void OnDrapeauClick(int position, ImageView favoriteView);
-
-        /**
-         * Comportement lors d'un clique sur l'image de l'élève
-         *
-         * @param position position dans le recyclerView de l'item
-         */
-        void OnImageEleveClick(int position);
 
         /**
          * Comportement lors d'un clique sur le profile du recylcerview d'un élève
@@ -144,15 +144,6 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
                 }
             });
 
-            imageEleveView.setOnClickListener(view -> {
-                if (listener != null) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.OnImageEleveClick(position);
-                    }
-                }
-            });
-
             itemView.setOnClickListener(view -> {
                 if (listener != null) {
                     int position = getAdapterPosition();
@@ -163,6 +154,19 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
             });
         }
 
+    }
+
+    protected void trierListeStages(Comparator<Stage>... comparators) {
+        Collections.sort(listeStages, new StageChainedComparateur(comparators));
+    }
+
+    protected void filtrerListeStages(int selectionPriorites) {
+        listeStages.addAll(listeStagesMasques);
+        listeStagesMasques.clear();
+
+        ArrayList<Integer> listePrioritesSelectionnees = Utils.calculerPrioritesSelectionnees(selectionPriorites);
+        listeStagesMasques = Utils.filtrerListeStages(listePrioritesSelectionnees, listeStages);
+        listeStages.removeAll(listeStagesMasques);
     }
 
 }

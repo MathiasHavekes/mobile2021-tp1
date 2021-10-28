@@ -35,8 +35,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.qc.bdeb.c5gm.stageplanif.databinding.ActivityGoogleMapsBinding;
-
 public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback, OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final float ZOOM_PAR_DEFAUT = 14f;
@@ -48,15 +46,13 @@ public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.O
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
     private boolean demandeLocalisationMiseAJour;
-    private ActivityGoogleMapsBinding binding;
     private Toolbar toolbar;
     private SelectionViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityGoogleMapsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_google_maps);
         demandeLocalisationMiseAJour = true;
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);

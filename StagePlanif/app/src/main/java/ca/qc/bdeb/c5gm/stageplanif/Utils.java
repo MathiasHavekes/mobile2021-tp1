@@ -75,4 +75,14 @@ public class Utils {
     public static Bitmap getImage(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
+
+    public static int renvoyerTotalValeursPriorite() {
+        int totalValeursPriorite = 0;
+
+        for(Priorite p : Priorite.values()) {
+            totalValeursPriorite += p.getValeur();
+        }
+
+        return totalValeursPriorite;
+    }
 }

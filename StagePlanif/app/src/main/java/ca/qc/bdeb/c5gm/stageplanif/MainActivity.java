@@ -27,13 +27,11 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton btnAjouterEleve;
     private Stockage dbHelper;
     private ArrayList<Stage> listeStages;
-    private ArrayList<Stage> listeStagesMasques;
     private RecyclerView recyclerView;
     private ListeStageAdapter StageAdapter;
     private Toolbar toolbar;
     private SelectionViewModel viewModel;
-    private ArrayList<Integer> selectionPriorites = new ArrayList<>();
-    private int selection;
+    private int selectionPriorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +43,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         dbHelper = Stockage.getInstance(getApplicationContext());
         listeStages = dbHelper.getStages();
-        listeStagesMasques = new ArrayList<>();
+        selectionPriorites = Utils.renvoyerTotalValeursPriorite();
 
         creationViewModel();
         creationSwipeRefreshLayout();
         creationRecyclerView();
-        mettreAJourlisteStages();
         btnAjouterEleve.setOnClickListener(ajouterEleveOnClickListener);
     }
 
@@ -59,15 +56,13 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         listeStages = dbHelper.getStages();
         creationRecyclerView();
-        mettreAJourlisteStages();
-        StageAdapter.notifyDataSetChanged();
     }
 
     private void creationSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mettreAJourlisteStages(selection);
+                StageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
                 StageAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -77,26 +72,11 @@ public class MainActivity extends AppCompatActivity {
     private void creationViewModel() {
         viewModel = new ViewModelProvider(this).get(SelectionViewModel.class);
         viewModel.getSelectedItem().observe(this, selection -> {
-            this.selection = selection;
-            mettreAJourlisteStages(selection);
+            this.selectionPriorites = selection;
+            StageAdapter.filtrerListeStages(selectionPriorites);
+            StageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
             StageAdapter.notifyDataSetChanged();
         });
-    }
-
-    private void mettreAJourlisteStages() {
-        listeStages = Utils.trierListeStages(listeStages, new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
-        StageAdapter.notifyDataSetChanged();
-    }
-
-    private void mettreAJourlisteStages(int selection) {
-        listeStages.addAll(listeStagesMasques);
-        listeStagesMasques.clear();
-
-        ArrayList<Integer> listePrioritesSelectionnees = Utils.calculerPrioritesSelectionnees(selection);
-        listeStagesMasques = Utils.filtrerListeStages(listePrioritesSelectionnees, listeStages);
-        listeStages.removeAll(listeStagesMasques);
-        listeStages = Utils.trierListeStages(listeStages, new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
-        StageAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -109,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startGoogleMapActivity() {
-        listeStages.addAll(listeStagesMasques);
         Intent intent = new Intent(this, GoogleMapsActivity.class);
         intent.putParcelableArrayListExtra("liste_des_stages", listeStages);
         startActivity(intent);
@@ -128,6 +107,8 @@ public class MainActivity extends AppCompatActivity {
     private void creationRecyclerView() {
         recyclerView = findViewById(R.id.rv_eleves);
         StageAdapter = new ListeStageAdapter(this, listeStages);
+        StageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
+        StageAdapter.notifyDataSetChanged();
         recyclerView.setAdapter(StageAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
@@ -137,11 +118,6 @@ public class MainActivity extends AppCompatActivity {
             public void OnDrapeauClick(int position, ImageView DrapeauView) {
                 changerPrioriteStage(position, DrapeauView);
                 StageAdapter.notifyItemChanged(position);
-            }
-
-            @Override
-            public void OnImageEleveClick(int position) {
-
             }
 
             @Override
