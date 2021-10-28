@@ -524,6 +524,17 @@ public class Stockage extends SQLiteOpenHelper {
         return (nbMAJ> 0);
     }
 
+    public boolean modifierStage(Stage stage) {
+        SQLiteDatabase db= this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(StageHelper.STAGE_ENTREPRISE_ID, stage.getEntreprise().getId());
+        values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
+        String whereClause= StageHelper._ID+ " = ?";
+        String[] whereArgs= {stage.getId()};
+        int nbMAJ= db.update(StageHelper.NOM_TABLE, values, whereClause, whereArgs);
+        return (nbMAJ> 0);
+    }
+
     public boolean changerPhotoCompte(Compte compte) {
         SQLiteDatabase db= this.getWritableDatabase();
         ContentValues values = new ContentValues();

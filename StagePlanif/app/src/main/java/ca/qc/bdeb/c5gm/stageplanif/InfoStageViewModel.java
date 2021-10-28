@@ -8,31 +8,24 @@ import androidx.lifecycle.ViewModel;
 
 public class InfoStageViewModel extends ViewModel {
     private final MutableLiveData<Priorite> priorite = new MutableLiveData<>();
-    private final MutableLiveData<Bitmap> photo = new MutableLiveData<>();
+    private final MutableLiveData<byte[]> photo = new MutableLiveData<>();
     private final MutableLiveData<Compte> compte = new MutableLiveData<>();
     private final MutableLiveData<Entreprise> entreprise = new MutableLiveData<>();
     private Stage stage;
-    private Boolean changements;
+
 
     public void setPriorite(Priorite selection) {
-        if (priorite.getValue() != selection) {
-            priorite.setValue(selection);
-            changements = true;
-        }
+        priorite.setValue(selection);
     }
 
     public void setImage(Bitmap photo) {
-        if (this.photo.getValue() != photo) {
-            this.photo.setValue(photo);
-            changements = true;
+        if (photo != null){
+            this.photo.setValue(Utils.getBytes(photo));
         }
     }
 
     public void setCompte(Compte compte) {
-        if (this.compte.getValue() != compte) {
-            this.compte.setValue(compte);
-            changements = true;
-        }
+        this.compte.setValue(compte);
     }
 
     public void setEntreprise(Entreprise entreprise) {
@@ -47,7 +40,7 @@ public class InfoStageViewModel extends ViewModel {
         return priorite;
     }
 
-    public LiveData<Bitmap> getPhoto() {
+    public LiveData<byte[]> getPhoto() {
         return photo;
     }
 
