@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Le compte sont le type de donnees utilise pour le recycler view
  */
 public class Compte implements Parcelable {
-    private final Integer Id;
+    private final Integer id;
     /**
      * Le nom du compte
      */
@@ -33,7 +33,7 @@ public class Compte implements Parcelable {
      * @param typeCompte Le type de compte
      */
     public Compte(Integer id, String nom, String prenom, byte[] photo, Integer typeCompte) {
-        this.Id = id;
+        this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.photo = photo;
@@ -48,7 +48,31 @@ public class Compte implements Parcelable {
         } else {
             typeCompte = in.readInt();
         }
-        Id = null;
+        id = in.readInt();
+        int photoLength = in.readInt();
+        if (photoLength != 0) {
+            this.photo = new byte[photoLength];
+            in.readByteArray(this.photo);
+        }
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(nom);
+        parcel.writeString(prenom);
+        if (typeCompte == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(typeCompte);
+        }
+        parcel.writeInt(id);
+        if (photo == null) {
+            parcel.writeInt(0);
+        } else {
+            parcel.writeInt(photo.length);
+            parcel.writeByteArray(photo);
+        }
     }
 
     public static final Creator<Compte> CREATOR = new Creator<Compte>() {
@@ -88,19 +112,7 @@ public class Compte implements Parcelable {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(nom);
-        parcel.writeString(prenom);
-        if (typeCompte == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(typeCompte);
-        }
-    }
-
     public Integer getId() {
-        return Id;
+        return id;
     }
 }

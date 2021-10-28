@@ -16,21 +16,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
@@ -55,7 +50,6 @@ public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSele
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbHelper = Stockage.getInstance(getActivity().getApplicationContext());
-        comptes = dbHelper.getEtudiantsSansStage();
     }
 
     private final View.OnClickListener prendrePhotoOnClickListener = new View.OnClickListener() {
@@ -68,12 +62,63 @@ public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSele
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        viewModel = new ViewModelProvider(requireActivity()).get(InfoStageViewModel.class);
         View view = inflater.inflate(R.layout.fragment_demande_info_eleve, container, false);
         imageView = view.findViewById(R.id.image_eleve_profile);
         btnPrendrePhoto = view.findViewById(R.id.btn_prendre_photo);
         spinnerNom = view.findViewById(R.id.nom_complet_entre_utilisateur);
         radioPriorite = view.findViewById(R.id.radio_group_drapeau);
         radioPriorite.setOnCheckedChangeListener(radioGroupOnClickListener);
+        Stage stage = viewModel.getStage();
+        if (stage != null) {
+            comptes.add(stage.getEtudiant());
+            setSpinner(stage);
+            setRadioButton(stage);
+        } else {
+            comptes = dbHelper.getEtudiantsSansStage();
+            setSpinner();
+        }
+        setImage();
+        return view;
+    }
+
+    private void setRadioButton(Stage stage) {
+        switch (stage.getPriorite()) {
+            case MINIMUM:
+                radioPriorite.check(R.id.drapeau_vert);
+                break;
+            case MOYENNE:
+                radioPriorite.check(R.id.drapeau_jaune);
+                break;
+            case MAXIMUM:
+                radioPriorite.check(R.id.drapeau_rouge);
+                break;
+        }
+    }
+
+    private void setSpinner(Stage stage) {
+        String[] arraySpinner = new String[1];
+        Compte etudiant = stage.getEtudiant();
+        arraySpinner[0] = etudiant.getPrenom() + " " + etudiant.getNom();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
+                android.R.layout.simple_spinner_item, arraySpinner);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerNom.setAdapter(adapter);
+    }
+
+    private void setSpinner() {
+        String[] arraySpinner = new String[comptes.size()];
+        for (int i = 0; i < comptes.size(); i++) {
+            Compte compte = comptes.get(i);
+            arraySpinner[i] = compte.getPrenom() + " " + compte.getNom();
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
+                android.R.layout.simple_spinner_item, arraySpinner);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerNom.setAdapter(adapter);
+    }
+
+    private void setImage() {
         if (comptes.size() > 0) {
             Compte compte = comptes.get(0);
             if (compte.getPhoto() != null) {
@@ -83,23 +128,11 @@ public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSele
                 imageView.setImageResource(R.drawable.ic_baseline_person_24);
             }
         }
-        String[] arraySpinner = new String[comptes.size()];
-        for (int i = 0; i < comptes.size(); i++) {
-            Compte compte = comptes.get(i);
-            arraySpinner[i] = compte.getPrenom() + " " + compte.getNom();
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
-                android.R.layout.simple_spinner_item, arraySpinner);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerNom.setAdapter(adapter);
-        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(InfoStageViewModel.class);
         btnPrendrePhoto.setOnClickListener(prendrePhotoOnClickListener);
         spinnerNom.setOnItemSelectedListener(this);
     }
@@ -191,7 +224,6 @@ public class DemandeInfoEleve extends Fragment implements AdapterView.OnItemSele
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(lienPhotoActuel, bmOptions);
         viewModel.setImage(bitmap);

@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class DemandeInfoEntreprise extends Fragment {
     private ArrayList<Entreprise> entreprises;
@@ -40,7 +41,22 @@ public class DemandeInfoEntreprise extends Fragment {
         texteCP = view.findViewById(R.id.text_cp);
         texteProvince = view.findViewById(R.id.text_province);
         viewModel = new ViewModelProvider(requireActivity()).get(InfoStageViewModel.class);
+        setSpinner();
+        Stage stage = viewModel.getStage();
+        if (stage != null) {
+            Entreprise entrepriseStage = stage.getEntreprise();
+            for (int i = 0; i < entreprises.size(); i++) {
+                Entreprise entrepriseDansListe = entreprises.get(i);
+                if(entrepriseStage.getId().equals(entrepriseDansListe.getId())) {
+                    spinnerEntreprise.setSelection(i);
+                    break;
+                }
+            }
+        }
+        return view;
+    }
 
+    private void setSpinner() {
         String[] arraySpinner = new String[entreprises.size()];
         for (int i = 0; i < entreprises.size(); i++) {
             Entreprise entreprise = entreprises.get(i);
@@ -52,7 +68,6 @@ public class DemandeInfoEntreprise extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerEntreprise.setAdapter(adapter);
         spinnerEntreprise.setOnItemSelectedListener(itemSelectionneListener);
-        return view;
     }
 
     private final AdapterView.OnItemSelectedListener itemSelectionneListener = new AdapterView.OnItemSelectedListener() {

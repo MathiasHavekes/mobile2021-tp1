@@ -33,30 +33,26 @@ public class DemandeInfoStage extends AppCompatActivity {
     private Bitmap photo;
     private Entreprise entreprise;
     private Compte eleve;
-    private Stage stage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_demande_info_stage);
-        Intent intent = getIntent();
-
-        if (intent.hasExtra("stage")) {
-            stage = intent.getParcelableExtra("stage");
-        } else {
-            // Do something else
-        }
         demandeInfoFragment = findViewById(R.id.fragment_demande_info);
         Fragment fragment = new DemandeInfoEleve();
+        context = this;
+        creationViewModel();
+        Intent intent = getIntent();
+        if (intent.hasExtra("stage")) {
+            Stage stage = intent.getParcelableExtra("stage");
+            viewModel.setStage(stage);
+        }
         changerFragment(fragment);
-
         boutonSuivant = findViewById(R.id.btn_suivant);
         boutonAnnuler = findViewById(R.id.btn_annuler);
         boutonAnnuler.setOnClickListener(annulerClique);
         boutonSuivant.setOnClickListener(suivantClique);
-        context = this;
-        creationViewModel();
     }
 
     private final View.OnClickListener annulerClique = new View.OnClickListener() {
@@ -115,18 +111,7 @@ public class DemandeInfoStage extends AppCompatActivity {
         public void onClick(View view) {
             if (boutonSuivant.getText() == getResources().getString(R.string.btn_suivant)) {
                 if (priorite == null || eleve == null) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-                    alertDialog.setTitle(R.string.titre_erreur);
-                    alertDialog.setMessage(getString(R.string.message_erreur));
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.btn_ok),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    //on ne fait rien
-                                }
-                            });
-                    alertDialog.show();
-                    return;
+                    afficherMessage();
                 }
                 boutonSuivant.setText(getResources().getString(R.string.btn_terminer));
                 Fragment fragment = new DemandeInfoEntreprise();
@@ -147,4 +132,19 @@ public class DemandeInfoStage extends AppCompatActivity {
             }
         }
     };
+
+    private void afficherMessage() {
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle(R.string.titre_erreur);
+        alertDialog.setMessage(getString(R.string.message_erreur));
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.btn_ok),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //on ne fait rien
+                    }
+                });
+        alertDialog.show();
+        return;
+    }
 }
