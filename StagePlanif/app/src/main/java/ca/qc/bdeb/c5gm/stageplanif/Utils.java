@@ -8,7 +8,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Utils {
     public static ArrayList<Integer> calculerPrioritesSelectionnees(int selection) {
@@ -33,10 +32,10 @@ public class Utils {
         return listeStagesMasques;
     }
 
-    public static ArrayList<GoogleMapsObject> filtrerListeGoogleMapsObject(ArrayList<Integer> ListePrioritesSelectionnees, ArrayList<GoogleMapsObject> listeStages) {
-        ArrayList<GoogleMapsObject> listeStagesMasques = new ArrayList<>();
+    public static ArrayList<StagePoidsPlume> filtrerListeGoogleMapsObject(ArrayList<Integer> ListePrioritesSelectionnees, ArrayList<StagePoidsPlume> listeStages) {
+        ArrayList<StagePoidsPlume> listeStagesMasques = new ArrayList<>();
 
-        for (GoogleMapsObject s : listeStages) {
+        for (StagePoidsPlume s : listeStages) {
             if (!ListePrioritesSelectionnees.contains(s.getPriorite().getValeur())) {
                 listeStagesMasques.add(s);
             }

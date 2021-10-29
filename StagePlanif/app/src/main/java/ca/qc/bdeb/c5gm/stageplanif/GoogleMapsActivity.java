@@ -31,6 +31,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import ca.qc.bdeb.c5gm.stageplanif.databinding.ActivityGoogleMapsBinding;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +40,9 @@ import java.util.List;
 public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback, OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private static final float ZOOM_PAR_DEFAUT = 14f;
-    private ArrayList<GoogleMapsObject> listeStages;
-    private ArrayList<GoogleMapsObject> listeStagesMasques;
+    private ActivityGoogleMapsBinding binding;
+    private ArrayList<StagePoidsPlume> listeStages;
+    private ArrayList<StagePoidsPlume> listeStagesMasques;
     private GoogleMap mMap;
     private Geocoder geocoder;
     private FusedLocationProviderClient fusedLocationClient;
@@ -52,7 +55,8 @@ public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_google_maps);
+        binding = ActivityGoogleMapsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         demandeLocalisationMiseAJour = true;
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -74,6 +78,9 @@ public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.O
         creationLocationCallBack();
     }
 
+    /**
+     * Assigne toutes les valeurs necessaires au bon fonctionnement du locationRequest
+     */
     private void creationLocationRequest() {
         locationRequest = LocationRequest.create();
         locationRequest.setInterval(4000);
@@ -81,7 +88,9 @@ public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.O
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-
+    /**
+     * Logique du locationCallback, a chaque mise a jour de la localisation, cette methode est appelee
+     */
     private void creationLocationCallBack() {
         locationCallback = new LocationCallback() {
             @Override
@@ -97,18 +106,24 @@ public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.O
                 }
             }
         };
-
     }
 
+    /**
+     * Creer le viewModel qui permet de recevoir les informations necessaires a l'affichage des stages
+     */
     private void creationViewModel() {
         viewModel = new ViewModelProvider(this).get(SelectionViewModel.class);
         viewModel.getSelectedItem().observe(this, selection -> {
-            mettreAJourlisteStages(selection);
+            filtrerlisteStages(selection);
             placerMarqueurs();
         });
     }
 
-    private void mettreAJourlisteStages(int selection) {
+    /**
+     * Filtre listeStages pour n'afficher que les stages selectionnes par l'utilisateur
+     * @param selection
+     */
+    private void filtrerlisteStages(int selection) {
         listeStages.addAll(listeStagesMasques);
         listeStagesMasques.clear();
 
@@ -128,16 +143,22 @@ public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.O
         placerMarqueurs();
     }
 
+    /**
+     * Place les marqueurs de toutes les entreprises presentent dans listeStages
+     */
     public void placerMarqueurs() {
         mMap.clear();
-        for (GoogleMapsObject s : listeStages) {
+        for (StagePoidsPlume s : listeStages) {
             MarkerOptions marqueur = creerMarqueur(s.getEntreprise().getLatLng(), s.getPriorite(), s.getEntreprise().getNom());
             mMap.addMarker(marqueur);
         }
     }
 
+    /**
+     * Set les coordonnees de toutes les entreprises presentent dans listeStages pour ne pas refaire les appels geocoder a chaque filtrage de la liste
+     */
     private void setCoordonneesEntreprise() {
-        for (GoogleMapsObject s : listeStages) {
+        for (StagePoidsPlume s : listeStages) {
             StringBuilder adresseComplete = new StringBuilder();
             adresseComplete.append(s.getEntreprise().getAdresse() + ", " + s.getEntreprise().getVille() + ", " + s.getEntreprise().getProvince() + " " + s.getEntreprise().getCp());
 
@@ -146,6 +167,12 @@ public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.O
         }
     }
 
+    /**
+     * Trouve l'adresse liee a une adresse de type String, fait l'appel du geocoder et gere les exceptions
+     *
+     * @param adresse adresse de l'entreprise en String
+     * @return l'adresse de l'entreprise en type Address avec sa localisation
+     */
     private double[] trouverAdressesParGeoCoding(String adresse) {
         try {
             List<Address> listeAdresses = geocoder.getFromLocationName(adresse, 1);
@@ -160,6 +187,14 @@ public class GoogleMapsActivity extends AppCompatActivity implements GoogleMap.O
         return null;
     }
 
+    /**
+     * Creer un marqueur a partir de la positition de l'entreprise, de la priorite et du nom de l'entreprise lie au stage
+     *
+     * @param latLng tableau de double contenant la longitude et lattitude de l'entreprise du stage
+     * @param priorite priorite du stage
+     * @param nomEntreprise nom de l'enmtreprise appartenant au stage
+     * @return le marqueur creer avec toutes les informations necessaires
+     */
     private MarkerOptions creerMarqueur(double[] latLng, Priorite priorite, String nomEntreprise) {
         LatLng coordonneesAdresse = new LatLng(latLng[0], latLng[1]);
         MarkerOptions marqueur = new MarkerOptions();

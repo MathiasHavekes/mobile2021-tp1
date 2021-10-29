@@ -170,11 +170,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private void startGoogleMapActivity() {
         Intent intent = new Intent(this, GoogleMapsActivity.class);
-        ArrayList<GoogleMapsObject> googleMapsObjects = new ArrayList<>();
+        ArrayList<StagePoidsPlume> stagePoidsPlumes = new ArrayList<>();
         for (Stage stage : listeStages) {
-            googleMapsObjects.add(stage.getGoogleMapsObject());
+            stagePoidsPlumes.add(stage.getGoogleMapsObject());
         }
-        intent.putParcelableArrayListExtra("liste_des_stages", googleMapsObjects);
+        intent.putParcelableArrayListExtra("liste_des_stages", stagePoidsPlumes);
         startActivity(intent);
     }
 

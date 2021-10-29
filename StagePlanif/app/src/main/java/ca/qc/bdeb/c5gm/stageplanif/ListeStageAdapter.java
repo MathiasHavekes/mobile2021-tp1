@@ -102,12 +102,19 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
      * @param selectionPriorites priorites choisis
      */
     protected void filtrerListeStages(int selectionPriorites) {
-        listeStages.addAll(listeStagesMasques);
-        listeStagesMasques.clear();
+        regrouperTousLesStages();
 
         ArrayList<Integer> listePrioritesSelectionnees = Utils.calculerPrioritesSelectionnees(selectionPriorites);
         listeStagesMasques = Utils.filtrerListeStages(listePrioritesSelectionnees, listeStages);
         listeStages.removeAll(listeStagesMasques);
+    }
+
+    /**
+     * Regroupe tous les stages dans listeStages
+     */
+    protected void regrouperTousLesStages() {
+        listeStages.addAll(listeStagesMasques);
+        listeStagesMasques.clear();
     }
 
     /**

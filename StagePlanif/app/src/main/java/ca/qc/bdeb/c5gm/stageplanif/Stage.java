@@ -111,7 +111,7 @@ public class Stage implements Parcelable {
      *
      * @return un objet google maps contenant les informations du stage
      */
-    public GoogleMapsObject getGoogleMapsObject() {
-        return new GoogleMapsObject(this.getEntreprise(), this.getPriorite());
+    public StagePoidsPlume getGoogleMapsObject() {
+        return new StagePoidsPlume(this.getEntreprise(), this.getPriorite());
     }
 }

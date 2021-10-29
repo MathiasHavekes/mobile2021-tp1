@@ -59,6 +59,11 @@ public class SelectionPrioriteFragment extends Fragment {
         }
     };
 
+    /**
+     *
+     * @param estCoche
+     * @param valeurDrapeau
+     */
     private void calculerValeurSelection(boolean estCoche, int valeurDrapeau) {
         if (estCoche) {
             selection += valeurDrapeau;

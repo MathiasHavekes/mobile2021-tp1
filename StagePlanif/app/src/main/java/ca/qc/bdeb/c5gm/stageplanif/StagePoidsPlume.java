@@ -6,19 +6,19 @@ import android.os.Parcelable;
 /**
  * Les GoogleMapsObject sont des pures fabrications qui permettent d'envoyer plusieurs stages sans faire crasher le programme
  */
-public class GoogleMapsObject implements Parcelable {
+public class StagePoidsPlume implements Parcelable {
     /**
      * Implementation de parcel
      */
-    public static final Creator<GoogleMapsObject> CREATOR = new Creator<GoogleMapsObject>() {
+    public static final Creator<StagePoidsPlume> CREATOR = new Creator<StagePoidsPlume>() {
         @Override
-        public GoogleMapsObject createFromParcel(Parcel in) {
-            return new GoogleMapsObject(in);
+        public StagePoidsPlume createFromParcel(Parcel in) {
+            return new StagePoidsPlume(in);
         }
 
         @Override
-        public GoogleMapsObject[] newArray(int size) {
-            return new GoogleMapsObject[size];
+        public StagePoidsPlume[] newArray(int size) {
+            return new StagePoidsPlume[size];
         }
     };
     /**
@@ -30,7 +30,7 @@ public class GoogleMapsObject implements Parcelable {
      */
     private final Priorite priorite;
 
-    public GoogleMapsObject(Entreprise entreprise, Priorite priorite) {
+    public StagePoidsPlume(Entreprise entreprise, Priorite priorite) {
         this.entreprise = entreprise;
         this.priorite = priorite;
     }
@@ -38,7 +38,7 @@ public class GoogleMapsObject implements Parcelable {
     /**
      * Implementation de parcel
      */
-    protected GoogleMapsObject(Parcel in) {
+    protected StagePoidsPlume(Parcel in) {
         entreprise = in.readParcelable(Entreprise.class.getClassLoader());
         priorite = in.readParcelable(Priorite.class.getClassLoader());
     }
