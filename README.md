@@ -7,5 +7,6 @@ Projet Android pour le cours d'application mobile (420-5GM-BB) donné au collèg
 - Creer 3 tableaux de LightWeightStage pour classer les etudiant des le lancement de l'activite GoogleMaps
 - Dans InfoStageActivity trouver le moyen de trouver le context sans passer par le text du bouton
 - Changer la maniere de modifier la taille de la photo sans faire apparaitre un "glitch" lors de l'affichage du recylerView
+- Trier en ordre decroissant de priorite plutot qu'en ordre croissant
 
 Mis a part les elements cites ci-dessus, les fonctionnalitees demandees pour la premiere remise du tp fonctionne bien. 
