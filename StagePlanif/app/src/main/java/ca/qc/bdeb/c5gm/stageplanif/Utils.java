@@ -2,11 +2,12 @@ package ca.qc.bdeb.c5gm.stageplanif;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.icu.util.Calendar;
+
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class Utils {
     public static ArrayList<Integer> calculerPrioritesSelectionnees(int selection) {
@@ -31,11 +32,24 @@ public class Utils {
         return listeStagesMasques;
     }
 
-    public static ArrayList<Stage> trierListeStages(ArrayList<Stage> listeStages, Comparator<Stage>... comparators) {
-        Collections.sort(listeStages, new StageChainedComparateur(comparators));
-        return listeStages;
+    public static ArrayList<StagePoidsPlume> filtrerListeGoogleMapsObject(ArrayList<Integer> ListePrioritesSelectionnees, ArrayList<StagePoidsPlume> listeStages) {
+        ArrayList<StagePoidsPlume> listeStagesMasques = new ArrayList<>();
+
+        for (StagePoidsPlume s : listeStages) {
+            if (!ListePrioritesSelectionnees.contains(s.getPriorite().getValeur())) {
+                listeStagesMasques.add(s);
+            }
+        }
+        return listeStagesMasques;
     }
 
+    /**
+     * Renvoie une couleur en fonction de la priorite passée en paramètre
+     * Priorité minimum = vert, Priorité moyenne = jaune, Priorité maximum = Rouge
+     * Sinon renvoie du noir
+     * @param priorite
+     * @return la couleur en format RGB (int)
+     */
     public static int renvoyerCouleur(Priorite priorite) {
         switch (priorite) {
             case MINIMUM:
@@ -46,6 +60,26 @@ public class Utils {
                 return R.color.red;
             default:
                 return R.color.black;
+        }
+    }
+
+    /**
+     * Renvoie une couleur en fonction de la priorite passée en paramètre
+     * Priorité minimum = vert, Priorité moyenne = jaune, Priorité maximum = Rouge
+     * Sinon renvoie du bleu
+     * @param priorite
+     * @return la couleur en format HSV (float)
+     */
+    public static float renvoyerCouleurHSV(Priorite priorite) {
+        switch (priorite) {
+            case MINIMUM:
+                return BitmapDescriptorFactory.HUE_GREEN;
+            case MOYENNE:
+                return BitmapDescriptorFactory.HUE_YELLOW;
+            case MAXIMUM:
+                return BitmapDescriptorFactory.HUE_RED;
+            default:
+                return BitmapDescriptorFactory.HUE_BLUE;
         }
     }
 
@@ -60,4 +94,39 @@ public class Utils {
     public static Bitmap getImage(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
+
+    public static Bitmap getImageAjustee(byte[] photo, int targetW, int targetH) {
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+
+        BitmapFactory.decodeByteArray(photo, 0, photo.length, bmOptions);
+
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+
+        Bitmap bitmap = BitmapFactory.decodeByteArray(photo, 0, photo.length, bmOptions);
+        return bitmap;
+    }
+
+    /**
+     * Methode qui determine l'annee scolaire en cours
+     * @return l'annee scolaire en cours
+     */
+    public static String getAnneeScolaire() {
+        Calendar calendrier = Calendar.getInstance();
+        int anneeActuelle = calendrier.get(Calendar.YEAR);
+        int moisActuel = calendrier.get(Calendar.MONTH);
+        if (moisActuel < 7) {
+            return String.format("%d-%d", anneeActuelle - 1, anneeActuelle);
+        }
+        return String.format("%d-%d", anneeActuelle, anneeActuelle + 1);
+    }
+
 }

@@ -3,7 +3,24 @@ package ca.qc.bdeb.c5gm.stageplanif;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Les entreprises sont les entreprises qui donnent des stages
+ */
 public class Entreprise implements Parcelable {
+    /**
+     * Implementation de parcelable
+     */
+    public static final Creator<Entreprise> CREATOR = new Creator<Entreprise>() {
+        @Override
+        public Entreprise createFromParcel(Parcel in) {
+            return new Entreprise(in);
+        }
+
+        @Override
+        public Entreprise[] newArray(int size) {
+            return new Entreprise[size];
+        }
+    };
     /**
      * ID de l'entreprise
      */
@@ -42,6 +59,9 @@ public class Entreprise implements Parcelable {
         this.codePostal = codePostal;
     }
 
+    /**
+     * Implementation de parcelable
+     */
     protected Entreprise(Parcel in) {
         id = in.readString();
         nom = in.readString();
@@ -51,18 +71,6 @@ public class Entreprise implements Parcelable {
         codePostal = in.readString();
         latLng = in.createDoubleArray();
     }
-
-    public static final Creator<Entreprise> CREATOR = new Creator<Entreprise>() {
-        @Override
-        public Entreprise createFromParcel(Parcel in) {
-            return new Entreprise(in);
-        }
-
-        @Override
-        public Entreprise[] newArray(int size) {
-            return new Entreprise[size];
-        }
-    };
 
     public String getId() {
         return id;
@@ -111,4 +119,5 @@ public class Entreprise implements Parcelable {
         parcel.writeString(codePostal);
         parcel.writeDoubleArray(latLng);
     }
+
 }

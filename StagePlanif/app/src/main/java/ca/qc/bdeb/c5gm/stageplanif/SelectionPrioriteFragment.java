@@ -1,24 +1,23 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CheckBox;
-
-public class MenuSelectionPriorite extends Fragment {
+public class SelectionPrioriteFragment extends Fragment {
     private final int VALEUR_DRAPEAU_VERT = Priorite.MINIMUM.getValeur();
     private final int VALEUR_DRAPEAU_JAUNE = Priorite.MOYENNE.getValeur();
     private final int VALEUR_DRAPEAU_ROUGE = Priorite.MAXIMUM.getValeur();
     private CheckBox drapeauVert, drapeauJaune, drapeauRouge;
     private int selection;
-    private ItemViewModel viewModel;
+    private SelectionViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,11 +31,11 @@ public class MenuSelectionPriorite extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(SelectionViewModel.class);
         drapeauVert.setOnClickListener(drapeauVertOnClickListener);
         drapeauJaune.setOnClickListener(drapeauJauneOnClickListener);
         drapeauRouge.setOnClickListener(drapeauRougeOnClickListener);
-        selection = VALEUR_DRAPEAU_VERT + VALEUR_DRAPEAU_JAUNE + VALEUR_DRAPEAU_ROUGE;
+        selection = Priorite.getTotalValeursPriorites();
     }
 
     private final View.OnClickListener drapeauVertOnClickListener = new View.OnClickListener() {
@@ -60,6 +59,11 @@ public class MenuSelectionPriorite extends Fragment {
         }
     };
 
+    /**
+     *
+     * @param estCoche
+     * @param valeurDrapeau
+     */
     private void calculerValeurSelection(boolean estCoche, int valeurDrapeau) {
         if (estCoche) {
             selection += valeurDrapeau;

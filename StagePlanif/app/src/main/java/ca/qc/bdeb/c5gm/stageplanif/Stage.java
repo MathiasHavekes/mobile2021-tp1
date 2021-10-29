@@ -3,7 +3,20 @@ package ca.qc.bdeb.c5gm.stageplanif;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.UUID;
+
 public class Stage implements Parcelable {
+    public static final Creator<Stage> CREATOR = new Creator<Stage>() {
+        @Override
+        public Stage createFromParcel(Parcel in) {
+            return new Stage(in);
+        }
+
+        @Override
+        public Stage[] newArray(int size) {
+            return new Stage[size];
+        }
+    };
     /**
      * ID du stage
      */
@@ -17,10 +30,6 @@ public class Stage implements Parcelable {
      */
     private Compte etudiant;
     /**
-     * Annee scolaire du stage
-     */
-    private final String anneeScolaire;
-    /**
      * Professeur du stage
      */
     private Compte professeur;
@@ -31,51 +40,30 @@ public class Stage implements Parcelable {
 
     public Stage(String id, String anneeScolaire, Priorite priorite) {
         this.id = id;
-        this.anneeScolaire = anneeScolaire;
+        this.priorite = priorite;
+    }
+
+    public Stage(Priorite priorite) {
+        this.id = UUID.randomUUID().toString();
         this.priorite = priorite;
     }
 
     protected Stage(Parcel in) {
         id = in.readString();
         etudiant = in.readParcelable(Compte.class.getClassLoader());
-        anneeScolaire = in.readString();
         professeur = in.readParcelable(Compte.class.getClassLoader());
-        entreprise = in.readParcelable(Compte.class.getClassLoader());
-        priorite = in.readParcelable(Compte.class.getClassLoader());
+        entreprise = in.readParcelable(Entreprise.class.getClassLoader());
+        priorite = in.readParcelable(Priorite.class.getClassLoader());
     }
 
-    public static final Creator<Stage> CREATOR = new Creator<Stage>() {
-        @Override
-        public Stage createFromParcel(Parcel in) {
-            return new Stage(in);
-        }
-
-        @Override
-        public Stage[] newArray(int size) {
-            return new Stage[size];
-        }
-    };
-
-    /**
-     * Ajouter un etudiant au stage
-     * @param etudiant etudiant du stage
-     */
     public void addEtudiant(Compte etudiant) {
         this.etudiant = etudiant;
     }
 
-    /**
-     * Professeur du stage
-     * @param professeur
-     */
     public void addProfesseur(Compte professeur) {
         this.professeur = professeur;
     }
 
-    /**
-     * Entreprise du stage
-     * @param entreprise
-     */
     public void addEntreprise(Entreprise entreprise) {
         this.entreprise = entreprise;
     }
@@ -88,16 +76,16 @@ public class Stage implements Parcelable {
         return etudiant;
     }
 
-    public String getAnneeScolaire() {
-        return anneeScolaire;
-    }
-
     public Compte getProfesseur() {
         return professeur;
     }
 
     public Priorite getPriorite() {
         return priorite;
+    }
+
+    public void setPriorite(Priorite priorite) {
+        this.priorite = priorite;
     }
 
     public String getId() {
@@ -113,13 +101,17 @@ public class Stage implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
         parcel.writeParcelable(etudiant, i);
-        parcel.writeString(anneeScolaire);
         parcel.writeParcelable(professeur, i);
         parcel.writeParcelable(entreprise, i);
         parcel.writeParcelable(priorite, i);
     }
-  
-    public void setPriorite(Priorite priorite) {
-        this.priorite = priorite;
+
+    /**
+     * Transforme un stage en une pure fabrication pour envoyer a Google Maps
+     *
+     * @return un objet google maps contenant les informations du stage
+     */
+    public StagePoidsPlume getGoogleMapsObject() {
+        return new StagePoidsPlume(this.getEntreprise(), this.getPriorite());
     }
 }

@@ -6,12 +6,32 @@
     <string name="msg_bouton_filtre">TODO</string>
     <string name="msg_nom">Nom de l\'eleve</string>
     <string name="msg_prenom">Prénom de l\'eleve</string>
-    <string name="title_activity_google_maps">GoogleMaps</string>
-    <string name="title_activity_add_student">activity_add_student</string>
+    <string name="titre_activity_google_maps">GoogleMaps</string>
+    <string name="titre_activity_demande_info_stage">Infos Stage</string>
 
-    <string name="btn_ajouter">Ajouter</string>
+    <string name="btn_suivant">Suivant</string>
+    <string name="btn_terminer">Terminer</string>
+    <string name="btn_annuler">Annuler</string>
 
     <string name="info_eleve">Élève</string>
     <string name="entree_prenom">Prénom</string>
     <string name="entree_nom">Nom de famille</string>
+
+    <string name="adresse_entreprise">Adresse</string>
+    <string name="ville_entreprise">Ville</string>
+    <string name="code_postale_entreprise">Code Postale</string>
+    <string name="province_entreprise">Province</string>
+
+    <string name="titre_avertissement">Avertissement</string>
+    <string name="titre_erreur">Erreur</string>
+    <string name="message_erreur">Veuillez remplir tous les champs</string>
+    <string name="message_modification">Veuillez modifier un champ pour enregistrer</string>
+    <string name="message_supprimer">Voulez-vous supprimer cet item ?</string>
+    <string name="message_avertissement">Voulez-vous annuler les modifications apportes ?</string>
+    <string name="btn_ok">ok</string>
+    <string name="message_oui">Oui</string>
+    <string name="annuler_message">Annuler</string>
+
+    <string name="image_eleve_description">Image de l\'élève</string>
+    <string name="btn_prendre_photo_description">Bouton prise de photo</string>
 </resources>

@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Classe qui définit l
+ */
 public enum Priorite implements Parcelable{
     MINIMUM(1),
     MOYENNE(2),
@@ -16,7 +19,7 @@ public enum Priorite implements Parcelable{
             Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
     private static final Random RANDOM = new Random();
-    private int valeur;
+    private final int valeur;
 
     Priorite(int valeur) {
         this.valeur = valeur;
@@ -69,5 +72,19 @@ public enum Priorite implements Parcelable{
             }
         }
         return null;
+    }
+
+    /**
+     * Renvoyer le total des valeurs de chaque prioritées
+     * @return le total (int)
+     */
+    public static int getTotalValeursPriorites() {
+        int totalValeursPriorite = 0;
+
+        for(Priorite p : Priorite.values()) {
+            totalValeursPriorite += p.getValeur();
+        }
+
+        return totalValeursPriorite;
     }
 }

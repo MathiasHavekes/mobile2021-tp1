@@ -13,13 +13,15 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
- * Adapte la liste de compte pour le recycler view
+ * Adapte la liste de stage pour le recycler view
  */
 public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.ListeStageHolder> {
     /**
-     * La liste des comptes à adapter pour le recycler view
+     * La liste des stages à adapter pour le recycler view
      */
     private final ArrayList<Stage> listeStages;
     /**
@@ -27,15 +29,23 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
      */
     private final LayoutInflater inflater;
     /**
+     * La liste des stages à ne pas afficher
+     */
+    private ArrayList<Stage> listeStagesMasques;
+    /**
      * Les listener de cliques
      */
     private OnItemClickListener listener;
+    /**
+     * Contexte de l'activitee
+     */
+    private final Context context;
 
-    private Context context;
     public ListeStageAdapter(Context context, ArrayList<Stage> listeStages) {
         inflater = LayoutInflater.from(context);
         this.listeStages = listeStages;
         this.context = context;
+        listeStagesMasques = new ArrayList<>();
     }
 
     /**
@@ -60,16 +70,51 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
         holder.drapeauView.setColorFilter(ContextCompat.getColor(context, Utils.renvoyerCouleur(stage.getPriorite())));
         holder.nomEleveView.setText(stage.getEtudiant().getNom());
         holder.prenomEleveView.setText(stage.getEtudiant().getPrenom());
-        holder.imageEleveView.setImageResource(R.drawable.ic_baseline_person_24);
-        if (stage.getEtudiant().getPhoto() != null) {
-            Bitmap photoBitmap = Utils.getImage(stage.getEtudiant().getPhoto());
-            holder.imageEleveView.setImageBitmap(photoBitmap);
-        }
+        //Creation d'un evenement qui met les images ajustees dans le recyclerView lorsque ceux-ci sont crees
+        holder.imageEleveView.post(() -> {
+            if (stage.getEtudiant().getPhoto() != null) {
+                ImageView imageView = holder.imageEleveView;
+                Bitmap bitmap = Utils.getImageAjustee(stage.getEtudiant().getPhoto(), imageView.getWidth(), imageView.getHeight());
+                imageView.setImageBitmap(bitmap);
+            } else {
+                holder.imageEleveView.setImageResource(R.drawable.ic_baseline_person_24);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return listeStages.size();
+    }
+
+    /**
+     * Trie la liste de stage
+     *
+     * @param comparators les comparateurs utilises pour trier
+     */
+    protected void trierListeStages(Comparator<Stage>... comparators) {
+        Collections.sort(listeStages, new StageChainedComparateur(comparators));
+    }
+
+    /**
+     * Filtrer la liste de stage en fonction des priorites choisies
+     *
+     * @param selectionPriorites priorites choisis
+     */
+    protected void filtrerListeStages(int selectionPriorites) {
+        regrouperTousLesStages();
+
+        ArrayList<Integer> listePrioritesSelectionnees = Utils.calculerPrioritesSelectionnees(selectionPriorites);
+        listeStagesMasques = Utils.filtrerListeStages(listePrioritesSelectionnees, listeStages);
+        listeStages.removeAll(listeStagesMasques);
+    }
+
+    /**
+     * Regroupe tous les stages dans listeStages
+     */
+    protected void regrouperTousLesStages() {
+        listeStages.addAll(listeStagesMasques);
+        listeStagesMasques.clear();
     }
 
     /**
@@ -85,20 +130,13 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
         void OnDrapeauClick(int position, ImageView favoriteView);
 
         /**
-         * Comportement lors d'un clique sur l'image de l'élève
-         *
-         * @param position position dans le recyclerView de l'item
-         */
-        void OnImageEleveClick(int position);
-
-        /**
          * Comportement lors d'un clique sur le profile du recylcerview d'un élève
          *
          * @param position position dans le recyclerView de l'item
          */
-        void OnItemViewClick(int position);
+        void OnItemViewClick(View view, int position);
     }
-  
+
     /**
      * Classe qui va afficher les views
      */
@@ -144,20 +182,11 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
                 }
             });
 
-            imageEleveView.setOnClickListener(view -> {
-                if (listener != null) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.OnImageEleveClick(position);
-                    }
-                }
-            });
-
             itemView.setOnClickListener(view -> {
                 if (listener != null) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
-                        listener.OnItemViewClick(position);
+                        listener.OnItemViewClick(view, position);
                     }
                 }
             });

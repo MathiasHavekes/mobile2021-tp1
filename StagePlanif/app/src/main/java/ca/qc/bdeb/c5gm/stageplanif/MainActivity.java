@@ -1,5 +1,6 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,7 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -16,62 +20,140 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
+/**
+ * Classe qui s'occupe de l'activite activity_main
+ */
 public class MainActivity extends AppCompatActivity {
+    /**
+     * Onclick listener pour lancer l'activitee d'ajout de stage
+     */
+    private final View.OnClickListener ajouterEleveOnClickListener = view -> lancerActiviteAjoutStage(view);
+    /**
+     * Contient le SwipeRefreshLayout
+     */
+    private SwipeRefreshLayout swipeRefreshLayout;
+    /**
+     * Contient le FloatingActionButton d'ajout d'eleve
+     */
     private FloatingActionButton btnAjouterEleve;
+    /**
+     * Contient le lien avec la BD
+     */
     private Stockage dbHelper;
+    /**
+     * Liste des stages
+     */
     private ArrayList<Stage> listeStages;
-    private ArrayList<Stage> listeStagesMasques;
+    /**
+     * Contient le recycler view des stages
+     */
     private RecyclerView recyclerView;
-    private ListeStageAdapter StageAdapter;
+    /**
+     * L'adapteur des stages
+     */
+    private ListeStageAdapter stageAdapter;
+    /**
+     * Defini le logique de swipe d'un item du recycler view
+     */
+    final ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            AlertDialog alertDialog = new AlertDialog.Builder(viewHolder.itemView.getContext()).create();
+            alertDialog.setTitle(R.string.titre_avertissement);
+            alertDialog.setMessage(getString(R.string.message_supprimer));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.message_oui),
+                    (dialogInterface, i) -> {
+                        int indexEnleve = viewHolder.getAdapterPosition();
+                        dbHelper.deleteStage(listeStages.get(indexEnleve));
+                        listeStages.remove(indexEnleve);
+                        stageAdapter.notifyItemRemoved(indexEnleve);
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.annuler_message),
+                    (dialogInterface, i) -> {
+                        int indexEnleve = viewHolder.getAdapterPosition();
+                        stageAdapter.notifyItemChanged(indexEnleve);
+                    });
+            alertDialog.show();
+            return;
+        }
+    };
+    /**
+     * La toolbar
+     */
     private Toolbar toolbar;
-    private ItemViewModel viewModel;
-    private ArrayList<Integer> selectionPriorites = new ArrayList<>();
+    /**
+     * Contient le view model pour communiquer avec le fragment de selection de priorite
+     */
+    private SelectionViewModel viewModel;
+    /**
+     * Contient la valeur des selections de priorite, est a jour en tout temps
+     */
+    private int selectionPriorites;
+    /**
+     * Lance l'activitee d'information de stage en demandant un resultat et analyse du resultat
+     */
+    final ActivityResultLauncher<Intent> envoyerInfoStageActivity = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent intent = result.getData();
+                    Stage stage = intent.getParcelableExtra("stage");
+                    mettreDansRV(stage);
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = findViewById((R.id.toolbar));
+        toolbar = findViewById(R.id.toolbar);
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         btnAjouterEleve = findViewById(R.id.btn_ajouter_eleve);
         setSupportActionBar(toolbar);
         dbHelper = Stockage.getInstance(getApplicationContext());
         listeStages = dbHelper.getStages();
-        listeStagesMasques = new ArrayList<>();
+        selectionPriorites = Priorite.getTotalValeursPriorites();
 
         creationViewModel();
-
+        creationSwipeRefreshLayout();
         creationRecyclerView();
-        mettreAJourlisteStages();
         btnAjouterEleve.setOnClickListener(ajouterEleveOnClickListener);
     }
 
-    private void creationViewModel() {
-        viewModel = new ViewModelProvider(this).get(ItemViewModel.class);
-        viewModel.getSelectedItem().observe(this, selection -> {
-            mettreAJourlisteStages(selection);
-            StageAdapter.notifyDataSetChanged();
+    /**
+     * Creation et logique du swipe refresh layout
+     */
+    private void creationSwipeRefreshLayout() {
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            stageAdapter.filtrerListeStages(selectionPriorites);
+            stageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
+            stageAdapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
         });
     }
 
-    private void mettreAJourlisteStages() {
-        listeStages = Utils.trierListeStages(listeStages, new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
-        StageAdapter.notifyDataSetChanged();
-    }
-
-    private void mettreAJourlisteStages(int selection) {
-        listeStages.addAll(listeStagesMasques);
-        listeStagesMasques.clear();
-
-        ArrayList<Integer> listePrioritesSelectionnees = Utils.calculerPrioritesSelectionnees(selection);
-        listeStagesMasques = Utils.filtrerListeStages(listePrioritesSelectionnees, listeStages);
-        listeStages.removeAll(listeStagesMasques);
-        listeStages = Utils.trierListeStages(listeStages, new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
-        StageAdapter.notifyDataSetChanged();
+    /**
+     * Creation et logique du view model pour communiquer avec le fragment de selection
+     */
+    private void creationViewModel() {
+        viewModel = new ViewModelProvider(this).get(SelectionViewModel.class);
+        viewModel.getSelectedItem().observe(this, selection -> {
+            this.selectionPriorites = selection;
+            stageAdapter.filtrerListeStages(selectionPriorites);
+            stageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
+            stageAdapter.notifyDataSetChanged();
+        });
     }
 
     @Override
@@ -83,10 +165,16 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Commence l'activitee de Google Maps
+     */
     private void startGoogleMapActivity() {
-        listeStages.addAll(listeStagesMasques);
-        Intent intent = new Intent(this, GoogleMaps.class);
-        intent.putParcelableArrayListExtra("liste_des_stages", listeStages);
+        Intent intent = new Intent(this, GoogleMapsActivity.class);
+        ArrayList<StagePoidsPlume> stagePoidsPlumes = new ArrayList<>();
+        for (Stage stage : listeStages) {
+            stagePoidsPlumes.add(stage.getGoogleMapsObject());
+        }
+        intent.putParcelableArrayListExtra("liste_des_stages", stagePoidsPlumes);
         startActivity(intent);
     }
 
@@ -102,37 +190,33 @@ public class MainActivity extends AppCompatActivity {
      */
     private void creationRecyclerView() {
         recyclerView = findViewById(R.id.rv_eleves);
-        StageAdapter = new ListeStageAdapter(this, listeStages);
-        recyclerView.setAdapter(StageAdapter);
+        stageAdapter = new ListeStageAdapter(this, listeStages);
+        stageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
+        stageAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(stageAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(recyclerView);
 
-        StageAdapter.setOnItemClickListener(new ListeStageAdapter.OnItemClickListener() {
+        stageAdapter.setOnItemClickListener(new ListeStageAdapter.OnItemClickListener() {
             @Override
             public void OnDrapeauClick(int position, ImageView DrapeauView) {
                 changerPrioriteStage(position, DrapeauView);
-                StageAdapter.notifyDataSetChanged();
+                stageAdapter.notifyItemChanged(position);
             }
 
             @Override
-            public void OnImageEleveClick(int position) {
-
-            }
-
-            @Override
-            public void OnItemViewClick(int position) {
-
+            public void OnItemViewClick(View view, int position) {
+                lancerActiviteAjoutStage(view, listeStages.get(position));
             }
         });
     }
 
-    private final View.OnClickListener ajouterEleveOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            lancerActiviteAjoutStage(view);
-        }
-    };
-  
+    /**
+     * Methode qui modifie la prioritee d'un stage
+     *
+     * @param positionStage la position du stage dans le recycler view
+     * @param drapeauView   l'image view du drapeau
+     */
     private void changerPrioriteStage(int positionStage, ImageView drapeauView) {
         Stage stage = listeStages.get(positionStage);
         int prioriteActuel = stage.getPriorite().ordinal();
@@ -142,28 +226,52 @@ public class MainActivity extends AppCompatActivity {
         stage.setPriorite(priorites[prochainePriorite]);
         int couleur = Utils.renvoyerCouleur(stage.getPriorite());
         drapeauView.setColorFilter(ContextCompat.getColor(this.getApplicationContext(), couleur));
-        StageAdapter.notifyItemChanged(positionStage);
+        stageAdapter.notifyItemChanged(positionStage);
         dbHelper.changerPrioriteStage(stage);
     }
 
-
+    /**
+     * Lance l'activitee d'ajout de stage
+     *
+     * @param view la vue qui demande de la creer
+     */
     public void lancerActiviteAjoutStage(View view) {
-        Intent intent = new Intent(this, DemandeInfoEleve.class);
-        startActivity(intent);
+        Intent intent = new Intent(this, InfoStageActivity.class);
+        envoyerInfoStageActivity.launch(intent);
     }
 
-    ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
+    /**
+     * Methode qui verifie si le stage est un stage existant et l'ajoute ou le modifie dans la liste de stages
+     *
+     * @param stage le stage qui a ete ajoute
+     */
+    private void mettreDansRV(Stage stage) {
+        for (int i = 0; i < listeStages.size(); i++) {
+            Stage lStage = listeStages.get(i);
+            if (lStage.getId().equals(stage.getId())) {
+                listeStages.set(i, stage);
+                stageAdapter.filtrerListeStages(selectionPriorites);
+                stageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
+                stageAdapter.notifyDataSetChanged();
+                return;
+            }
         }
+        listeStages.add(stage);
+        stageAdapter.filtrerListeStages(selectionPriorites);
+        stageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
+        stageAdapter.notifyDataSetChanged();
+    }
 
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            int removedItemIndex = viewHolder.getAdapterPosition();
-            dbHelper.deleteStage(listeStages.get(removedItemIndex));
-            listeStages.remove(removedItemIndex);
-            StageAdapter.notifyItemRemoved(removedItemIndex);
-        }
-    };
+    /**
+     * Lance l'activitee d'ajout de stage
+     *
+     * @param view  la vue qui demande de lancer l'activitee
+     * @param stage le stage a modifier
+     */
+    public void lancerActiviteAjoutStage(View view, Stage stage) {
+        Intent intent = new Intent(this, InfoStageActivity.class);
+        intent.putExtra("stage", stage);
+        envoyerInfoStageActivity.launch(intent);
+    }
+
 }
