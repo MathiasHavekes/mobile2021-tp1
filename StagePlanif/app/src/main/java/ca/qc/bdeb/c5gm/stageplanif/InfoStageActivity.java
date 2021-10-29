@@ -88,6 +88,7 @@ public class InfoStageActivity extends AppCompatActivity {
                             finish();
                         });
                 alertDialog.show();
+                return;
             } else {
                 setResult(RESULT_CANCELED);
                 finish();
@@ -209,7 +210,7 @@ public class InfoStageActivity extends AppCompatActivity {
         if (stageStockage != null) {
             return (photo == null && stageStockage.getEtudiant().getPhoto() != null) ^ Arrays.equals(photo, etudiant.getPhoto());
         }
-        return photo != null;
+        return photo == null;
     }
 
     /**
@@ -232,7 +233,7 @@ public class InfoStageActivity extends AppCompatActivity {
             return !photoEgal() && entreprise != null && priorite != null;
         }
         //Logique si c'est dans le fragment d'info d'eleves
-        return photoEgal() && priorite != null;
+        return ! photoEgal() || priorite != null;
     }
 
     /**
@@ -243,7 +244,7 @@ public class InfoStageActivity extends AppCompatActivity {
      */
     private Stage ajouterStage(Stockage dbHelper) {
         ArrayList<Compte> professeurs = dbHelper.getComptes(1);
-        Stage stage = new Stage(UUID.randomUUID().toString(), "2021-2022", priorite);
+        Stage stage = new Stage(priorite);
         etudiant.setPhoto(photo);
         stage.addEntreprise(entreprise);
         stage.addEtudiant(etudiant);

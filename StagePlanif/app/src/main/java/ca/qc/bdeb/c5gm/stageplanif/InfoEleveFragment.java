@@ -270,6 +270,7 @@ public class InfoEleveFragment extends Fragment implements AdapterView.OnItemSel
         viewModel.setCompte(compteSelectionne);
         if (compteSelectionne.getPhoto() != null) {
             Bitmap photoBitmap = Utils.getImage(compteSelectionne.getPhoto());
+            viewModel.setImage(photoBitmap);
             imageView.setImageBitmap(photoBitmap);
         } else {
             imageView.setImageResource(R.drawable.ic_baseline_person_24);

@@ -2,11 +2,13 @@ package ca.qc.bdeb.c5gm.stageplanif;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.icu.util.Calendar;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Utils {
     public static ArrayList<Integer> calculerPrioritesSelectionnees(int selection) {
@@ -112,6 +114,20 @@ public class Utils {
 
         Bitmap bitmap = BitmapFactory.decodeByteArray(photo, 0, photo.length, bmOptions);
         return bitmap;
+    }
+
+    /**
+     * Methode qui determine l'annee scolaire en cours
+     * @return l'annee scolaire en cours
+     */
+    public static String getAnneeScolaire() {
+        Calendar calendrier = Calendar.getInstance();
+        int anneeActuelle = calendrier.get(Calendar.YEAR);
+        int moisActuel = calendrier.get(Calendar.MONTH);
+        if (moisActuel < 7) {
+            return String.format("%d-%d", anneeActuelle - 1, anneeActuelle);
+        }
+        return String.format("%d-%d", anneeActuelle, anneeActuelle + 1);
     }
 
 }

@@ -261,7 +261,7 @@ public class Stockage extends SQLiteOpenHelper {
             values.put(StageHelper.STAGE_ENTREPRISE_ID, stage.getEntreprise().getId());
             values.put(StageHelper.STAGE_ETUDIANT_ID, stage.getEtudiant().getId());
             values.put(StageHelper.STAGE_PROFESSEUR_ID, stage.getProfesseur().getId());
-            values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, stage.getAnneeScolaire());
+            values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, Utils.getAnneeScolaire());
             values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
             db.insert(StageHelper.NOM_TABLE, null, values);
         }
@@ -493,7 +493,7 @@ public class Stockage extends SQLiteOpenHelper {
         values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
         String whereClause = StageHelper._ID + " = ?";
         String[] whereArgs = {stage.getId()};
-        int nbMAJ = db.update(StageHelper.NOM_TABLE, values, whereClause, whereArgs);
+        db.update(StageHelper.NOM_TABLE, values, whereClause, whereArgs);
     }
 
     /**
@@ -508,7 +508,7 @@ public class Stockage extends SQLiteOpenHelper {
         values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
         String whereClause = StageHelper._ID + " = ?";
         String[] whereArgs = {stage.getId()};
-        int nbMAJ = db.update(StageHelper.NOM_TABLE, values, whereClause, whereArgs);
+        db.update(StageHelper.NOM_TABLE, values, whereClause, whereArgs);
     }
 
     /**
@@ -522,7 +522,7 @@ public class Stockage extends SQLiteOpenHelper {
         values.put(CompteHelper.COMPTE_PHOTO, compte.getPhoto());
         String whereClause = CompteHelper._ID + " = ?";
         String[] whereArgs = {String.valueOf(compte.getId())};
-        int nbMAJ = db.update(CompteHelper.NOM_TABLE, values, whereClause, whereArgs);
+        db.update(CompteHelper.NOM_TABLE, values, whereClause, whereArgs);
     }
 
     /**
@@ -549,7 +549,7 @@ public class Stockage extends SQLiteOpenHelper {
         values.put(StageHelper.STAGE_ENTREPRISE_ID, stage.getEntreprise().getId()); // Nom du client
         values.put(StageHelper.STAGE_ETUDIANT_ID, stage.getEtudiant().getId()); // #tel du client
         values.put(StageHelper.STAGE_PROFESSEUR_ID, stage.getProfesseur().getId());
-        values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, stage.getAnneeScolaire());
+        values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, Utils.getAnneeScolaire());
         values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
         db.insert(StageHelper.NOM_TABLE, null, values);
     }
