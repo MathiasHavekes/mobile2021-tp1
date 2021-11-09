@@ -208,7 +208,7 @@ public class Stockage extends SQLiteOpenHelper {
             }
         }
         for (int i = 0; i < entreprises.size(); i++) {
-            Stage stage = new Stage(UUID.randomUUID().toString(), "2021-2022", Priorite.randomPriorite());
+            Stage stage = new Stage(UUID.randomUUID().toString(), Utils.getAnneeScolaire(), Priorite.randomPriorite());
             stage.addEntreprise(entreprises.get(i));
             stage.addEtudiant(comptes.get(i));
             stage.addProfesseur(professeur);
