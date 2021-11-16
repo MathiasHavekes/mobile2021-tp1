@@ -70,16 +70,13 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
         holder.drapeauView.setColorFilter(ContextCompat.getColor(context, Utils.renvoyerCouleur(stage.getPriorite())));
         holder.nomEleveView.setText(stage.getEtudiant().getNom());
         holder.prenomEleveView.setText(stage.getEtudiant().getPrenom());
-        //Creation d'un evenement qui met les images ajustees dans le recyclerView lorsque ceux-ci sont crees
-        holder.imageEleveView.post(() -> {
-            if (stage.getEtudiant().getPhoto() != null) {
-                ImageView imageView = holder.imageEleveView;
-                Bitmap bitmap = Utils.getImageAjustee(stage.getEtudiant().getPhoto(), imageView.getWidth(), imageView.getHeight());
-                imageView.setImageBitmap(bitmap);
-            } else {
-                holder.imageEleveView.setImageResource(R.drawable.ic_baseline_person_24);
-            }
-        });
+        if (stage.getEtudiant().getPhoto() != null) {
+            ImageView imageView = holder.imageEleveView;
+            Bitmap bitmap = Utils.getImageAjustee(stage.getEtudiant().getPhoto(), imageView.getWidth(), imageView.getHeight());
+            imageView.setImageBitmap(bitmap);
+        } else {
+            holder.imageEleveView.setImageResource(R.drawable.ic_baseline_person_24);
+        }
     }
 
     @Override

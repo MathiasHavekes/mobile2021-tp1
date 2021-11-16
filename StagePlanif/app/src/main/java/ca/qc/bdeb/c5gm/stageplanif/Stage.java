@@ -3,6 +3,7 @@ package ca.qc.bdeb.c5gm.stageplanif;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.time.LocalTime;
 import java.util.UUID;
 
 public class Stage implements Parcelable {
@@ -37,6 +38,38 @@ public class Stage implements Parcelable {
      * Drapeau du stage
      */
     private Priorite priorite;
+    /**
+     * Commentaire sur le stage
+     */
+    private String commentaire;
+    /**
+     * Journees de stage
+     */
+    private int[] journees;
+    /**
+     * Heure de debut du stage
+     */
+    private LocalTime heure_debut;
+    /**
+     * Duree du stage
+     */
+    private int temps_stage;
+    /**
+     * Heure de diner du stagiaire
+     */
+    private LocalTime heure_diner;
+    /**
+     * Temps du diner du stagiaire
+     */
+    private int temps_diner;
+    /**
+     * Duree moyenne des visites
+     */
+    private int duree_visite;
+    /**
+     * Disponibilites du tuteur
+     */
+    private int[] disponibilite_tuteur;
 
     public Stage(String id, String anneeScolaire, Priorite priorite) {
         this.id = id;
@@ -113,5 +146,61 @@ public class Stage implements Parcelable {
      */
     public StagePoidsPlume getGoogleMapsObject() {
         return new StagePoidsPlume(this.getEntreprise(), this.getPriorite());
+    }
+
+    public String getCommentaire() {
+        return commentaire;
+    }
+
+    public void setCommentaire(String commentaire) {
+        this.commentaire = commentaire;
+    }
+
+    public int[] getJournees() {
+        return journees;
+    }
+
+    public void setJournees(int[] journees) {
+        this.journees = journees;
+    }
+
+    public LocalTime getHeure_debut() {
+        return heure_debut;
+    }
+
+    public void setHeure_debut(LocalTime heure_debut) {
+        this.heure_debut = heure_debut;
+    }
+
+    public int getTemps_stage() {
+        return temps_stage;
+    }
+
+    public void setTemps_stage(int temps_stage) {
+        this.temps_stage = temps_stage;
+    }
+
+    public LocalTime getHeure_diner() {
+        return heure_diner;
+    }
+
+    public int getTemps_diner() {
+        return temps_diner;
+    }
+
+    public int getDuree_visite() {
+        return duree_visite;
+    }
+
+    public void setDuree_visite(int duree_visite) {
+        this.duree_visite = duree_visite;
+    }
+
+    public int[] getDisponibilite_tuteur() {
+        return disponibilite_tuteur;
+    }
+
+    public void setDisponibilite_tuteur(int[] disponibilite_tuteur) {
+        this.disponibilite_tuteur = disponibilite_tuteur;
     }
 }
