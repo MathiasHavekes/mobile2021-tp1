@@ -8,6 +8,12 @@ import androidx.lifecycle.ViewModel;
 
 import java.time.LocalTime;
 
+import ca.qc.bdeb.c5gm.stageplanif.Utils;
+import ca.qc.bdeb.c5gm.stageplanif.data.Compte;
+import ca.qc.bdeb.c5gm.stageplanif.data.Entreprise;
+import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
+
 /**
  * ViewModel permettant de faire communiquer les fragments et l'activitee
  */

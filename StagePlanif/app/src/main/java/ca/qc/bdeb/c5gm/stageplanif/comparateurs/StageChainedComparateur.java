@@ -1,8 +1,10 @@
-package ca.qc.bdeb.c5gm.stageplanif;
+package ca.qc.bdeb.c5gm.stageplanif.comparateurs;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+
+import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 
 /**
  * Comparteur enchainé de la classe stage : cette classe recoit des comparateur de stages
