@@ -6,6 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.time.LocalTime;
+
 /**
  * ViewModel permettant de faire communiquer les fragments et l'activitee
  */
@@ -26,6 +28,26 @@ public class InfoStageViewModel extends ViewModel {
      * Donnee live contenant l'entreprise du stage
      */
     private final MutableLiveData<Entreprise> entreprise = new MutableLiveData<>();
+    /**
+     * Donnee live contenant l'heure de debut du stage
+     */
+    private final MutableLiveData<LocalTime> heureDebutStage = new MutableLiveData<>();
+    /**
+     * Donnee live contenant l'heure de fin du stage
+     */
+    private final MutableLiveData<LocalTime> heureFinStage = new MutableLiveData<>();
+    /**
+     * Donnee live contenant l'heure de debut du diner
+     */
+    private final MutableLiveData<LocalTime> heureDebutDiner = new MutableLiveData<>();
+    /**
+     * Donnee live contenant l'heure de fin du diner
+     */
+    private final MutableLiveData<LocalTime> heureFinDiner = new MutableLiveData<>();
+    /**
+     * Donnee live contenant le temps d'une visite
+     */
+    private final MutableLiveData<Integer> tempsVisites = new MutableLiveData<>();
     /**
      * Propriete contenant le stage si c'est une modification
      */
@@ -65,6 +87,46 @@ public class InfoStageViewModel extends ViewModel {
         this.entreprise.setValue(entreprise);
     }
 
+    public LocalTime getHeureDebutStage(LocalTime temps) {
+        return this.heureDebutStage.getValue();
+    }
+
+    public void setHeureDebutStage(LocalTime temps) {
+        this.heureDebutStage.setValue(temps);
+    }
+
+    public LocalTime getHeureFinStage(LocalTime temps) {
+        return this.heureFinStage.getValue();
+    }
+
+    public void setHeureFinStage(LocalTime temps) {
+        this.heureFinStage.setValue(temps);
+    }
+
+    public LocalTime getHeureDebutDiner(LocalTime temps) {
+        return this.heureDebutDiner.getValue();
+    }
+
+    public void setHeureDebutDiner(LocalTime temps) {
+        this.heureFinDiner.setValue(temps);
+    }
+
+    public LocalTime getHeureFinDiner(LocalTime temps) {
+        return this.heureFinDiner.getValue();
+    }
+
+    public void setHeureFinDiner(LocalTime temps) {
+        this.heureFinDiner.setValue(temps);
+    }
+
+    public MutableLiveData<Integer> getTempsVisites() {
+        return tempsVisites;
+    }
+
+    public void setTempsVisites(int temps) {
+        this.tempsVisites.setValue(temps);
+    }
+
     public Stage getStage() {
         return stage;
     }
@@ -72,5 +134,4 @@ public class InfoStageViewModel extends ViewModel {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
 }

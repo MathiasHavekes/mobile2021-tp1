@@ -33,4 +33,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_menu_selection_priorite"
         tools:context=".GoogleMapsActivity" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_ajouter_eleve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="44dp"
+        android:layout_marginBottom="44dp"
+        android:contentDescription="@string/msg_bouton_ajout_eleve"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_baseline_calendar_today_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>
