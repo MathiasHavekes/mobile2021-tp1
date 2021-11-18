@@ -18,7 +18,7 @@ public class Stockage extends SQLiteOpenHelper {
     /**
      * numéro actuel de version de BD
      */
-    public static final int DB_VERSION = 3;
+    public static final int DB_VERSION = 4;
     /**
      * Nom de fichier de base de donnees
      */
@@ -58,6 +58,14 @@ public class Stockage extends SQLiteOpenHelper {
                     StageHelper.STAGE_ETUDIANT_ID + " INTEGER," +
                     StageHelper.STAGE_PROFESSEUR_ID + " INTEGER," +
                     StageHelper.STAGE_DRAPEAU + " INTEGER," +
+                    StageHelper.STAGE_COMMENTAIRE + " TEXT," +
+                    StageHelper.STAGE_JOURNEES + " INTEGER," +
+                    StageHelper.STAGE_HEURE_DEBUT + " TIME," +
+                    StageHelper.STAGE_TEMPS +  " INTEGER," +
+                    StageHelper.STAGE_HEURE_DINER + " TIME," +
+                    StageHelper.STAGE_TEMPS_DINER + " INTEGER," +
+                    StageHelper.STAGE_DUREE_VISITE + " INTEGER," +
+                    StageHelper.STAGE_DISPONIBILITE_TUTEUR + " INTEGER," +
                     "FOREIGN KEY (" + StageHelper.STAGE_ENTREPRISE_ID + ") REFERENCES " +
                     EntrepriseHelper.NOM_TABLE + "(" + EntrepriseHelper._ID + ")," +
                     "FOREIGN KEY (" + StageHelper.STAGE_ETUDIANT_ID + ") REFERENCES " +
@@ -200,7 +208,7 @@ public class Stockage extends SQLiteOpenHelper {
             }
         }
         for (int i = 0; i < entreprises.size(); i++) {
-            Stage stage = new Stage(UUID.randomUUID().toString(), "2021-2022", Priorite.randomPriorite());
+            Stage stage = new Stage(UUID.randomUUID().toString(), Utils.getAnneeScolaire(), Priorite.randomPriorite());
             stage.addEntreprise(entreprises.get(i));
             stage.addEtudiant(comptes.get(i));
             stage.addProfesseur(professeur);
@@ -590,6 +598,14 @@ public class Stockage extends SQLiteOpenHelper {
         public static final String STAGE_ETUDIANT_ID = "etudiant_id";
         public static final String STAGE_PROFESSEUR_ID = "professeur_id";
         public static final String STAGE_DRAPEAU = "priorite";
+        public static final String STAGE_COMMENTAIRE = "commentaire";
+        public static final String STAGE_JOURNEES = "journees";
+        public static final String STAGE_HEURE_DEBUT = "heure_debut";
+        public static final String STAGE_TEMPS = "temps_travail";
+        public static final String STAGE_HEURE_DINER = "heure_diner";
+        public static final String STAGE_TEMPS_DINER = "temps_diner";
+        public static final String STAGE_DUREE_VISITE = "duree_visite";
+        public static final String STAGE_DISPONIBILITE_TUTEUR = "disponibilite_tuteur";
     }
 
     /**
