@@ -19,31 +19,31 @@
             android:textSize="24dp" />
 
         <RelativeLayout
-            android:id="@+id/menu_selection_priorite"
+            android:id="@+id/menu_selection_jour"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp">
 
             <CheckBox
-                android:id="@+id/drapeau_vert"
+                android:id="@+id/selection_mercredi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="Mercredi"/>
+                android:text="Mercredi" />
 
             <CheckBox
-                android:id="@+id/drapeau_jaune"
+                android:id="@+id/selection_jeudi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Jeudi"/>
+                android:text="Jeudi" />
 
             <CheckBox
-                android:id="@+id/drapeau_rouge"
+                android:id="@+id/selection_vendredi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="Vendredi"/>
+                android:text="Vendredi" />
         </RelativeLayout>
 
         <TextView
@@ -54,20 +54,27 @@
             android:layout_marginTop="32dp"/>
 
         <EditText
+            android:id="@+id/text_stage_debut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:inputType="datetime"
+            android:drawableEnd="@drawable/ic_baseline_access_time_24"
+            android:enabled="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:hint="Heure de début"
-            android:drawableEnd="@drawable/ic_baseline_access_time_24" />
+            android:inputType="none" />
 
         <EditText
+            android:id="@+id/text_stage_fin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:inputType="datetime"
+            android:drawableEnd="@drawable/ic_baseline_access_time_24"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:hint="Heure de fin"
-            android:drawableEnd="@drawable/ic_baseline_access_time_24"/>
+            android:inputType="datetime" />
 
         <TextView
             android:layout_width="match_parent"
@@ -77,20 +84,26 @@
             android:layout_marginTop="32dp"/>
 
         <EditText
+            android:id="@+id/text_diner_debut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:inputType="datetime"
+            android:drawableEnd="@drawable/ic_baseline_access_time_24"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:hint="Heure de début"
-            android:drawableEnd="@drawable/ic_baseline_access_time_24"/>
+            android:inputType="datetime" />
 
         <EditText
+            android:id="@+id/text_diner_fin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:inputType="datetime"
+            android:drawableEnd="@drawable/ic_baseline_access_time_24"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:hint="Heure de fin"
-            android:drawableEnd="@drawable/ic_baseline_access_time_24"/>
+            android:inputType="datetime" />
 
         <TextView
             android:layout_width="match_parent"
@@ -100,14 +113,14 @@
             android:layout_marginTop="32dp"/>
 
         <RadioGroup
-            android:id="@+id/radio_group_drapeau"
+            android:id="@+id/radio_group_temps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="16dp">
 
             <RadioButton
-                android:id="@+id/drapeau_ver"
+                android:id="@+id/duree_30_minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="30 minutes"/>
@@ -119,7 +132,7 @@
                 android:layout_weight="1" />
 
             <RadioButton
-                android:id="@+id/drapeau_jaun"
+                android:id="@+id/duree_45_minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="45 minutes"/>
@@ -131,7 +144,7 @@
                 android:layout_weight="1" />
 
             <RadioButton
-                android:id="@+id/drapeau_roug"
+                android:id="@+id/duree_60_minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1 heure"/>

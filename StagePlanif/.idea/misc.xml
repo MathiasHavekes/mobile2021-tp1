@@ -49,7 +49,7 @@
         <entry key="app/src/main/res/layout/app_toolbar.xml" value="0.5052083333333334" />
         <entry key="app/src/main/res/layout/fragment_demande_info_eleve.xml" value="0.37864583333333335" />
         <entry key="app/src/main/res/layout/fragment_demande_info_entreprise.xml" value="0.37864583333333335" />
-        <entry key="app/src/main/res/layout/fragment_demande_info_visite.xml" value="0.35572916666666665" />
+        <entry key="app/src/main/res/layout/fragment_demande_info_visite.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_menu_selection_priorite.xml" value="0.37083333333333335" />
         <entry key="app/src/main/res/layout/student_list_item.xml" value="0.33" />
         <entry key="app/src/main/res/menu/activity_main_menu.xml" value="0.2833333333333333" />
