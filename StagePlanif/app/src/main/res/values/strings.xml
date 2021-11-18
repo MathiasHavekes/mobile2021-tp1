@@ -2,7 +2,7 @@
     <string name="app_name">StagePlanif</string>
     <string name="msg_img_eleve">TODO</string>
     <string name="msg_img_drapeau">TODO</string>
-    <string name="msg_bouton_ajout">TODO</string>
+    <string name="msg_bouton_ajout_eleve">TODO</string>
     <string name="msg_bouton_filtre">TODO</string>
     <string name="msg_nom">Nom de l\'eleve</string>
     <string name="msg_prenom">Prénom de l\'eleve</string>
@@ -34,4 +34,6 @@
 
     <string name="image_eleve_description">Image de l\'élève</string>
     <string name="btn_prendre_photo_description">Bouton prise de photo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

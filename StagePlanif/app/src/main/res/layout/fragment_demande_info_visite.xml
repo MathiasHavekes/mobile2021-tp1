@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InfoVisiteFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="32dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Journées de stage"
+            android:textSize="24dp" />
+
+        <RelativeLayout
+            android:id="@+id/menu_selection_jour"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp">
+
+            <CheckBox
+                android:id="@+id/selection_mercredi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="Mercredi" />
+
+            <CheckBox
+                android:id="@+id/selection_jeudi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Jeudi" />
+
+            <CheckBox
+                android:id="@+id/selection_vendredi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="Vendredi" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Horaire de stage"
+            android:textSize="24dp"
+            android:layout_marginTop="32dp"/>
+
+        <EditText
+            android:id="@+id/text_stage_debut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:drawableEnd="@drawable/ic_baseline_access_time_24"
+            android:enabled="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Heure de début"
+            android:inputType="none" />
+
+        <EditText
+            android:id="@+id/text_stage_fin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:drawableEnd="@drawable/ic_baseline_access_time_24"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Heure de fin"
+            android:inputType="datetime" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Horaire de diner"
+            android:textSize="24dp"
+            android:layout_marginTop="32dp"/>
+
+        <EditText
+            android:id="@+id/text_diner_debut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:drawableEnd="@drawable/ic_baseline_access_time_24"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Heure de début"
+            android:inputType="datetime" />
+
+        <EditText
+            android:id="@+id/text_diner_fin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:drawableEnd="@drawable/ic_baseline_access_time_24"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Heure de fin"
+            android:inputType="datetime" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Durée moyenne des visites"
+            android:textSize="24dp"
+            android:layout_marginTop="32dp"/>
+
+        <RadioGroup
+            android:id="@+id/radio_group_temps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <RadioButton
+                android:id="@+id/duree_30_minutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30 minutes"/>
+
+            <!--suppress AndroidUnresolvableTag -->
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:id="@+id/duree_45_minutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="45 minutes"/>
+
+            <!--suppress AndroidUnresolvableTag -->
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <RadioButton
+                android:id="@+id/duree_60_minutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1 heure"/>
+        </RadioGroup>
+    </LinearLayout>
+</ScrollView>

@@ -69,6 +69,14 @@ public class InfoStageActivity extends AppCompatActivity {
      */
     private Stage stageStockage;
     /**
+     * Liste des fragments affiches en ordre
+     */
+    private Fragment[] fragments;
+    /**
+     * Indice du fragment afficher dans la liste fragments
+     */
+    private int fragmentActuel;
+    /**
      * Contient la logique du clique sur le bouton annuler
      */
     private final View.OnClickListener annulerClique = new View.OnClickListener() {
@@ -102,7 +110,24 @@ public class InfoStageActivity extends AppCompatActivity {
     private final View.OnClickListener suivantClique = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            //Si le fragment affiche est celui de l'information de l'eleve
+            switch (fragmentActuel) {
+                case 0:
+                    Boolean champsRempli = priorite != null && etudiant != null;
+                    if(champsRempli) {
+                        fragmentActuel++;
+                        changerFragment(fragments[fragmentActuel]);
+                        return;
+                    }
+                    afficherMessage(getString(R.string.message_erreur));
+                    break;
+                case 1:
+                    fragmentActuel++;
+                    changerFragment(fragments[fragmentActuel]);
+                    break;
+                case 2:
+                    break;
+            }
+            /*//Si le fragment affiche est celui de l'information de l'eleve
             if (boutonSuivant.getText() == getResources().getString(R.string.btn_suivant)) {
                 //Si un champ n'est pas rempli
                 if (priorite == null || etudiant == null) {
@@ -140,7 +165,7 @@ public class InfoStageActivity extends AppCompatActivity {
                 }
                 creerIntent();
                 finish();
-            }
+            }*/
         }
     };
 
@@ -154,7 +179,7 @@ public class InfoStageActivity extends AppCompatActivity {
         boutonAnnuler = findViewById(R.id.btn_annuler);
         boutonAnnuler.setOnClickListener(annulerClique);
         boutonSuivant.setOnClickListener(suivantClique);
-        Fragment fragment = new InfoEleveFragment();
+        fragments = new Fragment[]{new InfoEleveFragment(), new InfoEntrepriseFragment(), new InfoVisiteFragment()};
         context = this;
         creationViewModel();
         Intent intent = getIntent();
@@ -162,7 +187,8 @@ public class InfoStageActivity extends AppCompatActivity {
             stageStockage = intent.getParcelableExtra("stage");
             viewModel.setStage(stageStockage);
         }
-        changerFragment(fragment);
+        changerFragment(fragments[0]);
+        fragmentActuel = 0;
     }
 
     /**
