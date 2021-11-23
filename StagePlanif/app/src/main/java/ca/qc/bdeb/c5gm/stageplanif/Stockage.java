@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import java.text.Normalizer;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public class Stockage extends SQLiteOpenHelper {
     /**
      * numéro actuel de version de BD
      */
-    public static final int DB_VERSION = 4;
+    public static final int DB_VERSION = 5;
     /**
      * Nom de fichier de base de donnees
      */
@@ -212,6 +213,13 @@ public class Stockage extends SQLiteOpenHelper {
             stage.addEntreprise(entreprises.get(i));
             stage.addEtudiant(comptes.get(i));
             stage.addProfesseur(professeur);
+            stage.setCommentaire("Ceci est un commentaire");
+            stage.setTempsStage(480);
+            stage.setDisponibiliteTuteur((byte) 0x03);
+            stage.setJournees((byte) 0x07);
+            stage.setDureeVisite(45);
+            stage.setheureDebut(LocalTime.now());
+            stage.setTempsDiner(60);
             listeStages.add(stage);
         }
         return listeStages;
@@ -271,6 +279,12 @@ public class Stockage extends SQLiteOpenHelper {
             values.put(StageHelper.STAGE_PROFESSEUR_ID, stage.getProfesseur().getId());
             values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, Utils.getAnneeScolaire());
             values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
+            values.put(StageHelper.STAGE_COMMENTAIRE, stage.getCommentaire());
+            values.put(StageHelper.STAGE_DISPONIBILITE_TUTEUR, stage.getDisponibiliteTuteur());
+            values.put(StageHelper.STAGE_DUREE_VISITE, stage.getDureeVisite());
+            values.put(StageHelper.STAGE_JOURNEES, stage.getJournees());
+            values.put(StageHelper.STAGE_TEMPS, stage.getTempsStage());
+            values.put(StageHelper.STAGE_TEMPS_DINER, stage.getTempsDiner());
             db.insert(StageHelper.NOM_TABLE, null, values);
         }
     }
@@ -554,11 +568,17 @@ public class Stockage extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(StageHelper._ID, stage.getId());
-        values.put(StageHelper.STAGE_ENTREPRISE_ID, stage.getEntreprise().getId()); // Nom du client
-        values.put(StageHelper.STAGE_ETUDIANT_ID, stage.getEtudiant().getId()); // #tel du client
+        values.put(StageHelper.STAGE_ENTREPRISE_ID, stage.getEntreprise().getId());
+        values.put(StageHelper.STAGE_ETUDIANT_ID, stage.getEtudiant().getId());
         values.put(StageHelper.STAGE_PROFESSEUR_ID, stage.getProfesseur().getId());
         values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, Utils.getAnneeScolaire());
         values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
+        values.put(StageHelper.STAGE_COMMENTAIRE, stage.getCommentaire());
+        values.put(StageHelper.STAGE_DISPONIBILITE_TUTEUR, stage.getDisponibiliteTuteur());
+        values.put(StageHelper.STAGE_DUREE_VISITE, stage.getDureeVisite());
+        values.put(StageHelper.STAGE_JOURNEES, stage.getJournees());
+        values.put(StageHelper.STAGE_TEMPS, stage.getTempsStage());
+        values.put(StageHelper.STAGE_TEMPS_DINER, stage.getTempsDiner());
         db.insert(StageHelper.NOM_TABLE, null, values);
     }
 

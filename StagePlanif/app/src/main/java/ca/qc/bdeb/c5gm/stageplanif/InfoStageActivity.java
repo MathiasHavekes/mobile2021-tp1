@@ -125,6 +125,16 @@ public class InfoStageActivity extends AppCompatActivity {
                     changerFragment(fragments[fragmentActuel]);
                     break;
                 case 2:
+                    champsRempli = viewModel.getJourStage() != null;
+                    champsRempli &= viewModel.getHeureDebutStage() != null;
+                    champsRempli &= viewModel.getHeureFinStage() != null;
+                    champsRempli &= viewModel.getHeureDebutDiner() != null;
+                    champsRempli &= viewModel.getHeureFinDiner() != null;
+                    champsRempli &= viewModel.getTempsVisites() != null;
+                    if (!champsRempli) {
+                        afficherMessage(getString(R.string.message_erreur));
+                        return;
+                    }
                     break;
             }
             /*//Si le fragment affiche est celui de l'information de l'eleve
