@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -25,26 +26,50 @@
             android:layout_marginTop="16dp">
 
             <CheckBox
-                android:id="@+id/selection_mercredi"
+                android:id="@+id/selection_lundi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:text="Lundi" />
+
+            <CheckBox
+                android:id="@+id/selection_mardi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Mardi" />
+
+            <CheckBox
+                android:id="@+id/selection_mercredi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:text="Mercredi" />
+
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <CheckBox
                 android:id="@+id/selection_jeudi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="Jeudi" />
+                android:text="Jeudi"
+                app:layout_constraintEnd_toStartOf="@+id/selection_vendredi"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <CheckBox
                 android:id="@+id/selection_vendredi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="Vendredi" />
-        </RelativeLayout>
+                android:layout_marginEnd="52dp"
+                android:text="Vendredi"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:layout_width="match_parent"

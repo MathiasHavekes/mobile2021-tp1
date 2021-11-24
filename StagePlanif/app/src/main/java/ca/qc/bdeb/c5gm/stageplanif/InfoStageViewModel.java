@@ -55,9 +55,14 @@ public class InfoStageViewModel extends ViewModel {
      */
     private final MutableLiveData<Integer> tempsVisites = new MutableLiveData<>();
     /**
+     *
+     */
+    private final MutableLiveData<Byte> jourStage = new MutableLiveData<>();
+    /**
      * Propriete contenant le stage si c'est une modification
      */
     private Stage stage;
+
 
     public void setImage(Bitmap photo) {
         if (photo != null) {
@@ -93,7 +98,7 @@ public class InfoStageViewModel extends ViewModel {
         this.entreprise.setValue(entreprise);
     }
 
-    public LocalTime getHeureDebutStage(LocalTime temps) {
+    public LocalTime getHeureDebutStage() {
         return this.heureDebutStage.getValue();
     }
 
@@ -101,7 +106,7 @@ public class InfoStageViewModel extends ViewModel {
         this.heureDebutStage.setValue(temps);
     }
 
-    public LocalTime getHeureFinStage(LocalTime temps) {
+    public LocalTime getHeureFinStage() {
         return this.heureFinStage.getValue();
     }
 
@@ -109,15 +114,15 @@ public class InfoStageViewModel extends ViewModel {
         this.heureFinStage.setValue(temps);
     }
 
-    public LocalTime getHeureDebutDiner(LocalTime temps) {
+    public LocalTime getHeureDebutDiner() {
         return this.heureDebutDiner.getValue();
     }
 
     public void setHeureDebutDiner(LocalTime temps) {
-        this.heureFinDiner.setValue(temps);
+        this.heureDebutDiner.setValue(temps);
     }
 
-    public LocalTime getHeureFinDiner(LocalTime temps) {
+    public LocalTime getHeureFinDiner() {
         return this.heureFinDiner.getValue();
     }
 
@@ -125,8 +130,8 @@ public class InfoStageViewModel extends ViewModel {
         this.heureFinDiner.setValue(temps);
     }
 
-    public MutableLiveData<Integer> getTempsVisites() {
-        return tempsVisites;
+    public Integer getTempsVisites() {
+        return this.tempsVisites.getValue();
     }
 
     public void setTempsVisites(int temps) {
@@ -139,5 +144,13 @@ public class InfoStageViewModel extends ViewModel {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public Byte getJourStage() {
+        return this.jourStage.getValue();
+    }
+
+    public void setJourStage(Byte jours) {
+        this.jourStage.setValue(jours);
     }
 }

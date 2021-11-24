@@ -45,31 +45,31 @@ public class Stage implements Parcelable {
     /**
      * Journees de stage
      */
-    private int[] journees;
+    private byte journees;
     /**
      * Heure de debut du stage
      */
-    private LocalTime heure_debut;
+    private LocalTime heureDebut;
     /**
      * Duree du stage
      */
-    private int temps_stage;
+    private int tempsStage;
     /**
      * Heure de diner du stagiaire
      */
-    private LocalTime heure_diner;
+    private LocalTime heureDiner;
     /**
      * Temps du diner du stagiaire
      */
-    private int temps_diner;
+    private int tempsDiner;
     /**
      * Duree moyenne des visites
      */
-    private int duree_visite;
+    private int dureeVisite;
     /**
      * Disponibilites du tuteur
      */
-    private int[] disponibilite_tuteur;
+    private byte disponibiliteTuteur;
 
     public Stage(String id, String anneeScolaire, Priorite priorite) {
         this.id = id;
@@ -87,6 +87,14 @@ public class Stage implements Parcelable {
         professeur = in.readParcelable(Compte.class.getClassLoader());
         entreprise = in.readParcelable(Entreprise.class.getClassLoader());
         priorite = in.readParcelable(Priorite.class.getClassLoader());
+        commentaire = in.readString();
+        journees = in.readByte();
+        heureDebut = LocalTime.ofSecondOfDay(in.readInt());
+        tempsStage = in.readInt();
+        heureDiner = LocalTime.ofSecondOfDay(in.readInt());
+        tempsDiner = in.readInt();
+        dureeVisite = in.readInt();
+        disponibiliteTuteur = in.readByte();
     }
 
     public void addEtudiant(Compte etudiant) {
@@ -137,6 +145,14 @@ public class Stage implements Parcelable {
         parcel.writeParcelable(professeur, i);
         parcel.writeParcelable(entreprise, i);
         parcel.writeParcelable(priorite, i);
+        parcel.writeString(commentaire);
+        parcel.writeByte(journees);
+        parcel.writeInt(heureDebut.toSecondOfDay());
+        parcel.writeInt(tempsStage);
+        parcel.writeInt(heureDiner.toSecondOfDay());
+        parcel.writeInt(tempsDiner);
+        parcel.writeInt(dureeVisite);
+        parcel.writeByte(disponibiliteTuteur);
     }
 
     /**
@@ -156,51 +172,59 @@ public class Stage implements Parcelable {
         this.commentaire = commentaire;
     }
 
-    public int[] getJournees() {
+    public byte getJournees() {
         return journees;
     }
 
-    public void setJournees(int[] journees) {
+    public void setJournees(byte journees) {
         this.journees = journees;
     }
 
-    public LocalTime getHeure_debut() {
-        return heure_debut;
+    public LocalTime getHeureDebut() {
+        return heureDebut;
     }
 
-    public void setHeure_debut(LocalTime heure_debut) {
-        this.heure_debut = heure_debut;
+    public void setheureDebut(LocalTime heureDebut) {
+        this.heureDebut = heureDebut;
     }
 
-    public int getTemps_stage() {
-        return temps_stage;
+    public int getTempsStage() {
+        return tempsStage;
     }
 
-    public void setTemps_stage(int temps_stage) {
-        this.temps_stage = temps_stage;
+    public void setTempsStage(int tempsStage) {
+        this.tempsStage = tempsStage;
     }
 
-    public LocalTime getHeure_diner() {
-        return heure_diner;
+    public LocalTime getHeureDiner() {
+        return heureDiner;
     }
 
-    public int getTemps_diner() {
-        return temps_diner;
+    public void setHeureDiner(LocalTime heureDiner) {
+        this.heureDiner = heureDiner;
     }
 
-    public int getDuree_visite() {
-        return duree_visite;
+    public int getTempsDiner() {
+        return tempsDiner;
     }
 
-    public void setDuree_visite(int duree_visite) {
-        this.duree_visite = duree_visite;
+    public void setTempsDiner(int tempsDiner) {
+        this.tempsDiner = tempsDiner;
     }
 
-    public int[] getDisponibilite_tuteur() {
-        return disponibilite_tuteur;
+    public int getDureeVisite() {
+        return dureeVisite;
     }
 
-    public void setDisponibilite_tuteur(int[] disponibilite_tuteur) {
-        this.disponibilite_tuteur = disponibilite_tuteur;
+    public void setDureeVisite(int dureeVisite) {
+        this.dureeVisite = dureeVisite;
+    }
+
+    public byte getDisponibiliteTuteur() {
+        return disponibiliteTuteur;
+    }
+
+    public void setDisponibiliteTuteur(byte disponibiliteTuteur) {
+        this.disponibiliteTuteur = disponibiliteTuteur;
     }
 }
