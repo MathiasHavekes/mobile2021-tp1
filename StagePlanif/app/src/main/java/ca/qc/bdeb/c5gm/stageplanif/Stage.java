@@ -87,6 +87,14 @@ public class Stage implements Parcelable {
         professeur = in.readParcelable(Compte.class.getClassLoader());
         entreprise = in.readParcelable(Entreprise.class.getClassLoader());
         priorite = in.readParcelable(Priorite.class.getClassLoader());
+        commentaire = in.readString();
+        journees = in.readByte();
+        heureDebut = LocalTime.ofSecondOfDay(in.readInt());
+        tempsStage = in.readInt();
+        heureDiner = LocalTime.ofSecondOfDay(in.readInt());
+        tempsDiner = in.readInt();
+        dureeVisite = in.readInt();
+        disponibiliteTuteur = in.readByte();
     }
 
     public void addEtudiant(Compte etudiant) {
@@ -137,6 +145,14 @@ public class Stage implements Parcelable {
         parcel.writeParcelable(professeur, i);
         parcel.writeParcelable(entreprise, i);
         parcel.writeParcelable(priorite, i);
+        parcel.writeString(commentaire);
+        parcel.writeByte(journees);
+        parcel.writeInt(heureDebut.toSecondOfDay());
+        parcel.writeInt(tempsStage);
+        parcel.writeInt(heureDiner.toSecondOfDay());
+        parcel.writeInt(tempsDiner);
+        parcel.writeInt(dureeVisite);
+        parcel.writeByte(disponibiliteTuteur);
     }
 
     /**

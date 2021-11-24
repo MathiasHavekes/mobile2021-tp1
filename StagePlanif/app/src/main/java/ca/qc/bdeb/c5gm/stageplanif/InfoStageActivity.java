@@ -126,6 +126,9 @@ public class InfoStageActivity extends AppCompatActivity {
                     break;
                 case 2:
                     champsRempli = viewModel.getJourStage() != null;
+                    if(champsRempli) {
+                        champsRempli &= viewModel.getJourStage() != 0x00;
+                    }
                     champsRempli &= viewModel.getHeureDebutStage() != null;
                     champsRempli &= viewModel.getHeureFinStage() != null;
                     champsRempli &= viewModel.getHeureDebutDiner() != null;

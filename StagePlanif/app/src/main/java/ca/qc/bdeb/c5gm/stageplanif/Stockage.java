@@ -19,7 +19,7 @@ public class Stockage extends SQLiteOpenHelper {
     /**
      * numéro actuel de version de BD
      */
-    public static final int DB_VERSION = 5;
+    public static final int DB_VERSION = 1;
     /**
      * Nom de fichier de base de donnees
      */
@@ -61,9 +61,9 @@ public class Stockage extends SQLiteOpenHelper {
                     StageHelper.STAGE_DRAPEAU + " INTEGER," +
                     StageHelper.STAGE_COMMENTAIRE + " TEXT," +
                     StageHelper.STAGE_JOURNEES + " INTEGER," +
-                    StageHelper.STAGE_HEURE_DEBUT + " TIME," +
+                    StageHelper.STAGE_HEURE_DEBUT + " INTEGER," +
                     StageHelper.STAGE_TEMPS +  " INTEGER," +
-                    StageHelper.STAGE_HEURE_DINER + " TIME," +
+                    StageHelper.STAGE_HEURE_DINER + " INTEGER," +
                     StageHelper.STAGE_TEMPS_DINER + " INTEGER," +
                     StageHelper.STAGE_DUREE_VISITE + " INTEGER," +
                     StageHelper.STAGE_DISPONIBILITE_TUTEUR + " INTEGER," +
@@ -218,7 +218,8 @@ public class Stockage extends SQLiteOpenHelper {
             stage.setDisponibiliteTuteur((byte) 0x03);
             stage.setJournees((byte) 0x07);
             stage.setDureeVisite(45);
-            stage.setheureDebut(LocalTime.now());
+            stage.setHeureDiner(LocalTime.of(12, 0));
+            stage.setheureDebut(LocalTime.of(8,0));
             stage.setTempsDiner(60);
             listeStages.add(stage);
         }
@@ -285,6 +286,8 @@ public class Stockage extends SQLiteOpenHelper {
             values.put(StageHelper.STAGE_JOURNEES, stage.getJournees());
             values.put(StageHelper.STAGE_TEMPS, stage.getTempsStage());
             values.put(StageHelper.STAGE_TEMPS_DINER, stage.getTempsDiner());
+            values.put(StageHelper.STAGE_HEURE_DEBUT, stage.getHeureDebut().toSecondOfDay());
+            values.put(StageHelper.STAGE_HEURE_DINER, stage.getHeureDiner().toSecondOfDay());
             db.insert(StageHelper.NOM_TABLE, null, values);
         }
     }
@@ -326,7 +329,6 @@ public class Stockage extends SQLiteOpenHelper {
 
     /**
      * Recevoir un compte de la base de données en fonction de l'ID
-     *
      * @param id l'id du compte
      * @return le compte correspondant à l'id
      */
@@ -470,7 +472,15 @@ public class Stockage extends SQLiteOpenHelper {
                 StageHelper.STAGE_DRAPEAU,
                 StageHelper.STAGE_ETUDIANT_ID,
                 StageHelper.STAGE_PROFESSEUR_ID,
-                StageHelper.STAGE_ENTREPRISE_ID
+                StageHelper.STAGE_ENTREPRISE_ID,
+                StageHelper.STAGE_COMMENTAIRE,
+                StageHelper.STAGE_JOURNEES,
+                StageHelper.STAGE_HEURE_DEBUT,
+                StageHelper.STAGE_TEMPS,
+                StageHelper.STAGE_HEURE_DINER,
+                StageHelper.STAGE_TEMPS_DINER,
+                StageHelper.STAGE_DUREE_VISITE,
+                StageHelper.STAGE_DISPONIBILITE_TUTEUR
         };
         Cursor cursor = db.query(StageHelper.NOM_TABLE, colonnes, null, null, null, null, null, null);
         if (cursor != null) {
@@ -497,6 +507,14 @@ public class Stockage extends SQLiteOpenHelper {
                     stage.addEntreprise(entreprise);
                     entreprisesConnu.add(entreprise);
                 }
+                stage.setCommentaire(cursor.getString(6));
+                stage.setJournees((byte) cursor.getInt(7));
+                stage.setheureDebut(LocalTime.ofSecondOfDay(cursor.getInt(8)));
+                stage.setTempsStage(cursor.getInt(9));
+                stage.setHeureDiner(LocalTime.ofSecondOfDay(cursor.getInt(10)));
+                stage.setTempsDiner(cursor.getInt(11));
+                stage.setDureeVisite(cursor.getInt(12));
+                stage.setDisponibiliteTuteur((byte) cursor.getInt(13));
                 stages.add(stage);
             } while (cursor.moveToNext());
             cursor.close();
@@ -579,6 +597,8 @@ public class Stockage extends SQLiteOpenHelper {
         values.put(StageHelper.STAGE_JOURNEES, stage.getJournees());
         values.put(StageHelper.STAGE_TEMPS, stage.getTempsStage());
         values.put(StageHelper.STAGE_TEMPS_DINER, stage.getTempsDiner());
+        values.put(StageHelper.STAGE_HEURE_DEBUT, stage.getHeureDebut().toSecondOfDay());
+        values.put(StageHelper.STAGE_HEURE_DINER, stage.getHeureDiner().toSecondOfDay());
         db.insert(StageHelper.NOM_TABLE, null, values);
     }
 
