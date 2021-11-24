@@ -16,6 +16,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.time.LocalTime;
 
+import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
+
 /**
  * Classe qui s'occupe du Fragment fragment_demande_info_visite
  */
