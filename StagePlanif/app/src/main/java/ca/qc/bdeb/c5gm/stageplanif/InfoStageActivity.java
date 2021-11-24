@@ -18,7 +18,12 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.UUID;
+
+import ca.qc.bdeb.c5gm.stageplanif.data.Compte;
+import ca.qc.bdeb.c5gm.stageplanif.data.Entreprise;
+import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
 
 /**
  * Classe qui s'occupe de l'activite activity_demande_info_stage

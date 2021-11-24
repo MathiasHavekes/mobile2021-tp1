@@ -1,6 +1,8 @@
-package ca.qc.bdeb.c5gm.stageplanif;
+package ca.qc.bdeb.c5gm.stageplanif.comparateurs;
 
 import java.util.Comparator;
+
+import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 
 /**
  * Comparteur de la classe stage : compare le prénom des étudiant entre eux

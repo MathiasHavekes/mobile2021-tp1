@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StageChainedComparateur;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
+
 /**
  * Adapte la liste de stage pour le recycler view
  */

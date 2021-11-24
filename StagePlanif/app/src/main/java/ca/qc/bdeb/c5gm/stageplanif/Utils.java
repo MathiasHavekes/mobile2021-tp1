@@ -2,13 +2,13 @@ package ca.qc.bdeb.c5gm.stageplanif;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.icu.util.Calendar;
-
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+
+import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 
 public class Utils {
     public static ArrayList<Integer> calculerPrioritesSelectionnees(int selection) {

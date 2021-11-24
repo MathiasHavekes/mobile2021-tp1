@@ -1,4 +1,4 @@
-package ca.qc.bdeb.c5gm.stageplanif;
+package ca.qc.bdeb.c5gm.stageplanif.data;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,6 +11,8 @@ import java.text.Normalizer;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.UUID;
+
+import ca.qc.bdeb.c5gm.stageplanif.Utils;
 
 /**
  * Classe qui permet de communiquer avec la BD

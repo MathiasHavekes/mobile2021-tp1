@@ -14,6 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 
+import ca.qc.bdeb.c5gm.stageplanif.data.Entreprise;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
+
 /**
  * Classe qui s'occupe du Fragment fragment_demande_info_entreprise
  */

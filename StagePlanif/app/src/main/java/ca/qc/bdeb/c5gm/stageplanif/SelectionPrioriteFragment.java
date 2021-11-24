@@ -11,6 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
+
 public class SelectionPrioriteFragment extends Fragment {
     private final int VALEUR_DRAPEAU_VERT = Priorite.MINIMUM.getValeur();
     private final int VALEUR_DRAPEAU_JAUNE = Priorite.MOYENNE.getValeur();
