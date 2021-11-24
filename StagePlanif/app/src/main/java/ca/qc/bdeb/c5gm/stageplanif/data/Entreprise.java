@@ -1,4 +1,4 @@
-package ca.qc.bdeb.c5gm.stageplanif;
+package ca.qc.bdeb.c5gm.stageplanif.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

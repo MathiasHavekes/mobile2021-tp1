@@ -33,6 +33,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ca.qc.bdeb.c5gm.stageplanif.data.Compte;
+import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
+
 /**
  * Classe qui s'occupe du Fragment fragment_demande_info_eleve
  */

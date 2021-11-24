@@ -26,6 +26,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
+import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StageNomComparateur;
+import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrenomComparateur;
+import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrioriteComparateur;
+import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
+import ca.qc.bdeb.c5gm.stageplanif.data.StagePoidsPlume;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
+
 /**
  * Classe qui s'occupe de l'activite activity_main
  */

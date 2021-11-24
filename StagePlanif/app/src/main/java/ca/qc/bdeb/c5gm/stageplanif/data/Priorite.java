@@ -1,35 +1,40 @@
-package ca.qc.bdeb.c5gm.stageplanif;
+package ca.qc.bdeb.c5gm.stageplanif.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
-public enum Jours implements Parcelable {
-    MERCREDI(1),
-    JEUDI(2),
-    VENDREDI(4);
+/**
+ * Classe qui définit l
+ */
+public enum Priorite implements Parcelable{
+    MINIMUM(1),
+    MOYENNE(2),
+    MAXIMUM(4);
 
-    private static final List<Jours> VALUES =
+    private static final List<Priorite> VALUES =
             Collections.unmodifiableList(Arrays.asList(values()));
+    private static final int SIZE = VALUES.size();
+    private static final Random RANDOM = new Random();
     private final int valeur;
 
-    Jours(int valeur) {
+    Priorite(int valeur) {
         this.valeur = valeur;
     }
 
 
-    public static final Parcelable.Creator<Jours> CREATOR = new Parcelable.Creator<Jours>() {
+    public static final Creator<Priorite> CREATOR = new Creator<Priorite>() {
         @Override
-        public Jours createFromParcel(Parcel in) {
-            return Jours.values()[in.readInt()];
+        public Priorite createFromParcel(Parcel in) {
+            return Priorite.values()[in.readInt()];
         }
 
         @Override
-        public Jours[] newArray(int size) {
-            return new Jours[size];
+        public Priorite[] newArray(int size) {
+            return new Priorite[size];
         }
     };
 
@@ -48,14 +53,22 @@ public enum Jours implements Parcelable {
     }
 
     /**
+     * Cree une priorite aleatoire
+     * @return une priorite
+     */
+    public static Priorite randomPriorite() {
+        return VALUES.get(RANDOM.nextInt(SIZE));
+    }
+
+    /**
      * Trouver la priorite en fonction de sa valeur
      * @param valeur valeur de la priorite voulue
      * @return une prioritee
      */
-    public static Jours getJours(Integer valeur) {
-        for(Jours jours: VALUES) {
-            if(jours.getValeur() == valeur){
-                return jours;
+    public static Priorite getPriorite(Integer valeur) {
+        for(Priorite priorite: VALUES) {
+            if(priorite.getValeur() == valeur){
+                return priorite;
             }
         }
         return null;
