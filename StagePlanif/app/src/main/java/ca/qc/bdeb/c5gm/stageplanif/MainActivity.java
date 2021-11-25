@@ -25,14 +25,23 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StageNomComparateur;
 import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrenomComparateur;
 import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrioriteComparateur;
+import ca.qc.bdeb.c5gm.stageplanif.data.Entreprise;
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 import ca.qc.bdeb.c5gm.stageplanif.data.StagePoidsPlume;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
+import ca.qc.bdeb.c5gm.stageplanif.reseau.ConnexionBD;
+import ca.qc.bdeb.c5gm.stageplanif.reseau.IAPI;
+import ca.qc.bdeb.c5gm.stageplanif.reseau.APIClient;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Classe qui s'occupe de l'activite activity_main
@@ -66,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
      * L'adapteur des stages
      */
     private ListeStageAdapter stageAdapter;
+    private IAPI IAPIClient;
     /**
      * Defini le logique de swipe d'un item du recycler view
      */
@@ -136,7 +146,39 @@ public class MainActivity extends AppCompatActivity {
         creationViewModel();
         creationSwipeRefreshLayout();
         creationRecyclerView();
+        creationClient();
         btnAjouterEleve.setOnClickListener(ajouterEleveOnClickListener);
+    }
+
+    private void creationClient() {
+        IAPIClient = APIClient.getRetrofit().create(IAPI.class);
+        if (ConnectUtils.authToken.isEmpty()) {
+            connecter();
+        } else {
+            HashMap<String, Object> user = new HashMap<>();
+            user.put("id_compte", ConnectUtils.authId);
+            IAPIClient.testerConnexion(ConnectUtils.authToken, user).enqueue(
+                    new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.code() != 200) {
+                                connecter();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            connecter();
+                        }
+                    }
+            );
+        }
+        ArrayList<Entreprise> entreprises = ConnexionBD.getEntreprises();
+    }
+
+    private void connecter() {
+        Intent intent = new Intent(this, ConnexionActivity.class);
+        startActivity(intent);
     }
 
     /**

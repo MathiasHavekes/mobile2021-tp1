@@ -6,13 +6,25 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
+import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.text.Normalizer;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import ca.qc.bdeb.c5gm.stageplanif.ConnectUtils;
 import ca.qc.bdeb.c5gm.stageplanif.Utils;
+import ca.qc.bdeb.c5gm.stageplanif.reseau.APIClient;
+import ca.qc.bdeb.c5gm.stageplanif.reseau.IAPI;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Classe qui permet de communiquer avec la BD
@@ -26,6 +38,7 @@ public class Stockage extends SQLiteOpenHelper {
      * Nom de fichier de base de donnees
      */
     private static final String DB_NAME = "ca.qc.bdeb.c5gm.stageplanif";
+    private IAPI client;
     /**
      * Query SQL de creation de la table entreprise
      */
@@ -125,11 +138,11 @@ public class Stockage extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_CREATE_ENTREPRISE);
         sqLiteDatabase.execSQL(SQL_CREATE_STAGE);
         sqLiteDatabase.execSQL(SQL_CREATE_VISITE);
-        ArrayList<Compte> comptes = creerComptes();
+        /*ArrayList<Compte> comptes = creerComptes();
         ajouterCompte(comptes, sqLiteDatabase);
         ArrayList<Entreprise> entreprises = creerEntreprise();
         ajouterEntreprise(entreprises, sqLiteDatabase);
-        ajouterStage(creerStages(entreprises, comptes), sqLiteDatabase);
+        ajouterStage(creerStages(entreprises, comptes), sqLiteDatabase);*/
     }
 
     @Override
@@ -486,6 +499,10 @@ public class Stockage extends SQLiteOpenHelper {
         };
         Cursor cursor = db.query(StageHelper.NOM_TABLE, colonnes, null, null, null, null, null, null);
         if (cursor != null) {
+            if(cursor.getCount() == 0) {
+                cursor.close();
+                return stages;
+            }
             cursor.moveToFirst();
             do {
                 //Crée un nouveau stage
@@ -579,6 +596,14 @@ public class Stockage extends SQLiteOpenHelper {
         db.delete(StageHelper.NOM_TABLE, whereClause, whereArgs);
     }
 
+    public boolean entrepriseIsEmpty(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String countQuery = "SELECT  * FROM " + EntrepriseHelper.NOM_TABLE;
+        Cursor cursor = db.rawQuery(countQuery, null);
+        cursor.close();
+
+        return cursor.getCount() == 0;
+    }
     /**
      * Cree un nouveau stage
      *
