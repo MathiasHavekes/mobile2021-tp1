@@ -15,14 +15,14 @@
         android:gravity="center">
 
         <EditText
-            android:id="@+id/text_stage_debut"
+            android:id="@+id/text_nom_compte"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_baseline_person_24"
-            android:hint="Heure de début" />
+            android:hint="Nom du compte" />
 
         <EditText
-            android:id="@+id/text_stage_fin"
+            android:id="@+id/text_mot_de_passe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
