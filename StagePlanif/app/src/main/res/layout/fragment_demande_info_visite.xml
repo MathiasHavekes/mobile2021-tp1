@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Journées de stage"
-            android:textSize="24dp" />
+            android:textSize="24sp" />
 
         <RelativeLayout
             android:id="@+id/menu_selection_jour"
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Horaire de stage"
-            android:textSize="24dp"
+            android:textSize="24sp"
             android:layout_marginTop="32dp"/>
 
         <EditText
@@ -104,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Horaire de diner"
-            android:textSize="24dp"
+            android:textSize="24sp"
             android:layout_marginTop="32dp"/>
 
         <EditText
@@ -133,7 +133,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Durée moyenne des visites"
-            android:textSize="24dp"
+            android:textSize="24sp"
             android:layout_marginTop="32dp"/>
 
         <RadioGroup

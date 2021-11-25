@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Commentaire sur le stage"
-            android:textSize="24dp" />
+            android:textSize="24sp" />
 
         <EditText
             android:layout_width="match_parent"
