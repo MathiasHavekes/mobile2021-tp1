@@ -12,6 +12,7 @@
     <string name="btn_suivant">Suivant</string>
     <string name="btn_terminer">Terminer</string>
     <string name="btn_annuler">Annuler</string>
+    <string name="btn_se_connecter">Se connecter</string>
 
     <string name="info_eleve">Élève</string>
     <string name="entree_prenom">Prénom</string>
