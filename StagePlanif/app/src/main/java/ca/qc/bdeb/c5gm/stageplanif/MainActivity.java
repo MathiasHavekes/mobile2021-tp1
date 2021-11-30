@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
         int couleur = Utils.renvoyerCouleur(stage.getPriorite());
         drapeauView.setColorFilter(ContextCompat.getColor(this.getApplicationContext(), couleur));
         stageAdapter.notifyItemChanged(positionStage);
-        dbHelper.changerPrioriteStage(stage);
+        dbHelper.modifierStage(stage);
     }
 
     /**

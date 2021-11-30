@@ -12,6 +12,7 @@
     <string name="btn_suivant">Suivant</string>
     <string name="btn_terminer">Terminer</string>
     <string name="btn_annuler">Annuler</string>
+    <string name="btn_se_connecter">Se connecter</string>
 
     <string name="info_eleve">Élève</string>
     <string name="entree_prenom">Prénom</string>
@@ -34,6 +35,8 @@
 
     <string name="image_eleve_description">Image de l\'élève</string>
     <string name="btn_prendre_photo_description">Bouton prise de photo</string>
+    
+    <string name="txt_dispo_tuteur">Disponibilités du tuteur</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

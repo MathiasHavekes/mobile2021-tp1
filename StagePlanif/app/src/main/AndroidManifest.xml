@@ -25,6 +25,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StagePlanif">
+        <activity
+            android:name=".SeConnecterActivity"
+            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -35,7 +38,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -53,7 +55,6 @@
             android:exported="true"
             android:label="@string/titre_activity_google_maps"
             android:parentActivityName=".MainActivity" />
-
         <activity
             android:name=".InfoStageActivity"
             android:exported="true"
