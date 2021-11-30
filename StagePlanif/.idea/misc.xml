@@ -46,6 +46,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_view_list_24.xml" value="0.5213541666666667" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.5213541666666667" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.315625" />
+        <entry key="app/src/main/res/layout/activity_clendrier.xml" value="0.28804347826086957" />
         <entry key="app/src/main/res/layout/activity_demande_info_eleve.xml" value="0.29791666666666666" />
         <entry key="app/src/main/res/layout/activity_demande_info_stage.xml" value="0.37864583333333335" />
         <entry key="app/src/main/res/layout/activity_google_maps.xml" value="0.37083333333333335" />
@@ -56,6 +57,7 @@
         <entry key="app/src/main/res/layout/fragment_demande_info_visite.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_menu_selection_priorite.xml" value="0.37083333333333335" />
         <entry key="app/src/main/res/layout/student_list_item.xml" value="0.33" />
+        <entry key="app/src/main/res/menu/activity_calendar_menu.xml" value="0.32447916666666665" />
         <entry key="app/src/main/res/menu/activity_main_menu.xml" value="0.2833333333333333" />
         <entry key="app/src/main/res/menu/empty_menu.xml" value="0.33177083333333335" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.315625" />

@@ -2,8 +2,9 @@
     <string name="app_name">StagePlanif</string>
     <string name="msg_img_eleve">TODO</string>
     <string name="msg_img_drapeau">TODO</string>
-    <string name="msg_bouton_ajout_eleve">TODO</string>
-    <string name="msg_bouton_filtre">TODO</string>
+    <string name="msg_btn_ajout_eleve">TODO</string>
+    <string name="msg_btn_filtre">TODO</string>
+    <string name="msg_btn_lancer_calendrier">TODO</string>
     <string name="msg_nom">Nom de l\'eleve</string>
     <string name="msg_prenom">Prénom de l\'eleve</string>
     <string name="titre_activity_google_maps">GoogleMaps</string>
@@ -36,4 +37,8 @@
     <string name="btn_prendre_photo_description">Bouton prise de photo</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_day_view">Jour</string>
+    <string name="action_three_day_view">3 Jours</string>
+    <string name="action_week_view">Semaine</string>
+    <string name="action_today">Aujourd\'hui</string>
 </resources>

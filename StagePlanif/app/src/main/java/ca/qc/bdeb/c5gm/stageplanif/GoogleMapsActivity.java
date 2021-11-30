@@ -3,6 +3,7 @@ package ca.qc.bdeb.c5gm.stageplanif;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -11,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +32,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,22 +46,27 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     private static final int LOCATION_REQUEST_CODE = 1;
     private static final float ZOOM_PAR_DEFAUT = 16f;
     private static final String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+    private final View.OnClickListener lancerCalendrierOnClickListener = view -> lancerActiviteCalendrier(view);
     private ActivityGoogleMapsBinding binding;
     private ArrayList<StagePoidsPlume> listeStages;
     private ArrayList<Marker> listeMarqueurs;
-    private ArrayList<Integer> listeTagMarqueursSelectionnes;
+    private ArrayList<StagePoidsPlume> listeStagesSelectionnes;
     private GoogleMap mMap;
     private Geocoder geocoder;
     private FusedLocationProviderClient fusedLocationClient;
     private boolean isLocationEnabled = false;
     private Toolbar toolbar;
     private SelectionViewModel viewModel;
+    private FloatingActionButton btnLancerCalendrier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityGoogleMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        btnLancerCalendrier = findViewById(R.id.btn_lancer_calendrier);
+        btnLancerCalendrier.setOnClickListener(lancerCalendrierOnClickListener);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -78,7 +86,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     private void initData() {
         listeStages = getIntent().getParcelableArrayListExtra("liste_des_stages");
         listeMarqueurs = new ArrayList<>();
-        listeTagMarqueursSelectionnes = new ArrayList<>();
+        listeStagesSelectionnes = new ArrayList<>();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         geocoder = new Geocoder(this);
     }
@@ -113,11 +121,12 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         placerMarqueurs();
 
         mMap.setOnMarkerClickListener(marker -> {
-            if(listeTagMarqueursSelectionnes.contains(marker.getTag())) {
-                listeTagMarqueursSelectionnes.remove(marker.getTag());
+            StagePoidsPlume stage = listeStages.get((int) marker.getTag());
+            if(listeStagesSelectionnes.contains(stage)) {
+                listeStagesSelectionnes.remove(stage);
                 marker.setIcon(bitmapDescriptorFromVector(getApplicationContext(), R.drawable.ic_baseline_location_on_24, listeStages.get((int) marker.getTag()).getPriorite()));
             } else {
-                listeTagMarqueursSelectionnes.add((int) marker.getTag());
+                listeStagesSelectionnes.add(stage);
                 marker.setIcon(bitmapDescriptorFromVector(getApplicationContext(), R.drawable.ic_baseline_add_location_24, listeStages.get((int) marker.getTag()).getPriorite()));
             }
             return false;
@@ -201,5 +210,11 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                 }
             });
         }
+    }
+
+    private void lancerActiviteCalendrier(View view) {
+        Intent intent = new Intent(this, CalendrierActivity.class);
+        intent.putParcelableArrayListExtra("listeStagesSelectionnes", listeStagesSelectionnes);
+        startActivity(intent);
     }
 }
