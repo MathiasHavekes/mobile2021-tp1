@@ -25,15 +25,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StagePlanif">
-<<<<<<< Updated upstream
-=======
-        <activity
-            android:name=".CalendrierActivity"
-            android:exported="true" />
-        <activity
-            android:name=".SeConnecterActivity"
-            android:exported="true" />
->>>>>>> Stashed changes
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -62,6 +53,12 @@
             android:exported="true"
             android:label="@string/titre_activity_google_maps"
             android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".CalendrierActivity"
+            android:exported="true"
+            android:label="@string/titre_activity_calendrier"
+            android:parentActivityName=".MainActivity"/>
 
         <activity
             android:name=".InfoStageActivity"

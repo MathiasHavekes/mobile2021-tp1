@@ -130,11 +130,11 @@ public class InfoEleveFragment extends Fragment implements AdapterView.OnItemSel
         Stage stage = viewModel.getStage();
         if (stage != null) {
             comptes.add(stage.getEtudiant());
-            setSpinner();
+            setSpinnerEtudiants();
             setRadioButton(stage);
         } else {
             comptes = dbHelper.getEtudiantsSansStage();
-            setSpinner();
+            setSpinnerEtudiants();
         }
         setImage();
         return view;
@@ -162,7 +162,7 @@ public class InfoEleveFragment extends Fragment implements AdapterView.OnItemSel
     /**
      * Met les noms d'etudiants dans le spinner
      */
-    private void setSpinner() {
+    private void setSpinnerEtudiants() {
         String[] arraySpinner = new String[comptes.size()];
         for (int i = 0; i < comptes.size(); i++) {
             Compte compte = comptes.get(i);

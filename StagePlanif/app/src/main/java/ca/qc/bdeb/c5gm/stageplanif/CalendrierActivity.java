@@ -1,22 +1,21 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,13 +26,25 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
     private static final int TYPE_WEEK_VIEW = 3;
+    /**
+     * Onclick listener pour lancer l'activitee d'ajout de stage
+     */
+    private final View.OnClickListener ajouterEleveOnClickListener = view -> lancerActiviteAjoutStage(view);
     private int mWeekViewType = TYPE_THREE_DAY_VIEW;
     private WeekView mWeekView;
+    private Toolbar toolbar;
+    /**
+     * Contient le FloatingActionButton d'ajout d'eleve
+     */
+    private FloatingActionButton btnAjouterEleve;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clendrier);
+        setContentView(R.layout.activity_calendrier);
+
+        btnAjouterEleve = findViewById(R.id.btn_ajouter_eleve);
+        btnAjouterEleve.setOnClickListener(ajouterEleveOnClickListener);
 
         // Get a reference for the week view in the layout.
         mWeekView = (WeekView) findViewById(R.id.weekView);
@@ -54,61 +65,13 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         // Set up a date time interpreter to interpret how the date and time will be formatted in
         // the week view. This is optional.
         setupDateTimeInterpreter(false);
+        initToolBar();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_calendar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        setupDateTimeInterpreter(id == R.id.action_week_view);
-        switch (id){
-            case R.id.action_today:
-                mWeekView.goToToday();
-                return true;
-            case R.id.action_day_view:
-                if (mWeekViewType != TYPE_DAY_VIEW) {
-                    item.setChecked(!item.isChecked());
-                    mWeekViewType = TYPE_DAY_VIEW;
-                    mWeekView.setNumberOfVisibleDays(1);
-
-                    // Lets change some dimensions to best fit the view.
-                    mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()));
-                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                    mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                }
-                return true;
-            case R.id.action_three_day_view:
-                if (mWeekViewType != TYPE_THREE_DAY_VIEW) {
-                    item.setChecked(!item.isChecked());
-                    mWeekViewType = TYPE_THREE_DAY_VIEW;
-                    mWeekView.setNumberOfVisibleDays(3);
-
-                    // Lets change some dimensions to best fit the view.
-                    mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics()));
-                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                    mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12, getResources().getDisplayMetrics()));
-                }
-                return true;
-            case R.id.action_week_view:
-                if (mWeekViewType != TYPE_WEEK_VIEW) {
-                    item.setChecked(!item.isChecked());
-                    mWeekViewType = TYPE_WEEK_VIEW;
-                    mWeekView.setNumberOfVisibleDays(7);
-
-                    // Lets change some dimensions to best fit the view.
-                    mWeekView.setColumnGap((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()));
-                    mWeekView.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
-                    mWeekView.setEventTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 10, getResources().getDisplayMetrics()));
-                }
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    private void initToolBar() {
+        toolbar = findViewById((R.id.toolbar));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -146,23 +109,21 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
         Toast.makeText(this, "Clicked " + event.getName(), Toast.LENGTH_SHORT).show();
+        creerDialogueChangerEvent();
     }
 
-//    private void creerDialogueChangerEvent() {
-//        LayoutInflater inflater = getLayoutInflater();
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        View dialog = inflater.inflate(,null);
-//        builder.setView(dialog)
-//                .setTitle()
-//                .setNegativeButton()
-//                .setPositiveButton("", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                    }
-//                })
-//                .show();
-//    }
+    private void creerDialogueChangerEvent() {
+        LayoutInflater inflater = getLayoutInflater();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialog = inflater.inflate(R.layout.dialog_modifier_visite, null);
+        builder.setView(dialog)
+                .setTitle("Modifier visite")
+                .setNegativeButton(R.string.btn_annuler, null)
+                .setPositiveButton(R.string.btn_ajouter, (dialog1, which) -> {
+                    Toast.makeText(this, "YESSSSS", Toast.LENGTH_SHORT).show();
+                })
+                .show();
+    }
 
     @Override
     public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
@@ -191,7 +152,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         endTime.add(Calendar.HOUR, 1);
         endTime.set(Calendar.MONTH, newMonth - 1);
         WeekViewEvent event = new WeekViewEvent(1, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.black));
+        event.setColor(getResources().getColor(R.color.red));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -204,7 +165,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         endTime.set(Calendar.MINUTE, 30);
         endTime.set(Calendar.MONTH, newMonth-1);
         event = new WeekViewEvent(10, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.black));
+        event.setColor(getResources().getColor(R.color.red));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -216,7 +177,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         endTime.set(Calendar.HOUR_OF_DAY, 5);
         endTime.set(Calendar.MINUTE, 0);
         event = new WeekViewEvent(10, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.black));
+        event.setColor(getResources().getColor(R.color.yellow));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -228,7 +189,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         endTime.add(Calendar.HOUR_OF_DAY, 2);
         endTime.set(Calendar.MONTH, newMonth-1);
         event = new WeekViewEvent(2, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.black));
+        event.setColor(getResources().getColor(R.color.green));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -241,7 +202,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         endTime.add(Calendar.HOUR_OF_DAY, 3);
         endTime.set(Calendar.MONTH, newMonth - 1);
         event = new WeekViewEvent(3, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.black));
+        event.setColor(getResources().getColor(R.color.red));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -253,7 +214,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         endTime = (Calendar) startTime.clone();
         endTime.add(Calendar.HOUR_OF_DAY, 3);
         event = new WeekViewEvent(4, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.black));
+        event.setColor(getResources().getColor(R.color.green));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -265,7 +226,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         endTime = (Calendar) startTime.clone();
         endTime.add(Calendar.HOUR_OF_DAY, 3);
         event = new WeekViewEvent(5, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.black));
+        event.setColor(getResources().getColor(R.color.red));
         events.add(event);
 
         startTime = Calendar.getInstance();
@@ -277,9 +238,14 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         endTime = (Calendar) startTime.clone();
         endTime.add(Calendar.HOUR_OF_DAY, 3);
         event = new WeekViewEvent(5, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.black));
+        event.setColor(getResources().getColor(R.color.green));
         events.add(event);
 
         return events;
+    }
+
+    public void lancerActiviteAjoutStage(View view) {
+        Intent intent = new Intent(this, InfoStageActivity.class);
+        startActivity(intent);
     }
 }

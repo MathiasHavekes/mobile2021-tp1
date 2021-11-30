@@ -12,9 +12,13 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -45,8 +49,9 @@ import ca.qc.bdeb.c5gm.stageplanif.databinding.ActivityGoogleMapsBinding;
 public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int LOCATION_REQUEST_CODE = 1;
     private static final float ZOOM_PAR_DEFAUT = 16f;
-    private static final String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
-    private final View.OnClickListener lancerCalendrierOnClickListener = view -> lancerActiviteCalendrier(view);
+    private static final String[] PERMISSIONS = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+    private static final String[] JOURS_DE_LA_SEMAINE = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"};
+    private final View.OnClickListener lancerCalendrierOnClickListener = view -> creerDialogueChoisirJour();
     private ActivityGoogleMapsBinding binding;
     private ArrayList<StagePoidsPlume> listeStages;
     private ArrayList<Marker> listeMarqueurs;
@@ -58,6 +63,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     private Toolbar toolbar;
     private SelectionViewModel viewModel;
     private FloatingActionButton btnLancerCalendrier;
+    private Spinner spinnerJour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +123,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        ActivityCompat.requestPermissions(this, permissions, LOCATION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, PERMISSIONS, LOCATION_REQUEST_CODE);
         placerMarqueurs();
 
         mMap.setOnMarkerClickListener(marker -> {
@@ -212,9 +218,32 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
-    private void lancerActiviteCalendrier(View view) {
+    private void lancerActiviteCalendrier() {
+        creerDialogueChoisirJour();
         Intent intent = new Intent(this, CalendrierActivity.class);
         intent.putParcelableArrayListExtra("listeStagesSelectionnes", listeStagesSelectionnes);
         startActivity(intent);
+    }
+
+    private void creerDialogueChoisirJour() {
+        LayoutInflater inflater = getLayoutInflater();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialog = inflater.inflate(R.layout.dialog_choisir_jour, null);
+        setSpinnerJour(dialog);
+        builder.setView(dialog)
+                .setTitle("Choisir un jour")
+                .setNegativeButton(R.string.btn_annuler, null)
+                .setPositiveButton(R.string.btn_ajouter, (dialog1, which) -> {
+                    lancerActiviteCalendrier();
+                })
+                .show();
+    }
+
+    private void setSpinnerJour(View view) {
+        spinnerJour = view.findViewById(R.id.spinner_selection_jour);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, JOURS_DE_LA_SEMAINE);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerJour.setAdapter(adapter);
     }
 }
