@@ -69,7 +69,7 @@ public class Stage implements Parcelable {
     /**
      * Disponibilites du tuteur
      */
-    private byte disponibiliteTuteur;
+    private Integer disponibiliteTuteur;
 
     public Stage(String id, String anneeScolaire, Priorite priorite) {
         this.id = id;
@@ -94,7 +94,7 @@ public class Stage implements Parcelable {
         heureDiner = LocalTime.ofSecondOfDay(in.readInt());
         tempsDiner = in.readInt();
         dureeVisite = in.readInt();
-        disponibiliteTuteur = in.readByte();
+        disponibiliteTuteur = in.readInt();
     }
 
     public void addEtudiant(Compte etudiant) {
@@ -152,7 +152,7 @@ public class Stage implements Parcelable {
         parcel.writeInt(heureDiner.toSecondOfDay());
         parcel.writeInt(tempsDiner);
         parcel.writeInt(dureeVisite);
-        parcel.writeByte(disponibiliteTuteur);
+        parcel.writeInt(disponibiliteTuteur);
     }
 
     /**
@@ -220,11 +220,11 @@ public class Stage implements Parcelable {
         this.dureeVisite = dureeVisite;
     }
 
-    public byte getDisponibiliteTuteur() {
+    public Integer getDisponibiliteTuteur() {
         return disponibiliteTuteur;
     }
 
-    public void setDisponibiliteTuteur(byte disponibiliteTuteur) {
+    public void setDisponibiliteTuteur(Integer disponibiliteTuteur) {
         this.disponibiliteTuteur = disponibiliteTuteur;
     }
 }

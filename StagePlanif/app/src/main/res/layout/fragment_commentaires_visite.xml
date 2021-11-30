@@ -24,27 +24,10 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <CheckBox
-                android:id="@+id/box_jour1_am"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="CheckBox"
-                tools:ignore="DuplicateSpeakableTextCheck" />
-
-            <CheckBox
-                android:id="@+id/box_jour2_am"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="CheckBox" />
-
-            <CheckBox
-                android:id="@+id/box_jour3_am"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="CheckBox" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"></LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -53,25 +36,118 @@
             android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/box_jour1_pm"
+                android:id="@+id/box_lundi_am"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="CheckBox" />
+                android:enabled="false"
+                android:focusable="false"
+                android:text="Lundi AM" />
 
             <CheckBox
-                android:id="@+id/box_jour2_pm"
+                android:id="@+id/box_lundi_pm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="CheckBox" />
+                android:clickable="false"
+                android:enabled="false"
+                android:text="Lundi PM" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/box_jour3_pm"
+                android:id="@+id/box_mardi_am"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="CheckBox" />
+                android:clickable="false"
+                android:enabled="false"
+                android:text="Mardi AM" />
+
+            <CheckBox
+                android:id="@+id/box_mardi_pm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:enabled="false"
+                android:text="Mardi PM" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/box_mercredi_am"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Mercredi AM" />
+
+            <CheckBox
+                android:id="@+id/box_mercredi_pm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Mercredi PM" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/box_jeudi_am"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Jeudi AM" />
+
+            <CheckBox
+                android:id="@+id/box_jeudi_pm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Jeudi PM" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/box_vendredi_am"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Vendredi AM" />
+
+            <CheckBox
+                android:id="@+id/box_vendredi_pm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="Vendredi PM" />
+
         </LinearLayout>
 
         <TextView

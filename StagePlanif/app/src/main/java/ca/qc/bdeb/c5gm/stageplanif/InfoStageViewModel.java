@@ -55,13 +55,38 @@ public class InfoStageViewModel extends ViewModel {
      */
     private final MutableLiveData<Integer> tempsVisites = new MutableLiveData<>();
     /**
-     *
+     * jours du stage
      */
     private final MutableLiveData<Byte> jourStage = new MutableLiveData<>();
+    /**
+     * Stock les disponibilites du tuteur
+     */
+    private final MutableLiveData<Integer> dispoTuteur = new MutableLiveData<>();
+    private final MutableLiveData<String> commentaire = new MutableLiveData<>();
     /**
      * Propriete contenant le stage si c'est une modification
      */
     private Stage stage;
+    /**
+     * Valeur de lundi
+     */
+    public final byte LUNDI = 0x01;
+    /**
+     * Valeur de mardi
+     */
+    public final byte MARDI = 0x02;
+    /**
+     * Valeur de mercredi
+     */
+    public final byte MERCREDI = 0x04;
+    /**
+     * Valeur de jeudi
+     */
+    public final byte JEUDI = 0x08;
+    /**
+     * Valeur de vendredi
+     */
+    public final byte VENDREDI = 0x10;
 
 
     public void setImage(Bitmap photo) {
@@ -152,5 +177,21 @@ public class InfoStageViewModel extends ViewModel {
 
     public void setJourStage(Byte jours) {
         this.jourStage.setValue(jours);
+    }
+
+    public Integer getDispoTuteur() {
+        return dispoTuteur.getValue();
+    }
+
+    public void setDispoTuteur(Integer jours) {
+        dispoTuteur.setValue(jours);
+    }
+
+    public String getCommentaire() {
+        return commentaire.getValue();
+    }
+
+    public void setCommentaire(String commentaire) {
+        this.commentaire.setValue(commentaire);
     }
 }

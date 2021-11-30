@@ -23,26 +23,6 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
  */
 public class InfoVisiteFragment extends Fragment {
     /**
-     * Valeur de lundi
-     */
-    private final byte LUNDI = 0x01;
-    /**
-     * Valeur de mardi
-     */
-    private final byte MARDI = 0x02;
-    /**
-     * Valeur de mercredi
-     */
-    private final byte MERCREDI = 0x04;
-    /**
-     * Valeur de jeudi
-     */
-    private final byte JEUDI = 0x08;
-    /**
-     * Valeur de vendredi
-     */
-    private final byte VENDREDI = 0x10;
-    /**
      * Champs de texte du temps de debut de stage
      */
     private EditText txtTempsDebutStage;
@@ -118,15 +98,15 @@ public class InfoVisiteFragment extends Fragment {
         public void onClick(View view) {
             Byte flag = 0;
             if (view.equals(checkBoxLundi)) {
-                flag = LUNDI;
+                flag = viewModel.LUNDI;
             } else if (view.equals(checkBoxMardi)) {
-                flag = MARDI;
+                flag = viewModel.MARDI;
             } else if (view.equals(checkBoxMercredi)) {
-                flag = MERCREDI;
+                flag = viewModel.MERCREDI;
             } else if (view.equals(checkBoxJeudi)) {
-                flag = JEUDI;
+                flag = viewModel.JEUDI;
             } else if (view.equals(checkBoxVendredi)) {
-                flag = VENDREDI;
+                flag = viewModel.VENDREDI;
             }
             if (((CheckBox) view).isChecked()) {
                 coche |= flag;
@@ -208,21 +188,27 @@ public class InfoVisiteFragment extends Fragment {
     private void setChampsJoursStage(Stage stage) {
         byte journees = stage.getJournees();
         if (journees != 0) {
-            if ((journees & LUNDI) == LUNDI) {
+            if ((journees & viewModel.LUNDI) == viewModel.LUNDI) {
+                coche |= viewModel.LUNDI;
                 checkBoxLundi.setChecked(true);
             }
-            if ((journees & MARDI) == MARDI) {
+            if ((journees & viewModel.MARDI) == viewModel.MARDI) {
+                coche |= viewModel.MARDI;
                 checkBoxMardi.setChecked(true);
             }
-            if ((journees & MERCREDI) == MERCREDI) {
+            if ((journees & viewModel.MERCREDI) == viewModel.MERCREDI) {
+                coche |= viewModel.MERCREDI;
                 checkBoxMercredi.setChecked(true);
             }
-            if ((journees & JEUDI) == JEUDI) {
+            if ((journees & viewModel.JEUDI) == viewModel.JEUDI) {
+                coche |= viewModel.JEUDI;
                 checkBoxJeudi.setChecked(true);
             }
-            if ((journees & VENDREDI) == VENDREDI) {
+            if ((journees & viewModel.VENDREDI) == viewModel.VENDREDI) {
+                coche |= viewModel.VENDREDI;
                 checkBoxVendredi.setChecked(true);
             }
+            viewModel.setJourStage(coche);
         }
 
     }
@@ -260,18 +246,22 @@ public class InfoVisiteFragment extends Fragment {
         LocalTime heureDebut = stage.getHeureDebut();
         if (heureDebut != null) {
             afficherTemps(txtTempsDebutStage, heureDebut);
+            viewModel.setHeureDebutStage(heureDebut);
             int tempsStage = stage.getTempsStage();
             if (tempsStage != 0) {
                 LocalTime heureFin = heureDebut.plusMinutes(tempsStage);
+                viewModel.setHeureFinStage(heureFin);
                 afficherTemps(txtTempsFinStage, heureFin);
             }
         }
         LocalTime heureDiner = stage.getHeureDiner();
         if (heureDiner != null) {
+            viewModel.setHeureDebutDiner(heureDiner);
             afficherTemps(txtTempsDebutDiner, heureDiner);
             int tempsDiner = stage.getTempsDiner();
             if (tempsDiner != 0) {
                 LocalTime heureFinDiner = heureDiner.plusMinutes(tempsDiner);
+                viewModel.setHeureFinDiner(heureFinDiner);
                 afficherTemps(txtTempsFinDiner, heureFinDiner);
             }
         }
