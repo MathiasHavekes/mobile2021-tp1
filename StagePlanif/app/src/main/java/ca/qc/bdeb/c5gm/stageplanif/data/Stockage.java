@@ -45,7 +45,6 @@ public class Stockage extends SQLiteOpenHelper {
                     CompteHelper._ID + " INTEGER PRIMARY KEY," +
                     CompteHelper.COMPTE_EMAIL + " TEXT," +
                     CompteHelper.COMPTE_EST_ACTIF + " NUMERIC," +
-                    CompteHelper.COMPTE_MOT_PASSE + " TEXT," +
                     CompteHelper.COMPTE_NOM + " TEXT," +
                     CompteHelper.COMPTE_PRENOM + " TEXT," +
                     CompteHelper.COMPTE_PHOTO + " BLOB," +
@@ -217,7 +216,7 @@ public class Stockage extends SQLiteOpenHelper {
             stage.addProfesseur(professeur);
             stage.setCommentaire("Ceci est un commentaire");
             stage.setTempsStage(480);
-            stage.setDisponibiliteTuteur((byte) 0x03);
+            stage.setDisponibiliteTuteur(3);
             stage.setJournees((byte) 0x07);
             stage.setDureeVisite(45);
             stage.setHeureDiner(LocalTime.of(12, 0));
@@ -516,26 +515,12 @@ public class Stockage extends SQLiteOpenHelper {
                 stage.setHeureDiner(LocalTime.ofSecondOfDay(cursor.getInt(10)));
                 stage.setTempsDiner(cursor.getInt(11));
                 stage.setDureeVisite(cursor.getInt(12));
-                stage.setDisponibiliteTuteur((byte) cursor.getInt(13));
+                stage.setDisponibiliteTuteur(cursor.getInt(13));
                 stages.add(stage);
             } while (cursor.moveToNext());
             cursor.close();
         }
         return stages;
-    }
-
-    /**
-     * Changer la priorite d'un stage
-     *
-     * @param stage le stage a modifier
-     */
-    public void changerPrioriteStage(Stage stage) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
-        String whereClause = StageHelper._ID + " = ?";
-        String[] whereArgs = {stage.getId()};
-        db.update(StageHelper.NOM_TABLE, values, whereClause, whereArgs);
     }
 
     /**
@@ -546,6 +531,19 @@ public class Stockage extends SQLiteOpenHelper {
     public void modifierStage(Stage stage) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(StageHelper.STAGE_ENTREPRISE_ID, stage.getEntreprise().getId());
+        values.put(StageHelper.STAGE_ETUDIANT_ID, stage.getEtudiant().getId());
+        values.put(StageHelper.STAGE_PROFESSEUR_ID, stage.getProfesseur().getId());
+        values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, Utils.getAnneeScolaire());
+        values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
+        values.put(StageHelper.STAGE_COMMENTAIRE, stage.getCommentaire());
+        values.put(StageHelper.STAGE_DISPONIBILITE_TUTEUR, stage.getDisponibiliteTuteur());
+        values.put(StageHelper.STAGE_DUREE_VISITE, stage.getDureeVisite());
+        values.put(StageHelper.STAGE_JOURNEES, stage.getJournees());
+        values.put(StageHelper.STAGE_TEMPS, stage.getTempsStage());
+        values.put(StageHelper.STAGE_TEMPS_DINER, stage.getTempsDiner());
+        values.put(StageHelper.STAGE_HEURE_DEBUT, stage.getHeureDebut().toSecondOfDay());
+        values.put(StageHelper.STAGE_HEURE_DINER, stage.getHeureDiner().toSecondOfDay());
         values.put(StageHelper.STAGE_ENTREPRISE_ID, stage.getEntreprise().getId());
         values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
         String whereClause = StageHelper._ID + " = ?";
@@ -623,7 +621,6 @@ public class Stockage extends SQLiteOpenHelper {
         public static final String NOM_TABLE = "compte";
         public static final String COMPTE_EMAIL = "email";
         public static final String COMPTE_EST_ACTIF = "est_actif";
-        public static final String COMPTE_MOT_PASSE = "mot_passe";
         public static final String COMPTE_NOM = "nom";
         public static final String COMPTE_PRENOM = "prenom";
         public static final String COMPTE_PHOTO = "photo";
