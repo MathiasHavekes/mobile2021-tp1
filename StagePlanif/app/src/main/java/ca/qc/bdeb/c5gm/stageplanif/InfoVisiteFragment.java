@@ -176,8 +176,25 @@ public class InfoVisiteFragment extends Fragment {
             setChampsHeures(stage);
             setChampsDureeVisite(stage);
             setChampsJoursStage(stage);
+        } else {
+            setValeurDefaut();
         }
         return view;
+    }
+
+    private void setValeurDefaut() {
+        LocalTime temps = LocalTime.of(8,0);
+        afficherTemps(txtTempsDebutStage, temps);
+        viewModel.setHeureDebutStage(temps);
+        temps = LocalTime.of(16,0);
+        afficherTemps(txtTempsFinStage, temps);
+        viewModel.setHeureFinStage(temps);
+        temps = LocalTime.of(12,0);
+        afficherTemps(txtTempsDebutDiner, temps);
+        viewModel.setHeureDebutDiner(temps);
+        temps = LocalTime.of(12,30);
+        afficherTemps(txtTempsFinDiner, temps);
+        viewModel.setHeureFinDiner(temps);
     }
 
     /**
