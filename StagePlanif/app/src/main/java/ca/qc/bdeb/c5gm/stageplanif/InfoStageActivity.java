@@ -179,9 +179,9 @@ public class InfoStageActivity extends AppCompatActivity {
                         stage.setCommentaire(viewModel.getCommentaire());
                         stage.setJournees(viewModel.getJourStage());
                         stage.setheureDebut(viewModel.getHeureDebutStage());
-                        stage.setTempsStage((int) MINUTES.between(viewModel.getHeureDebutStage(), viewModel.getHeureFinStage()));
+                        stage.setHeureFinStage(viewModel.getHeureFinStage());
                         stage.setHeureDiner(viewModel.getHeureDebutDiner());
-                        stage.setTempsDiner((int) MINUTES.between(viewModel.getHeureDebutDiner(), viewModel.getHeureFinDiner()));
+                        stage.setHeureFinDiner(viewModel.getHeureFinDiner());
                         stage.setDureeVisite(viewModel.getTempsVisites());
                         stage.setDisponibiliteTuteur(viewModel.getDispoTuteur());
                         dbHelper.modifierStage(stage);
@@ -205,6 +205,7 @@ public class InfoStageActivity extends AppCompatActivity {
         boutonSuivant.setOnClickListener(suivantClique);
         fragments = new Fragment[]{new InfoEleveFragment(), new InfoEntrepriseFragment(), new InfoVisiteFragment(), new CommentairesVisiteFragment()};
         context = this;
+        Utils.context = getApplicationContext();
         creationViewModel();
         Intent intent = getIntent();
         if (intent.hasExtra("stage")) {
@@ -302,9 +303,9 @@ public class InfoStageActivity extends AppCompatActivity {
         stage.setCommentaire(viewModel.getCommentaire());
         stage.setJournees(viewModel.getJourStage());
         stage.setheureDebut(viewModel.getHeureDebutStage());
-        stage.setTempsStage((int) MINUTES.between(viewModel.getHeureDebutStage(), viewModel.getHeureFinStage()));
+        stage.setHeureFinStage(viewModel.getHeureFinStage());
         stage.setHeureDiner(viewModel.getHeureDebutDiner());
-        stage.setTempsDiner((int) MINUTES.between(viewModel.getHeureDebutDiner(), viewModel.getHeureFinDiner()));
+        stage.setHeureFinDiner(viewModel.getHeureFinDiner());
         stage.setDureeVisite(viewModel.getTempsVisites());
         stage.setDisponibiliteTuteur(viewModel.getDispoTuteur());
         dbHelper.createStage(stage);

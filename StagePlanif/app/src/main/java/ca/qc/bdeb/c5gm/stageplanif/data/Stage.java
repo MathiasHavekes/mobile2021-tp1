@@ -53,7 +53,7 @@ public class Stage implements Parcelable {
     /**
      * Duree du stage
      */
-    private int tempsStage;
+    private LocalTime heureFinStage;
     /**
      * Heure de diner du stagiaire
      */
@@ -61,7 +61,7 @@ public class Stage implements Parcelable {
     /**
      * Temps du diner du stagiaire
      */
-    private int tempsDiner;
+    private LocalTime heureFinDiner;
     /**
      * Duree moyenne des visites
      */
@@ -90,9 +90,9 @@ public class Stage implements Parcelable {
         commentaire = in.readString();
         journees = in.readByte();
         heureDebut = LocalTime.ofSecondOfDay(in.readInt());
-        tempsStage = in.readInt();
+        heureFinStage = LocalTime.ofSecondOfDay(in.readInt());
         heureDiner = LocalTime.ofSecondOfDay(in.readInt());
-        tempsDiner = in.readInt();
+        heureFinDiner = LocalTime.ofSecondOfDay(in.readInt());
         dureeVisite = in.readInt();
         disponibiliteTuteur = in.readInt();
     }
@@ -148,9 +148,9 @@ public class Stage implements Parcelable {
         parcel.writeString(commentaire);
         parcel.writeByte(journees);
         parcel.writeInt(heureDebut.toSecondOfDay());
-        parcel.writeInt(tempsStage);
+        parcel.writeInt(heureFinStage.toSecondOfDay());
         parcel.writeInt(heureDiner.toSecondOfDay());
-        parcel.writeInt(tempsDiner);
+        parcel.writeInt(heureFinDiner.toSecondOfDay());
         parcel.writeInt(dureeVisite);
         parcel.writeInt(disponibiliteTuteur);
     }
@@ -188,12 +188,12 @@ public class Stage implements Parcelable {
         this.heureDebut = heureDebut;
     }
 
-    public int getTempsStage() {
-        return tempsStage;
+    public LocalTime getHeureFinStage() {
+        return heureFinStage;
     }
 
-    public void setTempsStage(int tempsStage) {
-        this.tempsStage = tempsStage;
+    public void setHeureFinStage(LocalTime heureFinStage) {
+        this.heureFinStage = heureFinStage;
     }
 
     public LocalTime getHeureDiner() {
@@ -204,12 +204,12 @@ public class Stage implements Parcelable {
         this.heureDiner = heureDiner;
     }
 
-    public int getTempsDiner() {
-        return tempsDiner;
+    public LocalTime getHeureFinDiner() {
+        return heureFinDiner;
     }
 
-    public void setTempsDiner(int tempsDiner) {
-        this.tempsDiner = tempsDiner;
+    public void setHeureFinDiner(LocalTime heureFinDiner) {
+        this.heureFinDiner = heureFinDiner;
     }
 
     public int getDureeVisite() {

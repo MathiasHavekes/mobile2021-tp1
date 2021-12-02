@@ -19,6 +19,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 
+import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
+import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
+import ca.qc.bdeb.c5gm.stageplanif.reseau.ConnexionBD;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.IAPI;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.APIClient;
 import okhttp3.ResponseBody;
@@ -42,7 +45,7 @@ public class ConnexionActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.password);
         btnLogin = findViewById(R.id.loginBtn);
         loadingProgressBar = findViewById(R.id.loading);
-
+        Utils.context = getApplicationContext();
         btnLogin.setEnabled(false);
 
         client = APIClient.getRetrofit().create(IAPI.class);
@@ -84,19 +87,21 @@ public class ConnexionActivity extends AppCompatActivity {
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
-                    JSONObject rep = new JSONObject(response.body().string());
-                    ConnectUtils.authToken = rep.getString("access_token");
-                    ConnectUtils.authId = rep.getString("id");
-                    Toast.makeText(getApplicationContext(), "Connexion réussie!!", Toast.LENGTH_LONG).show();
-                    finish();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    loadingProgressBar.setVisibility(View.GONE);
+                if(response.code() == 200) {
+                    try {
+                        JSONObject rep = new JSONObject(response.body().string());
+                        ConnectUtils.authToken = rep.getString("access_token");
+                        ConnectUtils.authId = rep.getString("id");
+                        ConnexionBD.updateCompte(rep);
+                        Toast.makeText(getApplicationContext(), "Connexion réussie!!", Toast.LENGTH_LONG).show();
+                        finish();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        loadingProgressBar.setVisibility(View.GONE);
+                    }
                 }
             }
 

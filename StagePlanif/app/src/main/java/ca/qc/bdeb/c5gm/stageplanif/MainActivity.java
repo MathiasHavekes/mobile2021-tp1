@@ -1,8 +1,10 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,6 +37,7 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 import ca.qc.bdeb.c5gm.stageplanif.data.StagePoidsPlume;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
+import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.ConnexionBD;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.IAPI;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.APIClient;
@@ -139,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         btnAjouterEleve = findViewById(R.id.btn_ajouter_eleve);
         setSupportActionBar(toolbar);
+        Utils.context = getApplicationContext();
         dbHelper = Stockage.getInstance(getApplicationContext());
         listeStages = dbHelper.getStages();
         selectionPriorites = Priorite.getTotalValeursPriorites();
@@ -163,6 +167,10 @@ public class MainActivity extends AppCompatActivity {
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (response.code() != 200) {
                                 connecter();
+                            } else {
+                                if(! dbHelper.compteExists(ConnectUtils.authId)) {
+                                    dbHelper.ajouterCompte(ConnectUtils.authId, null, null, null, TypeCompte.PROFESSEUR.getValeur());
+                                }
                             }
                         }
 
@@ -172,8 +180,10 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
             );
+            ConnexionBD.updateEntreprises();
+            ConnexionBD.updateComptesEleves();
+            ConnexionBD.updateStages();
         }
-        ArrayList<Entreprise> entreprises = ConnexionBD.getEntreprises();
     }
 
     private void connecter() {

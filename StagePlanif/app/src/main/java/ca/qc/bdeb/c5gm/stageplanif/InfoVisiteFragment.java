@@ -247,9 +247,8 @@ public class InfoVisiteFragment extends Fragment {
         if (heureDebut != null) {
             afficherTemps(txtTempsDebutStage, heureDebut);
             viewModel.setHeureDebutStage(heureDebut);
-            int tempsStage = stage.getTempsStage();
-            if (tempsStage != 0) {
-                LocalTime heureFin = heureDebut.plusMinutes(tempsStage);
+            LocalTime heureFin = stage.getHeureFinStage();
+            if (heureFin != null) {
                 viewModel.setHeureFinStage(heureFin);
                 afficherTemps(txtTempsFinStage, heureFin);
             }
@@ -258,9 +257,8 @@ public class InfoVisiteFragment extends Fragment {
         if (heureDiner != null) {
             viewModel.setHeureDebutDiner(heureDiner);
             afficherTemps(txtTempsDebutDiner, heureDiner);
-            int tempsDiner = stage.getTempsDiner();
-            if (tempsDiner != 0) {
-                LocalTime heureFinDiner = heureDiner.plusMinutes(tempsDiner);
+            LocalTime heureFinDiner = stage.getHeureFinDiner();
+            if (heureFinDiner != null) {
                 viewModel.setHeureFinDiner(heureFinDiner);
                 afficherTemps(txtTempsFinDiner, heureFinDiner);
             }
