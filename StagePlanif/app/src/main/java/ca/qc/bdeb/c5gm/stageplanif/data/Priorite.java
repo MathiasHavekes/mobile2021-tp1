@@ -13,7 +13,7 @@ import java.util.Random;
 public enum Priorite implements Parcelable{
     MINIMUM(1),
     MOYENNE(2),
-    MAXIMUM(4);
+    HAUTE(4);
 
     private static final List<Priorite> VALUES =
             Collections.unmodifiableList(Arrays.asList(values()));

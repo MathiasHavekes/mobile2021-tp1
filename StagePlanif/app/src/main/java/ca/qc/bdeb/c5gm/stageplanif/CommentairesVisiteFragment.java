@@ -190,7 +190,7 @@ public class CommentairesVisiteFragment extends Fragment {
     }
 
     private void activerChampsDispoTuteur(){
-        if(viewModel.getJourStage() > 0) {
+        if(viewModel.getJourStage() != null) {
             if ((viewModel.getJourStage() & viewModel.LUNDI) == viewModel.LUNDI) {
                 activerCheckboxes(checkBoxesDispoTuteur.get("lundi"));
             }
@@ -206,6 +206,8 @@ public class CommentairesVisiteFragment extends Fragment {
             if ((viewModel.getJourStage() & viewModel.VENDREDI) == viewModel.VENDREDI) {
                 activerCheckboxes(checkBoxesDispoTuteur.get("vendredi"));
             }
+        } else {
+            viewModel.setJourStage((byte) 0);
         }
     }
 

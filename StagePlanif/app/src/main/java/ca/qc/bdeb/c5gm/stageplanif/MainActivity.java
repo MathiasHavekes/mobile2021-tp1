@@ -1,10 +1,8 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,7 +30,6 @@ import java.util.HashMap;
 import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StageNomComparateur;
 import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrenomComparateur;
 import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrioriteComparateur;
-import ca.qc.bdeb.c5gm.stageplanif.data.Entreprise;
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 import ca.qc.bdeb.c5gm.stageplanif.data.StagePoidsPlume;
@@ -96,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.message_oui),
                     (dialogInterface, i) -> {
                         int indexEnleve = viewHolder.getAdapterPosition();
-                        dbHelper.deleteStage(listeStages.get(indexEnleve));
+                        dbHelper.deleteStage(listeStages.get(indexEnleve).getId());
                         listeStages.remove(indexEnleve);
                         stageAdapter.notifyItemRemoved(indexEnleve);
                     });
@@ -146,11 +143,10 @@ public class MainActivity extends AppCompatActivity {
         dbHelper = Stockage.getInstance(getApplicationContext());
         listeStages = dbHelper.getStages();
         selectionPriorites = Priorite.getTotalValeursPriorites();
-
+        creationClient();
         creationViewModel();
         creationSwipeRefreshLayout();
         creationRecyclerView();
-        creationClient();
         btnAjouterEleve.setOnClickListener(ajouterEleveOnClickListener);
     }
 
@@ -168,9 +164,7 @@ public class MainActivity extends AppCompatActivity {
                             if (response.code() != 200) {
                                 connecter();
                             } else {
-                                if(! dbHelper.compteExists(ConnectUtils.authId)) {
-                                    dbHelper.ajouterCompte(ConnectUtils.authId, null, null, null, TypeCompte.PROFESSEUR.getValeur());
-                                }
+                                dbHelper.ajouterOuModifierCompte(ConnectUtils.authId, null, null, null, TypeCompte.PROFESSEUR.getValeur());
                             }
                         }
 

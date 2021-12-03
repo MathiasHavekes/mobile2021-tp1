@@ -48,7 +48,7 @@ public class Utils {
                 return R.color.green;
             case MOYENNE:
                 return R.color.yellow;
-            case MAXIMUM:
+            case HAUTE:
                 return R.color.red;
             default:
                 return R.color.black;

@@ -63,8 +63,8 @@ public class Stockage extends SQLiteOpenHelper {
                     StageHelper.STAGE_JOURNEES + " INTEGER," +
                     StageHelper.STAGE_HEURE_DEBUT + " INTEGER," +
                     StageHelper.STAGE_HEURE_FIN +  " INTEGER," +
-                    StageHelper.STAGE_HEURE_DINER + " INTEGER," +
-                    StageHelper.STAGE_HEURE_FIN_DINER + " INTEGER," +
+                    StageHelper.STAGE_HEURE_PAUSE + " INTEGER," +
+                    StageHelper.STAGE_HEURE_FIN_PAUSE + " INTEGER," +
                     StageHelper.STAGE_DUREE_VISITE + " INTEGER," +
                     StageHelper.STAGE_DISPONIBILITE_TUTEUR + " INTEGER," +
                     "FOREIGN KEY (" + StageHelper.STAGE_ENTREPRISE_ID + ") REFERENCES " +
@@ -139,86 +139,74 @@ public class Stockage extends SQLiteOpenHelper {
      * Méthode qui ajoute les comptes à la base de données
      *
      */
-    public void ajouterCompte(String id, String nom, String prenom, String email, int typeCompte) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(CompteHelper._ID, id);
-        values.put(CompteHelper.COMPTE_NOM, nom);
-        values.put(CompteHelper.COMPTE_PRENOM, prenom);
-        values.put(CompteHelper.COMPTE_EMAIL, email);
-        values.put(CompteHelper.COMPTE_TYPE_COMPTE, typeCompte);
-        db.insert(CompteHelper.NOM_TABLE, null, values);
-    }
-
-    public void modifierCompte(String id, String nom, String prenom, String email, int typeCompte) {
+    public void ajouterOuModifierCompte(String id, String nom, String prenom, String email, int typeCompte) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues values = new ContentValues();
         values.put(CompteHelper.COMPTE_NOM, nom);
         values.put(CompteHelper.COMPTE_PRENOM, prenom);
         values.put(CompteHelper.COMPTE_EMAIL, email);
         values.put(CompteHelper.COMPTE_TYPE_COMPTE, typeCompte);
-        String whereClause = CompteHelper._ID + " = ?";
-        String[] whereArgs = {id};
-        db.update(CompteHelper.NOM_TABLE, values, whereClause, whereArgs);
+        if(compteExists(id, db)) {
+            String whereClause = CompteHelper._ID + " = ?";
+            String[] whereArgs = {id};
+            db.update(CompteHelper.NOM_TABLE, values, whereClause, whereArgs);
+        } else {
+            values.put(CompteHelper._ID, id);
+            db.insert(CompteHelper.NOM_TABLE, null, values);
+        }
     }
 
-    public void ajouterEntreprise(String id, String nom, String adresse, String ville, String province, String codePostal) {
-            SQLiteDatabase db = this.getReadableDatabase();
-            ContentValues values = new ContentValues();
-            values.put(EntrepriseHelper._ID, id);
-            values.put(EntrepriseHelper.ENTREPRISE_NOM, nom);
-            values.put(EntrepriseHelper.ENTREPRISE_ADRESSE, adresse);
-            values.put(EntrepriseHelper.ENTREPRISE_VILLE, ville);
-            values.put(EntrepriseHelper.ENTREPRISE_PROVINCE, province);
-            values.put(EntrepriseHelper.ENTREPRISE_CP, codePostal);
-            db.insert(EntrepriseHelper.NOM_TABLE, null, values);
-    }
-
-    public void modifierEntreprise(String id, String nom, String adresse, String ville, String province, String codePostal) {
+    public void ajouterOumodifierEntreprise(String id, String nom, String adresse, String ville, String province, String codePostal) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues values = new ContentValues();
-        values.put(EntrepriseHelper._ID, id);
         values.put(EntrepriseHelper.ENTREPRISE_NOM, nom);
         values.put(EntrepriseHelper.ENTREPRISE_ADRESSE, adresse);
         values.put(EntrepriseHelper.ENTREPRISE_VILLE, ville);
         values.put(EntrepriseHelper.ENTREPRISE_PROVINCE, province);
         values.put(EntrepriseHelper.ENTREPRISE_CP, codePostal);
-        String whereClause = EntrepriseHelper._ID + " = ?";
-        String[] whereArgs = {id};
-        db.update(EntrepriseHelper.NOM_TABLE, values, whereClause, whereArgs);
+        if(entrepriseExists(id, db)) {
+            String whereClause = EntrepriseHelper._ID + " = ?";
+            String[] whereArgs = {id};
+            db.update(EntrepriseHelper.NOM_TABLE, values, whereClause, whereArgs);
+        } else {
+            values.put(EntrepriseHelper._ID, id);
+            db.insert(EntrepriseHelper.NOM_TABLE, null, values);
+        }
     }
 
-    public void ajouterStage(String id, String anneeScolaire, String entrepriseId, String etudiantId,
-                             String professeurId, int priorite, String commentaire, int heureDebut) {
+    public void ajouterouModifierStage(String id, String anneeScolaire, String entrepriseId, String etudiantId,
+                             String professeurId, String commentaire, int heureDebut, int heureFin,
+                             int priorite, int heureDebutPause, int heureFinPause) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(StageHelper.STAGE_ENTREPRISE_ID, entrepriseId);
+        values.put(StageHelper.STAGE_ETUDIANT_ID, etudiantId);
+        values.put(StageHelper.STAGE_PROFESSEUR_ID, professeurId);
+        values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, anneeScolaire);
+        values.put(StageHelper.STAGE_DRAPEAU, priorite);
+        values.put(StageHelper.STAGE_COMMENTAIRE, commentaire);
+        if(heureFin > -1) {
+            values.put(StageHelper.STAGE_HEURE_FIN, heureFin);
+        }
+        if(heureFinPause > -1) {
+            values.put(StageHelper.STAGE_HEURE_FIN_PAUSE, heureFinPause);
+        }
+        if(heureDebut > -1) {
+            values.put(StageHelper.STAGE_HEURE_DEBUT, heureDebut);
+        }
+        if(heureDebutPause > -1) {
+            values.put(StageHelper.STAGE_HEURE_PAUSE, heureDebutPause);
+        }
 
-    }
-
-    /**
-     * Ajouter les stages à la base de données
-     *
-     * @param listeStages liste des stages à ajouter
-     * @param db          la base de données qui est utilisée
-     */
-    /*private void ajouterStage(ArrayList<Stage> listeStages, SQLiteDatabase db) {
-        for (Stage stage : listeStages) {
-            ContentValues values = new ContentValues();
-            values.put(StageHelper._ID, stage.getId());
-            values.put(StageHelper.STAGE_ENTREPRISE_ID, stage.getEntreprise().getId());
-            values.put(StageHelper.STAGE_ETUDIANT_ID, stage.getEtudiant().getId());
-            values.put(StageHelper.STAGE_PROFESSEUR_ID, stage.getProfesseur().getId());
-            values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, Utils.getAnneeScolaire());
-            values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
-            values.put(StageHelper.STAGE_COMMENTAIRE, stage.getCommentaire());
-            values.put(StageHelper.STAGE_DISPONIBILITE_TUTEUR, stage.getDisponibiliteTuteur());
-            values.put(StageHelper.STAGE_DUREE_VISITE, stage.getDureeVisite());
-            values.put(StageHelper.STAGE_JOURNEES, stage.getJournees());
-            values.put(StageHelper.STAGE_HEURE_FIN, stage.getHeureFinStage());
-            values.put(StageHelper.STAGE_HEURE_FIN_DINER, stage.getHeureFinDiner());
-            values.put(StageHelper.STAGE_HEURE_DEBUT, stage.getHeureDebut().toSecondOfDay());
-            values.put(StageHelper.STAGE_HEURE_DINER, stage.getHeureDiner().toSecondOfDay());
+        if(stageExists(id, db)) {
+            String whereClause = StageHelper._ID + " = ?";
+            String[] whereArgs = {id};
+            db.update(StageHelper.NOM_TABLE, values, whereClause, whereArgs);
+        } else {
+            values.put(StageHelper._ID, id);
             db.insert(StageHelper.NOM_TABLE, null, values);
         }
-    }*/
+    }
 
     /**
      * Recevoir la liste des comptes d'un certain type dans la base de données
@@ -405,8 +393,8 @@ public class Stockage extends SQLiteOpenHelper {
                 StageHelper.STAGE_JOURNEES,
                 StageHelper.STAGE_HEURE_DEBUT,
                 StageHelper.STAGE_HEURE_FIN,
-                StageHelper.STAGE_HEURE_DINER,
-                StageHelper.STAGE_HEURE_FIN_DINER,
+                StageHelper.STAGE_HEURE_PAUSE,
+                StageHelper.STAGE_HEURE_FIN_PAUSE,
                 StageHelper.STAGE_DUREE_VISITE,
                 StageHelper.STAGE_DISPONIBILITE_TUTEUR
         };
@@ -472,9 +460,9 @@ public class Stockage extends SQLiteOpenHelper {
         values.put(StageHelper.STAGE_DUREE_VISITE, stage.getDureeVisite());
         values.put(StageHelper.STAGE_JOURNEES, stage.getJournees());
         values.put(StageHelper.STAGE_HEURE_FIN, stage.getHeureFinStage().toSecondOfDay());
-        values.put(StageHelper.STAGE_HEURE_FIN_DINER, stage.getHeureFinDiner().toSecondOfDay());
+        values.put(StageHelper.STAGE_HEURE_FIN_PAUSE, stage.getHeureFinDiner().toSecondOfDay());
         values.put(StageHelper.STAGE_HEURE_DEBUT, stage.getHeureDebut().toSecondOfDay());
-        values.put(StageHelper.STAGE_HEURE_DINER, stage.getHeureDiner().toSecondOfDay());
+        values.put(StageHelper.STAGE_HEURE_PAUSE, stage.getHeureDiner().toSecondOfDay());
         values.put(StageHelper.STAGE_ENTREPRISE_ID, stage.getEntreprise().getId());
         values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
         String whereClause = StageHelper._ID + " = ?";
@@ -499,17 +487,15 @@ public class Stockage extends SQLiteOpenHelper {
     /**
      * Supprime un stage
      *
-     * @param stage le stage a supprimer
      */
-    public void deleteStage(Stage stage) {
+    public void deleteStage(String id) {
         SQLiteDatabase db = this.getWritableDatabase();
         String whereClause = StageHelper._ID + " = ?";
-        String[] whereArgs = {String.valueOf(stage.getId())};
+        String[] whereArgs = {id};
         db.delete(StageHelper.NOM_TABLE, whereClause, whereArgs);
     }
 
-    public boolean entrepriseExists(String id){
-        SQLiteDatabase db = this.getReadableDatabase();
+    private boolean entrepriseExists(String id, SQLiteDatabase db){
         String selection = EntrepriseHelper._ID + " = ?";
         String[] selectionArgs = {id};
         Cursor cursor = db.query(EntrepriseHelper.NOM_TABLE, null, selection, selectionArgs, null, null, null, null);
@@ -518,8 +504,7 @@ public class Stockage extends SQLiteOpenHelper {
         return count;
     }
 
-    public boolean compteExists(String id){
-        SQLiteDatabase db = this.getReadableDatabase();
+    private boolean compteExists(String id, SQLiteDatabase db){
         String selection = CompteHelper._ID + " = ?";
         String[] selectionArgs = {id};
         Cursor cursor = db.query(CompteHelper.NOM_TABLE, null, selection, selectionArgs, null, null, null, null);
@@ -528,14 +513,18 @@ public class Stockage extends SQLiteOpenHelper {
         return count;
     }
 
-    public boolean stageExists(String id){
-        SQLiteDatabase db = this.getReadableDatabase();
+    private boolean stageExists(String id, SQLiteDatabase db){
         String selection = StageHelper._ID + " = ?";
         String[] selectionArgs = {id};
         Cursor cursor = db.query(StageHelper.NOM_TABLE, null, selection, selectionArgs, null, null, null, null);
         boolean count = cursor.getCount() > 0;
         cursor.close();
         return count;
+    }
+
+    public boolean stageExists(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return stageExists(id, db);
     }
     /**
      * Cree un nouveau stage
@@ -556,9 +545,9 @@ public class Stockage extends SQLiteOpenHelper {
         values.put(StageHelper.STAGE_DUREE_VISITE, stage.getDureeVisite());
         values.put(StageHelper.STAGE_JOURNEES, stage.getJournees());
         values.put(StageHelper.STAGE_HEURE_FIN, stage.getHeureFinStage().toSecondOfDay());
-        values.put(StageHelper.STAGE_HEURE_FIN_DINER, stage.getHeureFinDiner().toSecondOfDay());
+        values.put(StageHelper.STAGE_HEURE_FIN_PAUSE, stage.getHeureFinDiner().toSecondOfDay());
         values.put(StageHelper.STAGE_HEURE_DEBUT, stage.getHeureDebut().toSecondOfDay());
-        values.put(StageHelper.STAGE_HEURE_DINER, stage.getHeureDiner().toSecondOfDay());
+        values.put(StageHelper.STAGE_HEURE_PAUSE, stage.getHeureDiner().toSecondOfDay());
         db.insert(StageHelper.NOM_TABLE, null, values);
     }
 
@@ -600,8 +589,8 @@ public class Stockage extends SQLiteOpenHelper {
         public static final String STAGE_JOURNEES = "journees";
         public static final String STAGE_HEURE_DEBUT = "heure_debut";
         public static final String STAGE_HEURE_FIN = "heure_fin";
-        public static final String STAGE_HEURE_DINER = "heure_debut_pause";
-        public static final String STAGE_HEURE_FIN_DINER = "heureFinPause";
+        public static final String STAGE_HEURE_PAUSE = "heure_debut_pause";
+        public static final String STAGE_HEURE_FIN_PAUSE = "heureFinPause";
         public static final String STAGE_DUREE_VISITE = "duree_visite";
         public static final String STAGE_DISPONIBILITE_TUTEUR = "disponibilite_tuteur";
     }

@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import ca.qc.bdeb.c5gm.stageplanif.ConnectUtils;
 import ca.qc.bdeb.c5gm.stageplanif.Utils;
+import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
 import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
 import okhttp3.ResponseBody;
@@ -38,12 +39,7 @@ public class ConnexionBD {
                             String ville = entreprise.getString("ville");
                             String province = entreprise.getString("province");
                             String codePostal = entreprise.getString("codePostal");
-                            Boolean entrepriseExists = dbHelper.entrepriseExists(id);
-                            if (entrepriseExists) {
-                                dbHelper.modifierEntreprise(id, nom, adresse, ville, province, codePostal);
-                            } else {
-                                dbHelper.ajouterEntreprise(id, nom, adresse, ville, province, codePostal);
-                            }
+                            dbHelper.ajouterOumodifierEntreprise(id, nom, adresse, ville, province, codePostal);
                         }
                     }
                 } catch (JSONException | IOException e) {
@@ -93,17 +89,14 @@ public class ConnexionBD {
             String email = compte.getString("email");
             String typeCompte = compte.getString("type_compte");
             int typeCompteId = TypeCompte.valueOf(typeCompte).getValeur();
-            Boolean compteExists = dbHelper.compteExists(id);
-            if (compteExists) {
-                dbHelper.modifierCompte(id, nom, prenom, email, typeCompteId);
-            } else {
-                dbHelper.ajouterCompte(id, nom, prenom, email, typeCompteId);
-            }
+            dbHelper.ajouterOuModifierCompte(id, nom, prenom, email, typeCompteId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
-
+    public static void test() {
+        client.getStages(ConnectUtils.authToken).isExecuted();
+    }
     public static void updateStages() {
         client.getStages(ConnectUtils.authToken).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -119,20 +112,51 @@ public class ConnexionBD {
                             String deletedAt = stage.getString("deletedAt");
                             String anneeScolaire = stage.getString("anneeScolaire");
                             JSONObject jsonEtudiant = stage.getJSONObject("etudiant");
-                            String idEtudiant = jsonEtudiant.getString("id");
+                            String etudiantId = jsonEtudiant.getString("id");
                             JSONObject professeur = stage.getJSONObject("professeur");
                             String professeurId = professeur.getString("id");
                             JSONObject entreprise = stage.getJSONObject("entreprise");
                             String entrepriseId = entreprise.getString("id");
-                            String priorite = stage.getString("priorite");
+                            String prioriteStr = stage.getString("priorite");
+                            int priorite = Priorite.valueOf(prioriteStr).getValeur();
                             String commentaire = stage.getString("commentaire");
-                            String heureDebut = stage.getString("heureDebut");
-                            String heureFin = stage.getString("heureFin");
-                            String heureDebutPause = stage.getString("heureDebutPause");
-                            String heureFinPause = stage.getString("heureFinPause");
-                            Boolean stageExists = dbHelper.stageExists(id);
-                            if (stageExists) {
+                            if(commentaire == "null") {
+                                commentaire = null;
+                            }
+                            String heureDebutStr = stage.getString("heureDebut");
+                            String heureFinStr = stage.getString("heureFin");
+                            String heureDebutPauseStr = stage.getString("heureDebutPause");
+                            String heureFinPauseStr = stage.getString("heureFinPause");
+                            int heureDebut = -1;
+                            int heureFin = -1;
+                            int heureDebutPause = -1;
+                            int heureFinPause = -1;
+                            try{
+                                if(isNumeric(heureDebutStr)) {
+                                     heureDebut = Integer.parseInt(heureDebutStr);
+                                }
+                                if(isNumeric(heureFinStr)) {
+                                    heureFin = Integer.parseInt(heureFinStr);
+                                }
+                                if(isNumeric(heureDebutPauseStr)) {
+                                    heureDebutPause = Integer.parseInt(heureDebutPauseStr);
+                                }
+                                if(isNumeric(heureFinPauseStr)) {
+                                    heureFinPause = Integer.parseInt(heureFinPauseStr);
+                                }
+                            }
+                            catch (NumberFormatException ex){
+                                ex.printStackTrace();
+                            }
+
+                            if(deletedAt == "null") {
+                                dbHelper.ajouterouModifierStage(id, anneeScolaire,entrepriseId, etudiantId,
+                                        professeurId, commentaire, heureDebut, heureFin, priorite,
+                                        heureDebutPause, heureFinPause);
                             } else {
+                                if(dbHelper.stageExists(id)) {
+                                    dbHelper.deleteStage(id);
+                                }
                             }
                         }
                     }
@@ -141,6 +165,9 @@ public class ConnexionBD {
                 }
             }
 
+            private boolean isNumeric(String str){
+                return str != null && str.matches("[0-9.]+");
+            }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
