@@ -18,7 +18,7 @@ public class Compte implements Parcelable {
             return new Compte[size];
         }
     };
-    private final Integer id;
+    private final String id;
     /**
      * Le nom du compte
      */
@@ -44,7 +44,7 @@ public class Compte implements Parcelable {
      * @param photo      La photo du compte (a modifier)
      * @param typeCompte Le type de compte
      */
-    public Compte(Integer id, String nom, String prenom, byte[] photo, Integer typeCompte) {
+    public Compte(String id, String nom, String prenom, byte[] photo, Integer typeCompte) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -63,7 +63,7 @@ public class Compte implements Parcelable {
         } else {
             typeCompte = in.readInt();
         }
-        id = in.readInt();
+        id = in.readString();
         int photoLength = in.readInt();
         if (photoLength != 0) {
             this.photo = new byte[photoLength];
@@ -81,7 +81,7 @@ public class Compte implements Parcelable {
             parcel.writeByte((byte) 1);
             parcel.writeInt(typeCompte);
         }
-        parcel.writeInt(id);
+        parcel.writeString(id);
         if (photo == null) {
             parcel.writeInt(0);
         } else {
@@ -115,7 +115,7 @@ public class Compte implements Parcelable {
         return 0;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 

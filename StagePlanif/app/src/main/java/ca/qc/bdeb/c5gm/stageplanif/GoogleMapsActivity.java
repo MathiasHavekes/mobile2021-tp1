@@ -59,7 +59,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         binding = ActivityGoogleMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        Utils.context = getApplicationContext();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

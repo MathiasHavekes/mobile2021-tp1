@@ -61,6 +61,11 @@
             android:label="@string/titre_activity_demande_info_stage"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".ConnexionActivity"
+            android:exported="true"
+            android:label="@string/title_activity_login"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name">

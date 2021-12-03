@@ -26,6 +26,7 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Entreprise;
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
+import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
 
 /**
  * Classe qui s'occupe de l'activite activity_demande_info_stage
@@ -171,17 +172,17 @@ public class InfoStageActivity extends AppCompatActivity {
                             dbHelper.changerPhotoCompte(stageStockage.getEtudiant());
                         }
                         stage = viewModel.getStage();
-                        ArrayList<Compte> professeurs = dbHelper.getComptes(1);
+                        ArrayList<Compte> professeurs = dbHelper.getComptes(TypeCompte.PROFESSEUR.getValeur());
                         stage.setPriorite(priorite);
                         stage.addEntreprise(entreprise);
                         stage.addEtudiant(etudiant);
-                        stage.addProfesseur(professeurs.get(0));
+                        stage.addProfesseur(professeurs.get(0).getId());
                         stage.setCommentaire(viewModel.getCommentaire());
                         stage.setJournees(viewModel.getJourStage());
                         stage.setheureDebut(viewModel.getHeureDebutStage());
-                        stage.setTempsStage((int) MINUTES.between(viewModel.getHeureDebutStage(), viewModel.getHeureFinStage()));
+                        stage.setHeureFinStage(viewModel.getHeureFinStage());
                         stage.setHeureDiner(viewModel.getHeureDebutDiner());
-                        stage.setTempsDiner((int) MINUTES.between(viewModel.getHeureDebutDiner(), viewModel.getHeureFinDiner()));
+                        stage.setHeureFinDiner(viewModel.getHeureFinDiner());
                         stage.setDureeVisite(viewModel.getTempsVisites());
                         stage.setDisponibiliteTuteur(viewModel.getDispoTuteur());
                         dbHelper.modifierStage(stage);
@@ -205,6 +206,7 @@ public class InfoStageActivity extends AppCompatActivity {
         boutonSuivant.setOnClickListener(suivantClique);
         fragments = new Fragment[]{new InfoEleveFragment(), new InfoEntrepriseFragment(), new InfoVisiteFragment(), new CommentairesVisiteFragment()};
         context = this;
+        Utils.context = getApplicationContext();
         creationViewModel();
         Intent intent = getIntent();
         if (intent.hasExtra("stage")) {
@@ -298,13 +300,13 @@ public class InfoStageActivity extends AppCompatActivity {
         etudiant.setPhoto(photo);
         stage.addEntreprise(entreprise);
         stage.addEtudiant(etudiant);
-        stage.addProfesseur(professeurs.get(0));
+        stage.addProfesseur(professeurs.get(0).getId());
         stage.setCommentaire(viewModel.getCommentaire());
         stage.setJournees(viewModel.getJourStage());
         stage.setheureDebut(viewModel.getHeureDebutStage());
-        stage.setTempsStage((int) MINUTES.between(viewModel.getHeureDebutStage(), viewModel.getHeureFinStage()));
+        stage.setHeureFinStage(viewModel.getHeureFinStage());
         stage.setHeureDiner(viewModel.getHeureDebutDiner());
-        stage.setTempsDiner((int) MINUTES.between(viewModel.getHeureDebutDiner(), viewModel.getHeureFinDiner()));
+        stage.setHeureFinDiner(viewModel.getHeureFinDiner());
         stage.setDureeVisite(viewModel.getTempsVisites());
         stage.setDisponibiliteTuteur(viewModel.getDispoTuteur());
         dbHelper.createStage(stage);
