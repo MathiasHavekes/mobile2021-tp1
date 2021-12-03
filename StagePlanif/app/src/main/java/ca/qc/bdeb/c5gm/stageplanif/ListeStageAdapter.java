@@ -18,6 +18,7 @@ import java.util.Comparator;
 
 import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StageChainedComparateur;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
+import okhttp3.internal.Util;
 
 /**
  * Adapte la liste de stage pour le recycler view
@@ -75,7 +76,9 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
         holder.prenomEleveView.setText(stage.getEtudiant().getPrenom());
         if (stage.getEtudiant().getPhoto() != null) {
             ImageView imageView = holder.imageEleveView;
-            Bitmap bitmap = Utils.getImageAjustee(stage.getEtudiant().getPhoto(), imageView.getWidth(), imageView.getHeight());
+            int imageWidth = (int) Utils.context.getResources().getDimension(R.dimen.image_width);
+            int imageHeigth = (int) Utils.context.getResources().getDimension(R.dimen.image_heigth);
+            Bitmap bitmap = Utils.getImageAjustee(stage.getEtudiant().getPhoto(), imageWidth, imageHeigth);
             imageView.setImageBitmap(bitmap);
         } else {
             holder.imageEleveView.setImageResource(R.drawable.ic_baseline_person_24);

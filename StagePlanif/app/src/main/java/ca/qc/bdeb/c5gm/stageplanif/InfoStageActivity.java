@@ -26,6 +26,7 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Entreprise;
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
+import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
 
 /**
  * Classe qui s'occupe de l'activite activity_demande_info_stage
@@ -171,11 +172,11 @@ public class InfoStageActivity extends AppCompatActivity {
                             dbHelper.changerPhotoCompte(stageStockage.getEtudiant());
                         }
                         stage = viewModel.getStage();
-                        ArrayList<Compte> professeurs = dbHelper.getComptes(1);
+                        ArrayList<Compte> professeurs = dbHelper.getComptes(TypeCompte.PROFESSEUR.getValeur());
                         stage.setPriorite(priorite);
                         stage.addEntreprise(entreprise);
                         stage.addEtudiant(etudiant);
-                        stage.addProfesseur(professeurs.get(0));
+                        stage.addProfesseur(professeurs.get(0).getId());
                         stage.setCommentaire(viewModel.getCommentaire());
                         stage.setJournees(viewModel.getJourStage());
                         stage.setheureDebut(viewModel.getHeureDebutStage());
@@ -299,7 +300,7 @@ public class InfoStageActivity extends AppCompatActivity {
         etudiant.setPhoto(photo);
         stage.addEntreprise(entreprise);
         stage.addEtudiant(etudiant);
-        stage.addProfesseur(professeurs.get(0));
+        stage.addProfesseur(professeurs.get(0).getId());
         stage.setCommentaire(viewModel.getCommentaire());
         stage.setJournees(viewModel.getJourStage());
         stage.setheureDebut(viewModel.getHeureDebutStage());

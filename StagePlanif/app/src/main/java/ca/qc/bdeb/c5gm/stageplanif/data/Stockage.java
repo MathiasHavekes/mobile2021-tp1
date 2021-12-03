@@ -244,7 +244,7 @@ public class Stockage extends SQLiteOpenHelper {
         if (cursor != null) {
             cursor.moveToFirst();
             do {
-                comptes.add(new Compte(cursor.getInt(0),
+                comptes.add(new Compte(cursor.getString(0),
                         cursor.getString(1),
                         cursor.getString(2),
                         cursor.getBlob(3),
@@ -260,7 +260,7 @@ public class Stockage extends SQLiteOpenHelper {
      * @param id l'id du compte
      * @return le compte correspondant à l'id
      */
-    public Compte getCompte(Integer id) {
+    public Compte getCompte(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
         // les colonnes retournées par la requête:
         String[] colonnes = {
@@ -276,7 +276,7 @@ public class Stockage extends SQLiteOpenHelper {
         Compte compte = null;
         if (cursor != null) {
             cursor.moveToFirst();
-            compte = new Compte(cursor.getInt(0),
+            compte = new Compte(cursor.getString(0),
                     cursor.getString(1),
                     cursor.getString(2),
                     cursor.getBlob(3),
@@ -302,7 +302,7 @@ public class Stockage extends SQLiteOpenHelper {
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {
-                comptes.add(new Compte(cursor.getInt(0),
+                comptes.add(new Compte(cursor.getString(0),
                         cursor.getString(1),
                         cursor.getString(2),
                         cursor.getBlob(3),
@@ -391,7 +391,7 @@ public class Stockage extends SQLiteOpenHelper {
         ArrayList<Stage> stages = new ArrayList<>();
         ArrayList<Entreprise> entreprisesConnu = new ArrayList<>();
 
-        Compte professeur = null;
+        String professeur = null;
         SQLiteDatabase db = this.getReadableDatabase(); // On veut lire dans la BD
         // les colonnes retournées par la requête:
         String[] colonnes = {
@@ -422,11 +422,11 @@ public class Stockage extends SQLiteOpenHelper {
                 Stage stage = new Stage(cursor.getString(0), cursor.getString(1), Priorite.getPriorite(cursor.getInt(2)));
                 //Verifie si le professeur a ete cree et le cree s'il ne l'a pas ete
                 if (professeur == null) {
-                    professeur = getCompte(cursor.getInt(4));
+                    professeur = cursor.getString(4);
                 }
                 stage.addProfesseur(professeur);
                 //Cree l'etudiant associe au stage
-                stage.addEtudiant(getCompte(cursor.getInt(3)));
+                stage.addEtudiant(getCompte(cursor.getString(3)));
                 //Verifie que l'entreprise n'a pas deja ete creefinal
                 for (Entreprise entreprise : entreprisesConnu) {
                     if (entreprise.getId().equals(cursor.getString(5))) {
@@ -464,7 +464,7 @@ public class Stockage extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(StageHelper.STAGE_ENTREPRISE_ID, stage.getEntreprise().getId());
         values.put(StageHelper.STAGE_ETUDIANT_ID, stage.getEtudiant().getId());
-        values.put(StageHelper.STAGE_PROFESSEUR_ID, stage.getProfesseur().getId());
+        values.put(StageHelper.STAGE_PROFESSEUR_ID, stage.getProfesseur());
         values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, Utils.getAnneeScolaire());
         values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
         values.put(StageHelper.STAGE_COMMENTAIRE, stage.getCommentaire());
@@ -548,7 +548,7 @@ public class Stockage extends SQLiteOpenHelper {
         values.put(StageHelper._ID, stage.getId());
         values.put(StageHelper.STAGE_ENTREPRISE_ID, stage.getEntreprise().getId());
         values.put(StageHelper.STAGE_ETUDIANT_ID, stage.getEtudiant().getId());
-        values.put(StageHelper.STAGE_PROFESSEUR_ID, stage.getProfesseur().getId());
+        values.put(StageHelper.STAGE_PROFESSEUR_ID, stage.getProfesseur());
         values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, Utils.getAnneeScolaire());
         values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
         values.put(StageHelper.STAGE_COMMENTAIRE, stage.getCommentaire());

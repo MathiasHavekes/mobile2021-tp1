@@ -33,7 +33,7 @@ public class Stage implements Parcelable {
     /**
      * Professeur du stage
      */
-    private Compte professeur;
+    private String professeur;
     /**
      * Drapeau du stage
      */
@@ -84,7 +84,7 @@ public class Stage implements Parcelable {
     protected Stage(Parcel in) {
         id = in.readString();
         etudiant = in.readParcelable(Compte.class.getClassLoader());
-        professeur = in.readParcelable(Compte.class.getClassLoader());
+        professeur = in.readString();
         entreprise = in.readParcelable(Entreprise.class.getClassLoader());
         priorite = in.readParcelable(Priorite.class.getClassLoader());
         commentaire = in.readString();
@@ -101,7 +101,7 @@ public class Stage implements Parcelable {
         this.etudiant = etudiant;
     }
 
-    public void addProfesseur(Compte professeur) {
+    public void addProfesseur(String professeur) {
         this.professeur = professeur;
     }
 
@@ -117,7 +117,7 @@ public class Stage implements Parcelable {
         return etudiant;
     }
 
-    public Compte getProfesseur() {
+    public String getProfesseur() {
         return professeur;
     }
 
@@ -142,7 +142,7 @@ public class Stage implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
         parcel.writeParcelable(etudiant, i);
-        parcel.writeParcelable(professeur, i);
+        parcel.writeString(professeur);
         parcel.writeParcelable(entreprise, i);
         parcel.writeParcelable(priorite, i);
         parcel.writeString(commentaire);
