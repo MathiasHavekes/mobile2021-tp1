@@ -123,7 +123,7 @@
                 android:id="@+id/duree_30_minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="30 minutes"/>
+                android:text="30 min"/>
 
             <!--suppress AndroidUnresolvableTag -->
             <Space
@@ -135,7 +135,7 @@
                 android:id="@+id/duree_45_minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="45 minutes"/>
+                android:text="45 min"/>
 
             <!--suppress AndroidUnresolvableTag -->
             <Space
@@ -147,7 +147,7 @@
                 android:id="@+id/duree_60_minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1 heure"/>
+                android:text="1 h"/>
         </RadioGroup>
     </LinearLayout>
 </ScrollView>

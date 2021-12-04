@@ -17,6 +17,7 @@
     <string name="btn_annuler">Annuler</string>
     <string name="btn_ajouter">Ajouter</string>
     <string name="btn_se_connecter">Se connecter</string>
+    <string name="btn_revenir">Revenir</string>
 
     <string name="info_eleve">Élève</string>
     <string name="entree_prenom">Prénom</string>

@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../../layout/custom_preview.xml" value="0.22135416666666666" />
+        <entry key="../../../../../layout/custom_preview.xml" value="0.15520833333333334" />
         <entry key="..\:/BDEB/21-2-Automne/mobile2021-tp1/StagePlanif/app/src/main/res/layout/app_toolbar.xml" value="0.20520833333333333" />
         <entry key="..\:/BDEB/21-2-Automne/mobile2021-tp1/StagePlanif/app/src/main/res/layout/student_list_item.xml" value="0.5" />
         <entry key="..\:/Users/1928107/Desktop/mobile2021-tp1/StagePlanif/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.24479166666666666" />
@@ -60,8 +61,11 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_se_connecter.xml" value="0.29438405797101447" />
         <entry key="app/src/main/res/layout/app_toolbar.xml" value="0.5052083333333334" />
+        <entry key="app/src/main/res/layout/dialog_ajouter_visite.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/dialog_choisir_jour.xml" value="0.2749094202898551" />
+        <entry key="app/src/main/res/layout/dialog_creer_visite.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/dialog_demander_jour.xml" value="0.2749094202898551" />
+        <entry key="app/src/main/res/layout/dialog_description_visite.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/dialog_modifier_visite.xml" value="0.2749094202898551" />
         <entry key="app/src/main/res/layout/fragment_commentaires_visite.xml" value="0.29438405797101447" />
         <entry key="app/src/main/res/layout/fragment_demande_info_eleve.xml" value="0.37864583333333335" />

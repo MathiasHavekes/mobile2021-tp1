@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -40,22 +41,27 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.StagePoidsPlume;
+import ca.qc.bdeb.c5gm.stageplanif.data.Visite;
 import ca.qc.bdeb.c5gm.stageplanif.databinding.ActivityGoogleMapsBinding;
 
 public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int LOCATION_REQUEST_CODE = 1;
     private static final float ZOOM_PAR_DEFAUT = 16f;
     private static final String[] PERMISSIONS = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
-    private static final String[] JOURS_DE_LA_SEMAINE = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"};
+    private static HashMap<Integer, String> joursDeLaSemaines = new HashMap<>();
     private final View.OnClickListener lancerCalendrierOnClickListener = view -> creerDialogueChoisirJour();
     private ActivityGoogleMapsBinding binding;
-    private ArrayList<StagePoidsPlume> listeStages;
-    private ArrayList<Marker> listeMarqueurs;
-    private ArrayList<StagePoidsPlume> listeStagesSelectionnes;
+    private ArrayList<StagePoidsPlume> listeStages = new ArrayList<>();
+    private ArrayList<Marker> listeMarqueurs = new ArrayList<>();
+    private ArrayList<StagePoidsPlume> listeStagesSelectionnes = new ArrayList<>();
     private GoogleMap mMap;
     private Geocoder geocoder;
     private FusedLocationProviderClient fusedLocationClient;
@@ -63,7 +69,6 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     private Toolbar toolbar;
     private SelectionViewModel viewModel;
     private FloatingActionButton btnLancerCalendrier;
-    private Spinner spinnerJour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +96,13 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
     private void initData() {
         listeStages = getIntent().getParcelableArrayListExtra("liste_des_stages");
-        listeMarqueurs = new ArrayList<>();
-        listeStagesSelectionnes = new ArrayList<>();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         geocoder = new Geocoder(this);
+        joursDeLaSemaines.put(2, "Lundi");
+        joursDeLaSemaines.put(3, "Mardi");
+        joursDeLaSemaines.put(4, "Mercredi");
+        joursDeLaSemaines.put(5, "Jeudi");
+        joursDeLaSemaines.put(6, "Vendredi");
     }
 
     /**
@@ -154,18 +162,20 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
      */
     private void placerMarqueurs() {
         for (int i = 0; i < listeStages.size(); i++) {
+            StagePoidsPlume stage = listeStages.get(i);
+            String nomCompletEtudiant = stage.getPrenomEtudiant() + " " + stage.getNomEtudiant();
             StringBuilder adresseComplete = new StringBuilder();
-            adresseComplete.append(listeStages.get(i).getEntreprise().getAdresse() +
-                    ", " + listeStages.get(i).getEntreprise().getVille() +
-                    ", " + listeStages.get(i).getEntreprise().getProvince() +
-                    " " + listeStages.get(i).getEntreprise().getCp());
+            adresseComplete.append(stage.getEntreprise().getAdresse() +
+                    ", " + stage.getEntreprise().getVille() +
+                    ", " + stage.getEntreprise().getProvince() +
+                    " " + stage.getEntreprise().getCp());
 
             LatLng coordonneesTrouvees = trouverAdressesParGeoCoding(adresseComplete.toString());
             listeMarqueurs.add(mMap.addMarker(
                     new MarkerOptions()
                             .position(coordonneesTrouvees)
-                            .title("TODO : REMETTRE NOM")
-                            .snippet(listeStages.get(i).getEntreprise().getNom())
+                            .title(nomCompletEtudiant)
+                            .snippet(stage.getEntreprise().getNom())
                             .icon(bitmapDescriptorFromVector(getApplicationContext(), R.drawable.ic_baseline_location_on_24, listeStages.get(i).getPriorite()))
             ));
 
@@ -218,32 +228,61 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
-    private void lancerActiviteCalendrier() {
-        creerDialogueChoisirJour();
+    private void lancerActiviteCalendrier(int jourSelectionne) {
         Intent intent = new Intent(this, CalendrierActivity.class);
-        intent.putParcelableArrayListExtra("listeStagesSelectionnes", listeStagesSelectionnes);
+
+        if (jourSelectionne > -1) {
+            ArrayList<Visite> listeVisites = new ArrayList<>();
+
+            for (int i = 0; i < listeStagesSelectionnes.size(); i++) {
+                listeVisites.add(listeStagesSelectionnes.get(i).getVisite());
+                listeVisites.get(i).setJournee(jourSelectionne);
+            }
+
+            intent.putParcelableArrayListExtra("liste_visites", listeVisites);
+        }
+
         startActivity(intent);
     }
 
     private void creerDialogueChoisirJour() {
-        LayoutInflater inflater = getLayoutInflater();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialog = inflater.inflate(R.layout.dialog_choisir_jour, null);
-        setSpinnerJour(dialog);
-        builder.setView(dialog)
-                .setTitle("Choisir un jour")
-                .setNegativeButton(R.string.btn_annuler, null)
-                .setPositiveButton(R.string.btn_ajouter, (dialog1, which) -> {
-                    lancerActiviteCalendrier();
-                })
-                .show();
+        if (!listeStagesSelectionnes.isEmpty()) {
+            LayoutInflater inflater = getLayoutInflater();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            View dialog = inflater.inflate(R.layout.dialog_choisir_jour, null);
+            Spinner spinnerJour = dialog.findViewById(R.id.spinner_selection_jour);
+            List<String> joursDeLaSemainesListe = creeListeAvecValeursHashMap(joursDeLaSemaines);
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_item, joursDeLaSemainesListe);
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerJour.setAdapter(adapter);
+
+            builder.setView(dialog)
+                    .setTitle("Choisir un jour")
+                    .setNegativeButton(R.string.btn_annuler, null)
+                    .setPositiveButton(R.string.btn_ajouter, (dialog1, which) -> {
+                        String jourSelectionne = (String) spinnerJour.getSelectedItem();
+                        int cleJourSelectionne = trouverCleAvecValeurHashMap(joursDeLaSemaines, jourSelectionne);
+                        lancerActiviteCalendrier(cleJourSelectionne);
+                    })
+                    .show();
+        } else {
+            lancerActiviteCalendrier(-1);
+        }
     }
 
-    private void setSpinnerJour(View view) {
-        spinnerJour = view.findViewById(R.id.spinner_selection_jour);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, JOURS_DE_LA_SEMAINE);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerJour.setAdapter(adapter);
+    private static <K, V> K trouverCleAvecValeurHashMap(HashMap<K, V> map, V value) {
+        for (Map.Entry<K, V> entree : map.entrySet()) {
+            if (Objects.equals(value, entree.getValue())) {
+                return entree.getKey();
+            }
+        }
+        return null;
+    }
+
+    private static <K, V>  List<V> creeListeAvecValeursHashMap (HashMap<K, V> map){
+        return map.values().stream().collect(Collectors.toList());
     }
 }

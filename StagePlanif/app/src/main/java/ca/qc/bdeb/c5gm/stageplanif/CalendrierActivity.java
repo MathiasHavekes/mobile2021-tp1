@@ -1,50 +1,62 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
-import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
+import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
+import ca.qc.bdeb.c5gm.stageplanif.data.Visite;
+
 public class CalendrierActivity extends AppCompatActivity implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
-    private static final int TYPE_DAY_VIEW = 1;
-    private static final int TYPE_THREE_DAY_VIEW = 2;
-    private static final int TYPE_WEEK_VIEW = 3;
-    /**
-     * Onclick listener pour lancer l'activitee d'ajout de stage
-     */
-    private final View.OnClickListener ajouterEleveOnClickListener = view -> lancerActiviteAjoutStage(view);
-    private int mWeekViewType = TYPE_THREE_DAY_VIEW;
+
+    private static final int DUREE_VISITE_STANDARD = 45;
+    private static final int DUREE_PAUSE_STANDARD = 45;
+    private static final int HEURE_PREMIERE_VISITE = 480;
     private WeekView mWeekView;
     private Toolbar toolbar;
+    private ArrayList<Visite> visites = new ArrayList<>();;
+    private ArrayList<Stage> stages = new ArrayList<>();
+    private ArrayList<WeekViewEvent> events = new ArrayList<>();
+    private Stockage dbHelper;
+
     /**
      * Contient le FloatingActionButton d'ajout d'eleve
      */
-    private FloatingActionButton btnAjouterEleve;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendrier);
+        dbHelper = Stockage.getInstance(this);
+        stages = dbHelper.getStages();
 
-        btnAjouterEleve = findViewById(R.id.btn_ajouter_eleve);
-        btnAjouterEleve.setOnClickListener(ajouterEleveOnClickListener);
+        ArrayList<Visite> donneesRecuperees = getIntent().getParcelableArrayListExtra("liste_visites");
+
+        if (!(donneesRecuperees == null)) {
+            visites = donneesRecuperees;
+        }
 
         // Get a reference for the week view in the layout.
         mWeekView = (WeekView) findViewById(R.id.weekView);
@@ -85,7 +97,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
             public String interpretDate(Calendar date) {
                 SimpleDateFormat weekdayNameFormat = new SimpleDateFormat("EEE", Locale.getDefault());
                 String weekday = weekdayNameFormat.format(date.getTime());
-                SimpleDateFormat format = new SimpleDateFormat(" M/d", Locale.getDefault());
+                SimpleDateFormat format = new SimpleDateFormat(" d/M", Locale.getDefault());
 
                 // All android api level do not have a standard way of getting the first letter of
                 // the week day name. Hence we get the first char programmatically.
@@ -102,150 +114,130 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         });
     }
 
-    protected String getEventTitle(Calendar time) {
-        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
+    @Override
+    public void onEventClick(WeekViewEvent event, RectF eventRect) {
+        LayoutInflater inflater = getLayoutInflater();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialog = inflater.inflate(R.layout.dialog_description_visite, null);
+        Visite visite = visites.get((int) event.getId());
+        TextView textViewEtudiant = dialog.findViewById(R.id.text_etudiant_visite);
+        textViewEtudiant.setText(visite.getNomCompletEtudiant());
+        builder.setView(dialog)
+                .setTitle("Description visite")
+                .setPositiveButton(R.string.btn_revenir, null)
+                .show();
     }
 
     @Override
-    public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        Toast.makeText(this, "Clicked " + event.getName(), Toast.LENGTH_SHORT).show();
-        creerDialogueChangerEvent();
-    }
-
-    private void creerDialogueChangerEvent() {
+    public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
         LayoutInflater inflater = getLayoutInflater();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialog = inflater.inflate(R.layout.dialog_modifier_visite, null);
         builder.setView(dialog)
                 .setTitle("Modifier visite")
                 .setNegativeButton(R.string.btn_annuler, null)
-                .setPositiveButton(R.string.btn_ajouter, (dialog1, which) -> {
-                    Toast.makeText(this, "YESSSSS", Toast.LENGTH_SHORT).show();
+                .setPositiveButton(R.string.btn_terminer, (dialog1, which) -> {
+
                 })
                 .show();
     }
 
     @Override
-    public void onEventLongPress(WeekViewEvent event, RectF eventRect) {
-        Toast.makeText(this, "Long pressed event: " + event.getName(), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void onEmptyViewLongPress(Calendar time) {
-        Toast.makeText(this, "Empty view long pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
-    }
+        LayoutInflater inflater = getLayoutInflater();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View dialog = inflater.inflate(R.layout.dialog_ajouter_visite, null);
+        Spinner spinnerEtudiant = dialog.findViewById(R.id.spinner_selection_etudiant);
+        TimePicker timePicker = dialog.findViewById(R.id.time_picker);
 
-    public WeekView getWeekView() {
-        return mWeekView;
+        List<String> stageSpinner = new ArrayList<>();
+
+        for (Stage s : stages) {
+            stageSpinner.add(s.getEtudiant().getPrenom() + " " + s.getEtudiant().getNom());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, stageSpinner);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerEtudiant.setAdapter(adapter);
+        timePicker.setHour(time.getTime().getHours());
+        timePicker.setMinute(time.getTime().getMinutes());
+
+        builder.setView(dialog)
+                .setTitle("Ajouter une visite")
+                .setNegativeButton(R.string.btn_annuler, null)
+                .setPositiveButton(R.string.btn_ajouter, (dialog1, which) -> {
+                    String itemSelectionne = (String) spinnerEtudiant.getSelectedItem();
+                    for (int i = 0; i < stageSpinner.size(); i++) {
+                        if (stageSpinner.get(i) == itemSelectionne) {
+                            Stage stageSelectionne = stages.get(i);
+                            Visite nouvelleVisite = new Visite(
+                                    "",
+                                    "",
+                                    stageSelectionne.getEtudiant().getNom(),
+                                    stageSelectionne.getEtudiant().getPrenom(),
+                                    stageSelectionne.getPriorite(),
+                                    timePicker.getHour() * 60 + timePicker.getMinute(),
+                                    stageSelectionne.getDuree_visite(),
+                                    time.getTime().getDay() + 1);
+                            visites.add(nouvelleVisite);
+                            mWeekView.notifyDatasetChanged();
+                        }
+                    }
+                })
+                .show();
     }
 
     @Override
     public ArrayList<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-        ArrayList<WeekViewEvent> events = new ArrayList<WeekViewEvent>();;
+        events = new ArrayList<>();
 
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 3);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth - 1);
-        startTime.set(Calendar.YEAR, newYear);
-        Calendar endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR, 1);
-        endTime.set(Calendar.MONTH, newMonth - 1);
-        WeekViewEvent event = new WeekViewEvent(1, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.red));
-        events.add(event);
+        if (!visites.isEmpty()) {
+            for (Visite v : visites) {
+                if (v.getDuree() <= 0) {
+                    v.setDuree(DUREE_VISITE_STANDARD);
+                }
 
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 3);
-        startTime.set(Calendar.MINUTE, 30);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.set(Calendar.HOUR_OF_DAY, 4);
-        endTime.set(Calendar.MINUTE, 30);
-        endTime.set(Calendar.MONTH, newMonth-1);
-        event = new WeekViewEvent(10, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.red));
-        events.add(event);
+                if (v.getHeureDeDebut() > 0) {
+                    v.setHeureDeDebut(HEURE_PREMIERE_VISITE);
+                }
 
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 4);
-        startTime.set(Calendar.MINUTE, 20);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.set(Calendar.HOUR_OF_DAY, 5);
-        endTime.set(Calendar.MINUTE, 0);
-        event = new WeekViewEvent(10, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.yellow));
-        events.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 5);
-        startTime.set(Calendar.MINUTE, 30);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR_OF_DAY, 2);
-        endTime.set(Calendar.MONTH, newMonth-1);
-        event = new WeekViewEvent(2, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.green));
-        events.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 5);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth - 1);
-        startTime.set(Calendar.YEAR, newYear);
-        startTime.add(Calendar.DATE, 1);
-        endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR_OF_DAY, 3);
-        endTime.set(Calendar.MONTH, newMonth - 1);
-        event = new WeekViewEvent(3, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.red));
-        events.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.DAY_OF_MONTH, 15);
-        startTime.set(Calendar.HOUR_OF_DAY, 3);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR_OF_DAY, 3);
-        event = new WeekViewEvent(4, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.green));
-        events.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.DAY_OF_MONTH, 1);
-        startTime.set(Calendar.HOUR_OF_DAY, 3);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR_OF_DAY, 3);
-        event = new WeekViewEvent(5, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.red));
-        events.add(event);
-
-        startTime = Calendar.getInstance();
-        startTime.set(Calendar.DAY_OF_MONTH, startTime.getActualMaximum(Calendar.DAY_OF_MONTH));
-        startTime.set(Calendar.HOUR_OF_DAY, 15);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR_OF_DAY, 3);
-        event = new WeekViewEvent(5, getEventTitle(startTime), startTime, endTime);
-        event.setColor(getResources().getColor(R.color.green));
-        events.add(event);
+                WeekViewEvent event = getWeekViewEventFromVisite(v, newMonth, newYear);
+                events.add(event);
+            }
+        }
 
         return events;
     }
 
-    public void lancerActiviteAjoutStage(View view) {
-        Intent intent = new Intent(this, InfoStageActivity.class);
-        startActivity(intent);
+    private WeekViewEvent getWeekViewEventFromVisite(Visite visite, int month, int year) {
+        Calendar startTime = Calendar.getInstance();
+        int[] heureDeDebut = separerHeuresEtMinutes(visite.getHeureDeDebut());
+
+        startTime.set(Calendar.MINUTE, heureDeDebut[0]);
+        startTime.set(Calendar.HOUR_OF_DAY, heureDeDebut[1]);
+        startTime.set(Calendar.DAY_OF_WEEK, visite.getJournee());
+        startTime.set(Calendar.MONTH, month - 1);
+        startTime.set(Calendar.YEAR, year);
+        Calendar endTime = (Calendar) startTime.clone();
+        endTime.add(Calendar.MINUTE, visite.getDuree());
+        endTime.set(Calendar.MONTH, month - 1);
+
+        int indexVisite = visites.indexOf(visite);
+
+        WeekViewEvent event = new WeekViewEvent(indexVisite, visite.getNomCompletEtudiant(), startTime, endTime);
+        event.setColor(ContextCompat.getColor(this, Utils.renvoyerCouleur(visite.getPriorite())));
+        return event;
+    }
+
+    private int regrouperHeuresEtMinutes(int[] tableauHeuresEtMinutes) {
+        return tableauHeuresEtMinutes[0] + tableauHeuresEtMinutes[1] * 60;
+    }
+
+    private int[] separerHeuresEtMinutes(int nombreTotalMinutes) {
+        int nombreHeures = nombreTotalMinutes / 60;
+        int nombreMinutes = nombreTotalMinutes % 60;
+        return new int[] {nombreMinutes, nombreHeures};
     }
 }
