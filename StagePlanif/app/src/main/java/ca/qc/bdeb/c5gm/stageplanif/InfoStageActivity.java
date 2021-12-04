@@ -27,6 +27,7 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
 import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
+import ca.qc.bdeb.c5gm.stageplanif.reseau.ConnexionBD;
 
 /**
  * Classe qui s'occupe de l'activite activity_demande_info_stage
@@ -133,20 +134,18 @@ public class InfoStageActivity extends AppCompatActivity {
                     changerFragment(fragments[fragmentActuel]);
                     break;
                 case 2:
-                    if(viewModel.getStage() == null) {
-                        champsRempli = viewModel.getJourStage() != null;
-                        if(champsRempli) {
-                            champsRempli &= viewModel.getJourStage() != 0x00;
-                        }
-                        champsRempli &= viewModel.getHeureDebutStage() != null;
-                        champsRempli &= viewModel.getHeureFinStage() != null;
-                        champsRempli &= viewModel.getHeureDebutDiner() != null;
-                        champsRempli &= viewModel.getHeureFinDiner() != null;
-                        champsRempli &= viewModel.getTempsVisites() != null;
-                        if (!champsRempli) {
-                            afficherMessage(getString(R.string.message_erreur));
-                            return;
-                        }
+                    champsRempli = viewModel.getJourStage() != null;
+                    if(champsRempli) {
+                        champsRempli &= viewModel.getJourStage() != 0x00;
+                    }
+                    champsRempli &= viewModel.getHeureDebutStage() != null;
+                    champsRempli &= viewModel.getHeureFinStage() != null;
+                    champsRempli &= viewModel.getHeureDebutDiner() != null;
+                    champsRempli &= viewModel.getHeureFinDiner() != null;
+                    champsRempli &= viewModel.getTempsVisites() != null;
+                    if (!champsRempli) {
+                        afficherMessage(getString(R.string.message_erreur));
+                        return;
                     }
                     fragmentActuel++;
                     boutonSuivant.setText(getResources().getString(R.string.btn_terminer));
@@ -154,39 +153,37 @@ public class InfoStageActivity extends AppCompatActivity {
                     break;
                 case  3:
                     Stockage dbHelper = Stockage.getInstance(context);
-                    Stage stage;
-                    if(viewModel.getStage() == null) {
-                        champsRempli = viewModel.getDispoTuteur() != null;
-                        if(champsRempli) {
-                            champsRempli &= viewModel.getDispoTuteur() != 0x00;
-                        }
-                        if (!champsRempli) {
-                            afficherMessage(getString(R.string.message_erreur));
-                            return;
-                        } else {
-                            stage = creerStage(dbHelper);
-                        }
-                    } else {
-                        if (!photoEgal()) {
-                            stageStockage.getEtudiant().setPhoto(photo);
-                            dbHelper.changerPhotoCompte(stageStockage.getEtudiant());
-                        }
-                        stage = viewModel.getStage();
-                        ArrayList<Compte> professeurs = dbHelper.getComptes(TypeCompte.PROFESSEUR.getValeur());
-                        stage.setPriorite(priorite);
-                        stage.addEntreprise(entreprise);
-                        stage.addEtudiant(etudiant);
-                        stage.addProfesseur(professeurs.get(0).getId());
-                        stage.setCommentaire(viewModel.getCommentaire());
-                        stage.setJournees(viewModel.getJourStage());
-                        stage.setheureDebut(viewModel.getHeureDebutStage());
-                        stage.setHeureFinStage(viewModel.getHeureFinStage());
-                        stage.setHeureDiner(viewModel.getHeureDebutDiner());
-                        stage.setHeureFinDiner(viewModel.getHeureFinDiner());
-                        stage.setDureeVisite(viewModel.getTempsVisites());
-                        stage.setDisponibiliteTuteur(viewModel.getDispoTuteur());
-                        dbHelper.modifierStage(stage);
+                    champsRempli = viewModel.getDispoTuteur() != null;
+                    if(champsRempli) {
+                        champsRempli &= viewModel.getDispoTuteur() != 0x00;
                     }
+                    if (!champsRempli) {
+                        afficherMessage(getString(R.string.message_erreur));
+                        return;
+                    }
+                    Stage stage = viewModel.getStage();
+                    if(stage == null) {
+                        stage = creerStage(dbHelper);
+                    }
+                    ArrayList<Compte> professeurs = dbHelper.getComptes(TypeCompte.PROFESSEUR.getValeur());
+                    stage.setPriorite(priorite);
+                    stage.addEntreprise(entreprise);
+                    stage.addEtudiant(etudiant);
+                    if (!photoEgal()) {
+                        stage.getEtudiant().setPhoto(photo);
+                        dbHelper.changerPhotoCompte(stage.getEtudiant());
+                    }
+                    stage.addProfesseur(professeurs.get(0).getId());
+                    stage.setCommentaire(viewModel.getCommentaire());
+                    stage.setJournees(viewModel.getJourStage());
+                    stage.setheureDebut(viewModel.getHeureDebutStage());
+                    stage.setHeureFinStage(viewModel.getHeureFinStage());
+                    stage.setHeureDiner(viewModel.getHeureDebutDiner());
+                    stage.setHeureFinDiner(viewModel.getHeureFinDiner());
+                    stage.setDureeVisite(viewModel.getTempsVisites());
+                    stage.setDisponibiliteTuteur(viewModel.getDispoTuteur());
+                    dbHelper.modifierStage(stage);
+                    ConnexionBD.ajouterOuModifierStage(stage);
                     creerIntent(stage);
                     finish();
                     break;

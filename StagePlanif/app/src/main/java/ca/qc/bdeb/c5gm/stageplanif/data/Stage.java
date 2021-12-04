@@ -70,10 +70,15 @@ public class Stage implements Parcelable {
      * Disponibilites du tuteur
      */
     private Integer disponibiliteTuteur;
+    /**
+     * Annee scolaire du stage
+     */
+    private String anneeScolaire;
 
     public Stage(String id, String anneeScolaire, Priorite priorite) {
         this.id = id;
         this.priorite = priorite;
+        this.anneeScolaire = anneeScolaire;
     }
 
     public Stage(Priorite priorite) {
@@ -196,7 +201,7 @@ public class Stage implements Parcelable {
         this.heureFinStage = heureFinStage;
     }
 
-    public LocalTime getHeureDiner() {
+    public LocalTime getHeurePause() {
         return heureDiner;
     }
 
@@ -204,7 +209,7 @@ public class Stage implements Parcelable {
         this.heureDiner = heureDiner;
     }
 
-    public LocalTime getHeureFinDiner() {
+    public LocalTime getHeureFinPause() {
         return heureFinDiner;
     }
 
@@ -226,5 +231,13 @@ public class Stage implements Parcelable {
 
     public void setDisponibiliteTuteur(Integer disponibiliteTuteur) {
         this.disponibiliteTuteur = disponibiliteTuteur;
+    }
+
+    public String getAnneeScolaire() {
+        return anneeScolaire;
+    }
+
+    public void setAnneeScolaire(String anneeScolaire) {
+        this.anneeScolaire = anneeScolaire;
     }
 }

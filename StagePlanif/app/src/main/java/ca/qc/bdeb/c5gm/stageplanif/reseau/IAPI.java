@@ -5,6 +5,7 @@ import java.util.HashMap;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -39,4 +40,7 @@ public interface IAPI {
 
     @POST("/stage")
     Call<ResponseBody> ajouterStage(@Header("Authorization") String token, @Body HashMap<String, Object> data);
+
+    @DELETE("/stage/{idStage}")
+    Call<ResponseBody> supprStage(@Header("Authorization") String token, @Path("idStage") String idStage);
 }

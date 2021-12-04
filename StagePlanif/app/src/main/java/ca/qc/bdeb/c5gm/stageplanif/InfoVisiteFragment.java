@@ -33,11 +33,11 @@ public class InfoVisiteFragment extends Fragment {
     /**
      * Champs de texte de temps de debut du diner
      */
-    private EditText txtTempsDebutDiner;
+    private EditText txtTempsDebutPause;
     /**
      * Champs de texte du temps de fin du diner
      */
-    private EditText txtTempsFinDiner;
+    private EditText txtTempsFinPause;
     /**
      * Radio group du temps de visite
      */
@@ -149,10 +149,10 @@ public class InfoVisiteFragment extends Fragment {
             viewModel.setHeureDebutStage(temps);
         } else if (view.equals(txtTempsFinStage)) {
             viewModel.setHeureFinStage(temps);
-        } else if (view.equals(txtTempsDebutDiner)) {
-            viewModel.setHeureDebutDiner(temps);
-        } else if (view.equals(txtTempsFinDiner)) {
-            viewModel.setHeureFinDiner(temps);
+        } else if (view.equals(txtTempsDebutPause)) {
+            viewModel.setHeureDebutPause(temps);
+        } else if (view.equals(txtTempsFinPause)) {
+            viewModel.setHeureFinPause(temps);
         }
         EditText tempsText = (EditText) view;
         String texteTemps = String.format("%02d:%02d", heure, minutes);
@@ -182,6 +182,41 @@ public class InfoVisiteFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Set les champs des heures de stage
+     *
+     * @param stage instance du stage
+     */
+    private void setChampsHeures(Stage stage) {
+        LocalTime heureDebut = stage.getHeureDebut();
+        if (heureDebut == null) {
+            heureDebut = LocalTime.of(8,0);
+        }
+        afficherTemps(txtTempsDebutStage, heureDebut);
+        viewModel.setHeureDebutStage(heureDebut);
+
+        LocalTime heureFin = stage.getHeureFinStage();
+        if (heureFin == null) {
+            heureFin = LocalTime.of(16,0);
+        }
+        viewModel.setHeureFinStage(heureFin);
+        afficherTemps(txtTempsFinStage, heureFin);
+
+        LocalTime heurePause = stage.getHeurePause();
+        if (heurePause == null) {
+            heurePause = LocalTime.of(12,0);
+        }
+        viewModel.setHeureDebutPause(heurePause);
+        afficherTemps(txtTempsDebutPause, heurePause);
+
+        LocalTime heureFinPause = stage.getHeureFinPause();
+        if (heureFinPause == null) {
+            heureFinPause = LocalTime.of(12,30);
+        }
+        viewModel.setHeureFinPause(heureFinPause);
+        afficherTemps(txtTempsFinPause, heureFinPause);
+    }
+
     private void setValeurDefaut() {
         LocalTime temps = LocalTime.of(8,0);
         afficherTemps(txtTempsDebutStage, temps);
@@ -190,11 +225,11 @@ public class InfoVisiteFragment extends Fragment {
         afficherTemps(txtTempsFinStage, temps);
         viewModel.setHeureFinStage(temps);
         temps = LocalTime.of(12,0);
-        afficherTemps(txtTempsDebutDiner, temps);
-        viewModel.setHeureDebutDiner(temps);
+        afficherTemps(txtTempsDebutPause, temps);
+        viewModel.setHeureDebutPause(temps);
         temps = LocalTime.of(12,30);
-        afficherTemps(txtTempsFinDiner, temps);
-        viewModel.setHeureFinDiner(temps);
+        afficherTemps(txtTempsFinPause, temps);
+        viewModel.setHeureFinPause(temps);
     }
 
     /**
@@ -255,34 +290,6 @@ public class InfoVisiteFragment extends Fragment {
     }
 
     /**
-     * Set les champs des heures de stage
-     *
-     * @param stage instance du stage
-     */
-    private void setChampsHeures(Stage stage) {
-        LocalTime heureDebut = stage.getHeureDebut();
-        if (heureDebut != null) {
-            afficherTemps(txtTempsDebutStage, heureDebut);
-            viewModel.setHeureDebutStage(heureDebut);
-            LocalTime heureFin = stage.getHeureFinStage();
-            if (heureFin != null) {
-                viewModel.setHeureFinStage(heureFin);
-                afficherTemps(txtTempsFinStage, heureFin);
-            }
-        }
-        LocalTime heureDiner = stage.getHeureDiner();
-        if (heureDiner != null) {
-            viewModel.setHeureDebutDiner(heureDiner);
-            afficherTemps(txtTempsDebutDiner, heureDiner);
-            LocalTime heureFinDiner = stage.getHeureFinDiner();
-            if (heureFinDiner != null) {
-                viewModel.setHeureFinDiner(heureFinDiner);
-                afficherTemps(txtTempsFinDiner, heureFinDiner);
-            }
-        }
-    }
-
-    /**
      * Affiche un texte d'heure dans un champ de texte defini
      *
      * @param champs champs a remplir
@@ -303,10 +310,10 @@ public class InfoVisiteFragment extends Fragment {
         txtTempsDebutStage.setOnClickListener(choisirTemps);
         txtTempsFinStage = view.findViewById(R.id.text_stage_fin);
         txtTempsFinStage.setOnClickListener(choisirTemps);
-        txtTempsDebutDiner = view.findViewById(R.id.text_diner_debut);
-        txtTempsDebutDiner.setOnClickListener(choisirTemps);
-        txtTempsFinDiner = view.findViewById(R.id.text_diner_fin);
-        txtTempsFinDiner.setOnClickListener(choisirTemps);
+        txtTempsDebutPause = view.findViewById(R.id.text_diner_debut);
+        txtTempsDebutPause.setOnClickListener(choisirTemps);
+        txtTempsFinPause = view.findViewById(R.id.text_diner_fin);
+        txtTempsFinPause.setOnClickListener(choisirTemps);
         checkBoxLundi = view.findViewById(R.id.selection_lundi);
         checkBoxLundi.setOnClickListener(checkboxClique);
         checkBoxMardi = view.findViewById(R.id.selection_mardi);

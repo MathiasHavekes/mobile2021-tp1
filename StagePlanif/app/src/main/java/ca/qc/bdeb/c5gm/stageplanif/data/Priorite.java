@@ -11,7 +11,7 @@ import java.util.Random;
  * Classe qui définit l
  */
 public enum Priorite implements Parcelable{
-    MINIMUM(1),
+    BASSE(1),
     MOYENNE(2),
     HAUTE(4);
 

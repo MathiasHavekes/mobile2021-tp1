@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Liste des stages
      */
-    private ArrayList<Stage> listeStages;
+    public static ArrayList<Stage> listeStages;
     /**
      * Contient le recycler view des stages
      */
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * L'adapteur des stages
      */
-    private ListeStageAdapter stageAdapter;
+    public static ListeStageAdapter stageAdapter;
     private IAPI IAPIClient;
     /**
      * Defini le logique de swipe d'un item du recycler view
@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     (dialogInterface, i) -> {
                         int indexEnleve = viewHolder.getAdapterPosition();
                         dbHelper.deleteStage(listeStages.get(indexEnleve).getId());
+                        ConnexionBD.supprimerStage(listeStages.get(indexEnleve).getId());
                         listeStages.remove(indexEnleve);
                         stageAdapter.notifyItemRemoved(indexEnleve);
                     });
@@ -174,10 +175,10 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
             );
-            ConnexionBD.updateEntreprises();
-            ConnexionBD.updateComptesEleves();
-            ConnexionBD.updateStages();
         }
+        ConnexionBD.updateEntreprises();
+        ConnexionBD.updateComptesEleves();
+        ConnexionBD.updateStages();
     }
 
     private void connecter() {
@@ -282,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
         drapeauView.setColorFilter(ContextCompat.getColor(this.getApplicationContext(), couleur));
         stageAdapter.notifyItemChanged(positionStage);
         dbHelper.modifierStage(stage);
+        ConnexionBD.ajouterOuModifierStage(stage);
     }
 
     /**
