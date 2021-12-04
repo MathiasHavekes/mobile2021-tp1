@@ -79,6 +79,8 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         btnLancerCalendrier = findViewById(R.id.btn_lancer_calendrier);
         btnLancerCalendrier.setOnClickListener(lancerCalendrierOnClickListener);
 
+        Utils.context = getApplicationContext();
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

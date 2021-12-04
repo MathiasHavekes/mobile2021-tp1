@@ -90,7 +90,7 @@ public class InfoEleveFragment extends Fragment implements AdapterView.OnItemSel
                     priorite = Priorite.MOYENNE;
                     break;
                 default:
-                    priorite = Priorite.MAXIMUM;
+                    priorite = Priorite.HAUTE;
                     break;
             }
             viewModel.setPriorite(priorite);
@@ -153,7 +153,7 @@ public class InfoEleveFragment extends Fragment implements AdapterView.OnItemSel
             case MOYENNE:
                 radioPriorite.check(R.id.drapeau_jaune);
                 break;
-            case MAXIMUM:
+            case HAUTE:
                 radioPriorite.check(R.id.drapeau_rouge);
                 break;
         }

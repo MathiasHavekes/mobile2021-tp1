@@ -1,5 +1,7 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
+import static java.time.temporal.ChronoUnit.MINUTES;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Entreprise;
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
+import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
 
 /**
  * Classe qui s'occupe de l'activite activity_demande_info_stage
@@ -130,47 +133,64 @@ public class InfoStageActivity extends AppCompatActivity {
                     changerFragment(fragments[fragmentActuel]);
                     break;
                 case 2:
+                    if(viewModel.getStage() == null) {
+                        champsRempli = viewModel.getJourStage() != null;
+                        if(champsRempli) {
+                            champsRempli &= viewModel.getJourStage() != 0x00;
+                        }
+                        champsRempli &= viewModel.getHeureDebutStage() != null;
+                        champsRempli &= viewModel.getHeureFinStage() != null;
+                        champsRempli &= viewModel.getHeureDebutDiner() != null;
+                        champsRempli &= viewModel.getHeureFinDiner() != null;
+                        champsRempli &= viewModel.getTempsVisites() != null;
+                        if (!champsRempli) {
+                            afficherMessage(getString(R.string.message_erreur));
+                            return;
+                        }
+                    }
+                    fragmentActuel++;
+                    boutonSuivant.setText(getResources().getString(R.string.btn_terminer));
+                    changerFragment(fragments[fragmentActuel]);
+                    break;
+                case  3:
+                    Stockage dbHelper = Stockage.getInstance(context);
+                    Stage stage;
+                    if(viewModel.getStage() == null) {
+                        champsRempli = viewModel.getDispoTuteur() != null;
+                        if(champsRempli) {
+                            champsRempli &= viewModel.getDispoTuteur() != 0x00;
+                        }
+                        if (!champsRempli) {
+                            afficherMessage(getString(R.string.message_erreur));
+                            return;
+                        } else {
+                            stage = creerStage(dbHelper);
+                        }
+                    } else {
+                        if (!photoEgal()) {
+                            stageStockage.getEtudiant().setPhoto(photo);
+                            dbHelper.changerPhotoCompte(stageStockage.getEtudiant());
+                        }
+                        stage = viewModel.getStage();
+                        ArrayList<Compte> professeurs = dbHelper.getComptes(TypeCompte.PROFESSEUR.getValeur());
+                        stage.setPriorite(priorite);
+                        stage.addEntreprise(entreprise);
+                        stage.addEtudiant(etudiant);
+                        stage.addProfesseur(professeurs.get(0).getId());
+                        stage.setCommentaire(viewModel.getCommentaire());
+                        stage.setJournees(viewModel.getJourStage());
+                        stage.setheureDebut(viewModel.getHeureDebutStage());
+                        stage.setHeureFinStage(viewModel.getHeureFinStage());
+                        stage.setHeureDiner(viewModel.getHeureDebutDiner());
+                        stage.setHeureFinDiner(viewModel.getHeureFinDiner());
+                        stage.setDureeVisite(viewModel.getTempsVisites());
+                        stage.setDisponibiliteTuteur(viewModel.getDispoTuteur());
+                        dbHelper.modifierStage(stage);
+                    }
+                    creerIntent(stage);
+                    finish();
                     break;
             }
-            /*//Si le fragment affiche est celui de l'information de l'eleve
-            if (boutonSuivant.getText() == getResources().getString(R.string.btn_suivant)) {
-                //Si un champ n'est pas rempli
-                if (priorite == null || etudiant == null) {
-                    afficherMessage(getString(R.string.message_erreur));
-                    return;
-                }
-                //Si les champs sont rempli
-                boutonSuivant.setText(getResources().getString(R.string.btn_terminer));
-                Fragment fragment = new InfoEntrepriseFragment();
-                changerFragment(fragment);
-            } else if (boutonSuivant.getText() == getResources().getString(R.string.btn_terminer)) {
-                Stockage dbHelper = Stockage.getInstance(context);
-                //Si c'est un ajout de stage
-                if (stageStockage == null) {
-                    stageStockage = ajouterStage(dbHelper);
-                    creerIntent();
-                    finish();
-                    return;
-                }
-                //Si le stage n'a pas ete modifie
-                if (!stageModifie()) {
-                    afficherMessage(getString(R.string.message_modification));
-                    return;
-                }
-                //Si la photo a ete changee
-                if (!photoEgal()) {
-                    stageStockage.getEtudiant().setPhoto(photo);
-                    dbHelper.changerPhotoCompte(stageStockage.getEtudiant());
-                }
-                //Si le stage a ete modifie
-                if (stageModifie()) {
-                    stageStockage.setPriorite(priorite);
-                    stageStockage.addEntreprise(entreprise);
-                    dbHelper.modifierStage(stageStockage);
-                }
-                creerIntent();
-                finish();
-            }*/
         }
     };
 
@@ -184,8 +204,9 @@ public class InfoStageActivity extends AppCompatActivity {
         boutonAnnuler = findViewById(R.id.btn_annuler);
         boutonAnnuler.setOnClickListener(annulerClique);
         boutonSuivant.setOnClickListener(suivantClique);
-        fragments = new Fragment[]{new InfoEleveFragment(), new InfoEntrepriseFragment(), new InfoVisiteFragment()};
+        fragments = new Fragment[]{new InfoEleveFragment(), new InfoEntrepriseFragment(), new InfoVisiteFragment(), new CommentairesVisiteFragment()};
         context = this;
+        Utils.context = getApplicationContext();
         creationViewModel();
         Intent intent = getIntent();
         if (intent.hasExtra("stage")) {
@@ -226,9 +247,9 @@ public class InfoStageActivity extends AppCompatActivity {
     /**
      * Envoie le resultat a l'activite
      */
-    private void creerIntent() {
+    private void creerIntent(Stage stage) {
         Intent intent = new Intent();
-        intent.putExtra("stage", stageStockage);
+        intent.putExtra("stage", stage);
         setResult(RESULT_OK, intent);
     }
 
@@ -273,13 +294,21 @@ public class InfoStageActivity extends AppCompatActivity {
      * @param dbHelper lien vers la BD
      * @return Le stage cre
      */
-    private Stage ajouterStage(Stockage dbHelper) {
+    private Stage creerStage(Stockage dbHelper) {
         ArrayList<Compte> professeurs = dbHelper.getComptes(1);
         Stage stage = new Stage(priorite);
         etudiant.setPhoto(photo);
         stage.addEntreprise(entreprise);
         stage.addEtudiant(etudiant);
-        stage.addProfesseur(professeurs.get(0));
+        stage.addProfesseur(professeurs.get(0).getId());
+        stage.setCommentaire(viewModel.getCommentaire());
+        stage.setJournees(viewModel.getJourStage());
+        stage.setheureDebut(viewModel.getHeureDebutStage());
+        stage.setHeureFinStage(viewModel.getHeureFinStage());
+        stage.setHeureDiner(viewModel.getHeureDebutDiner());
+        stage.setHeureFinDiner(viewModel.getHeureFinDiner());
+        stage.setDureeVisite(viewModel.getTempsVisites());
+        stage.setDisponibiliteTuteur(viewModel.getDispoTuteur());
         dbHelper.createStage(stage);
         dbHelper.changerPhotoCompte(etudiant);
         return stage;

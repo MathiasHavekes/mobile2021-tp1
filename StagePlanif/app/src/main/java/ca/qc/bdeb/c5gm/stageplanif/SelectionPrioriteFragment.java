@@ -16,7 +16,7 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 public class SelectionPrioriteFragment extends Fragment {
     private final int VALEUR_DRAPEAU_VERT = Priorite.MINIMUM.getValeur();
     private final int VALEUR_DRAPEAU_JAUNE = Priorite.MOYENNE.getValeur();
-    private final int VALEUR_DRAPEAU_ROUGE = Priorite.MAXIMUM.getValeur();
+    private final int VALEUR_DRAPEAU_ROUGE = Priorite.HAUTE.getValeur();
     private CheckBox drapeauVert, drapeauJaune, drapeauRouge;
     private int selection;
     private SelectionViewModel viewModel;

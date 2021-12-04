@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Journées de stage"
-            android:textSize="24dp" />
+            android:textSize="24sp" />
 
         <RelativeLayout
             android:id="@+id/menu_selection_jour"
@@ -25,32 +26,56 @@
             android:layout_marginTop="16dp">
 
             <CheckBox
-                android:id="@+id/selection_mercredi"
+                android:id="@+id/selection_lundi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:text="Lundi" />
+
+            <CheckBox
+                android:id="@+id/selection_mardi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Mardi" />
+
+            <CheckBox
+                android:id="@+id/selection_mercredi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:text="Mercredi" />
+
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <CheckBox
                 android:id="@+id/selection_jeudi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="Jeudi" />
+                android:text="Jeudi"
+                app:layout_constraintEnd_toStartOf="@+id/selection_vendredi"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <CheckBox
                 android:id="@+id/selection_vendredi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="Vendredi" />
-        </RelativeLayout>
+                android:layout_marginEnd="52dp"
+                android:text="Vendredi"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Horaire de stage"
-            android:textSize="24dp"
+            android:textSize="24sp"
             android:layout_marginTop="32dp"/>
 
         <EditText
@@ -59,11 +84,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:drawableEnd="@drawable/ic_baseline_access_time_24"
-            android:enabled="true"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:hint="Heure de début"
-            android:inputType="none" />
+            android:inputType="datetime" />
 
         <EditText
             android:id="@+id/text_stage_fin"
@@ -80,7 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Horaire de diner"
-            android:textSize="24dp"
+            android:textSize="24sp"
             android:layout_marginTop="32dp"/>
 
         <EditText
@@ -109,7 +133,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Durée moyenne des visites"
-            android:textSize="24dp"
+            android:textSize="24sp"
             android:layout_marginTop="32dp"/>
 
         <RadioGroup
