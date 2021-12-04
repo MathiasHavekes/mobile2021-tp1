@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                         listeStages.remove(indexEnleve);
                         stageAdapter.notifyItemRemoved(indexEnleve);
                     });
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.annuler_message),
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.message_annuler),
                     (dialogInterface, i) -> {
                         int indexEnleve = viewHolder.getAdapterPosition();
                         stageAdapter.notifyItemChanged(indexEnleve);
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Lance l'activitee d'information de stage en demandant un resultat et analyse du resultat
      */
-    final ActivityResultLauncher<Intent> envoyerInfoStageActivity = registerForActivityResult(
+    private final ActivityResultLauncher<Intent> envoyerInfoStageActivity = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         btnAjouterEleve = findViewById(R.id.btn_ajouter_eleve);
+        btnAjouterEleve.setOnClickListener(ajouterEleveOnClickListener);
         setSupportActionBar(toolbar);
         Utils.context = getApplicationContext();
         dbHelper = Stockage.getInstance(getApplicationContext());
@@ -214,7 +215,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.passer_sur_carte) {
-            startGoogleMapActivity();
+            lancerGoogleMapActivity();
+        } else if (item.getItemId() == R.id.passer_sur_calendrier) {
+            lancerCalendrierActivity();
         }
 
         return super.onOptionsItemSelected(item);
@@ -223,13 +226,21 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Commence l'activitee de Google Maps
      */
-    private void startGoogleMapActivity() {
+    private void lancerGoogleMapActivity() {
         Intent intent = new Intent(this, GoogleMapsActivity.class);
         ArrayList<StagePoidsPlume> stagePoidsPlumes = new ArrayList<>();
         for (Stage stage : listeStages) {
             stagePoidsPlumes.add(stage.getGoogleMapsObject());
         }
         intent.putParcelableArrayListExtra("liste_des_stages", stagePoidsPlumes);
+        startActivity(intent);
+    }
+
+    /**
+     * Commence l'activitee du Calendrier
+     */
+    private void lancerCalendrierActivity() {
+        Intent intent = new Intent(this, CalendrierActivity.class);
         startActivity(intent);
     }
 

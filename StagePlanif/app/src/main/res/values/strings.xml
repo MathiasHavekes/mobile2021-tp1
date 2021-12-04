@@ -2,16 +2,21 @@
     <string name="app_name">StagePlanif</string>
     <string name="msg_img_eleve">TODO</string>
     <string name="msg_img_drapeau">TODO</string>
-    <string name="msg_bouton_ajout_eleve">TODO</string>
-    <string name="msg_bouton_filtre">TODO</string>
+    <string name="msg_btn_ajout_eleve">TODO</string>
+    <string name="msg_btn_filtre">TODO</string>
+    <string name="msg_btn_lancer_calendrier">TODO</string>
     <string name="msg_nom">Nom de l\'eleve</string>
     <string name="msg_prenom">Prénom de l\'eleve</string>
+
     <string name="titre_activity_google_maps">GoogleMaps</string>
     <string name="titre_activity_demande_info_stage">Infos Stage</string>
+    <string name="titre_activity_calendrier">Calendrier</string>
 
     <string name="btn_suivant">Suivant</string>
     <string name="btn_terminer">Terminer</string>
     <string name="btn_annuler">Annuler</string>
+    <string name="btn_ajouter">Ajouter</string>
+    <string name="btn_revenir">Revenir</string>
     <string name="btn_se_connecter">Se connecter</string>
 
     <string name="info_eleve">Élève</string>
@@ -31,14 +36,13 @@
     <string name="message_avertissement">Voulez-vous annuler les modifications apportes ?</string>
     <string name="btn_ok">ok</string>
     <string name="message_oui">Oui</string>
-    <string name="annuler_message">Annuler</string>
+    <string name="message_annuler">Annuler</string>
 
     <string name="image_eleve_description">Image de l\'élève</string>
     <string name="btn_prendre_photo_description">Bouton prise de photo</string>
     
     <string name="txt_dispo_tuteur">Disponibilités du tuteur</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>

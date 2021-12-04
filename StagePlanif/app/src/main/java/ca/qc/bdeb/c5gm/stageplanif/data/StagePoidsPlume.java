@@ -3,6 +3,8 @@ package ca.qc.bdeb.c5gm.stageplanif.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.UUID;
+
 /**
  * Les GoogleMapsObject sont des pures fabrications qui permettent d'envoyer plusieurs stages sans faire crasher le programme
  */
@@ -29,10 +31,18 @@ public class StagePoidsPlume implements Parcelable {
      * La priorite du stage
      */
     private final Priorite priorite;
+    private final String idEtudiant;
+    private final String nomEtudiant;
+    private final String prenomEtudiant;
+    private final Integer dureeVisite;
 
-    public StagePoidsPlume(Entreprise entreprise, Priorite priorite) {
+    public StagePoidsPlume(Entreprise entreprise, Priorite priorite, String idEtudiant, String nomEtudiant, String prenomEtudiant, Integer dureeVisite) {
         this.entreprise = entreprise;
         this.priorite = priorite;
+        this.idEtudiant = idEtudiant;
+        this.nomEtudiant = nomEtudiant;
+        this.prenomEtudiant = prenomEtudiant;
+        this.dureeVisite = dureeVisite;
     }
 
     /**
@@ -41,6 +51,10 @@ public class StagePoidsPlume implements Parcelable {
     protected StagePoidsPlume(Parcel in) {
         entreprise = in.readParcelable(Entreprise.class.getClassLoader());
         priorite = in.readParcelable(Priorite.class.getClassLoader());
+        idEtudiant = in.readString();
+        nomEtudiant = in.readString();
+        prenomEtudiant = in.readString();
+        dureeVisite = in.readInt();
     }
 
     @Override
@@ -52,6 +66,14 @@ public class StagePoidsPlume implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeParcelable(entreprise, i);
         parcel.writeParcelable(priorite, i);
+        parcel.writeString(idEtudiant);
+        parcel.writeString(nomEtudiant);
+        parcel.writeString(prenomEtudiant);
+        parcel.writeInt(dureeVisite);
+    }
+
+    public Visite getVisite() {
+        return new Visite(UUID.randomUUID().toString(), this.idEtudiant, this.nomEtudiant, this.prenomEtudiant, this.priorite, 0, this.dureeVisite, 0);
     }
 
     public Entreprise getEntreprise() {
@@ -62,4 +84,19 @@ public class StagePoidsPlume implements Parcelable {
         return priorite;
     }
 
+    public String getIdEtudiant() {
+        return idEtudiant;
+    }
+
+    public String getNomEtudiant() {
+        return nomEtudiant;
+    }
+
+    public String getPrenomEtudiant() {
+        return prenomEtudiant;
+    }
+
+    public Integer getDureeVisite() {
+        return dureeVisite;
+    }
 }
