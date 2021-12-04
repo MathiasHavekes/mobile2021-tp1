@@ -7,4 +7,10 @@
         android:icon="@drawable/ic_baseline_map_24"
         android:title="passerSurCarte"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/passer_sur_calendrier"
+        android:icon="@drawable/ic_baseline_calendar_today_24"
+        android:title="passerSurCalendrier"
+        app:showAsAction="ifRoom" />
 </menu>

@@ -56,6 +56,12 @@
             android:label="@string/titre_activity_google_maps"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".CalendrierActivity"
+            android:exported="true"
+            android:label="@string/titre_activity_calendrier"
+            android:parentActivityName=".MainActivity"/>
+
+        <activity
             android:name=".InfoStageActivity"
             android:exported="true"
             android:label="@string/titre_activity_demande_info_stage"
