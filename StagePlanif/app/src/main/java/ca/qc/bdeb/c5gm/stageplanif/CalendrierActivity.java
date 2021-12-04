@@ -179,7 +179,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
                                     stageSelectionne.getEtudiant().getPrenom(),
                                     stageSelectionne.getPriorite(),
                                     timePicker.getHour() * 60 + timePicker.getMinute(),
-                                    stageSelectionne.getDuree_visite(),
+                                    stageSelectionne.getDureeVisite(),
                                     time.getTime().getDay() + 1);
                             visites.add(nouvelleVisite);
                             mWeekView.notifyDatasetChanged();
