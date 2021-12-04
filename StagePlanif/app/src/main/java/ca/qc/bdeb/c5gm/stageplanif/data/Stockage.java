@@ -185,19 +185,22 @@ public class Stockage extends SQLiteOpenHelper {
         values.put(StageHelper.STAGE_ANNEE_SCOLAIRE, anneeScolaire);
         values.put(StageHelper.STAGE_DRAPEAU, priorite);
         values.put(StageHelper.STAGE_COMMENTAIRE, commentaire);
-        if(heureFin > -1) {
-            values.put(StageHelper.STAGE_HEURE_FIN, heureFin);
+        if(heureFin < 0) {
+            heureFin = LocalTime.of(16,0).toSecondOfDay();
         }
-        if(heureFinPause > -1) {
-            values.put(StageHelper.STAGE_HEURE_FIN_PAUSE, heureFinPause);
+        values.put(StageHelper.STAGE_HEURE_FIN, heureFin);
+        if(heureFinPause < 0) {
+            heureFinPause = LocalTime.of(12,30).toSecondOfDay();
         }
-        if(heureDebut > -1) {
-            values.put(StageHelper.STAGE_HEURE_DEBUT, heureDebut);
+        values.put(StageHelper.STAGE_HEURE_FIN_PAUSE, heureFinPause);
+        if(heureDebut < 0) {
+            heureDebut = LocalTime.of(8,0).toSecondOfDay();
         }
-        if(heureDebutPause > -1) {
-            values.put(StageHelper.STAGE_HEURE_PAUSE, heureDebutPause);
+        values.put(StageHelper.STAGE_HEURE_DEBUT, heureDebut);
+        if(heureDebutPause < 0) {
+            heureDebutPause = LocalTime.of(12,0).toSecondOfDay();
         }
-
+        values.put(StageHelper.STAGE_HEURE_PAUSE, heureDebutPause);
         if(stageExists(id, db)) {
             String whereClause = StageHelper._ID + " = ?";
             String[] whereArgs = {id};
@@ -396,7 +399,8 @@ public class Stockage extends SQLiteOpenHelper {
                 StageHelper.STAGE_HEURE_PAUSE,
                 StageHelper.STAGE_HEURE_FIN_PAUSE,
                 StageHelper.STAGE_DUREE_VISITE,
-                StageHelper.STAGE_DISPONIBILITE_TUTEUR
+                StageHelper.STAGE_DISPONIBILITE_TUTEUR,
+                StageHelper.STAGE_ANNEE_SCOLAIRE
         };
         Cursor cursor = db.query(StageHelper.NOM_TABLE, colonnes, null, null, null, null, null, null);
         if (cursor != null) {
@@ -435,6 +439,7 @@ public class Stockage extends SQLiteOpenHelper {
                 stage.setHeureFinDiner(LocalTime.ofSecondOfDay(cursor.getInt(11)));
                 stage.setDureeVisite(cursor.getInt(12));
                 stage.setDisponibiliteTuteur(cursor.getInt(13));
+                stage.setAnneeScolaire(cursor.getString(14));
                 stages.add(stage);
             } while (cursor.moveToNext());
             cursor.close();
@@ -460,9 +465,9 @@ public class Stockage extends SQLiteOpenHelper {
         values.put(StageHelper.STAGE_DUREE_VISITE, stage.getDureeVisite());
         values.put(StageHelper.STAGE_JOURNEES, stage.getJournees());
         values.put(StageHelper.STAGE_HEURE_FIN, stage.getHeureFinStage().toSecondOfDay());
-        values.put(StageHelper.STAGE_HEURE_FIN_PAUSE, stage.getHeureFinDiner().toSecondOfDay());
+        values.put(StageHelper.STAGE_HEURE_FIN_PAUSE, stage.getHeureFinPause().toSecondOfDay());
         values.put(StageHelper.STAGE_HEURE_DEBUT, stage.getHeureDebut().toSecondOfDay());
-        values.put(StageHelper.STAGE_HEURE_PAUSE, stage.getHeureDiner().toSecondOfDay());
+        values.put(StageHelper.STAGE_HEURE_PAUSE, stage.getHeurePause().toSecondOfDay());
         values.put(StageHelper.STAGE_ENTREPRISE_ID, stage.getEntreprise().getId());
         values.put(StageHelper.STAGE_DRAPEAU, stage.getPriorite().getValeur());
         String whereClause = StageHelper._ID + " = ?";
@@ -545,9 +550,9 @@ public class Stockage extends SQLiteOpenHelper {
         values.put(StageHelper.STAGE_DUREE_VISITE, stage.getDureeVisite());
         values.put(StageHelper.STAGE_JOURNEES, stage.getJournees());
         values.put(StageHelper.STAGE_HEURE_FIN, stage.getHeureFinStage().toSecondOfDay());
-        values.put(StageHelper.STAGE_HEURE_FIN_PAUSE, stage.getHeureFinDiner().toSecondOfDay());
+        values.put(StageHelper.STAGE_HEURE_FIN_PAUSE, stage.getHeureFinPause().toSecondOfDay());
         values.put(StageHelper.STAGE_HEURE_DEBUT, stage.getHeureDebut().toSecondOfDay());
-        values.put(StageHelper.STAGE_HEURE_PAUSE, stage.getHeureDiner().toSecondOfDay());
+        values.put(StageHelper.STAGE_HEURE_PAUSE, stage.getHeurePause().toSecondOfDay());
         db.insert(StageHelper.NOM_TABLE, null, values);
     }
 

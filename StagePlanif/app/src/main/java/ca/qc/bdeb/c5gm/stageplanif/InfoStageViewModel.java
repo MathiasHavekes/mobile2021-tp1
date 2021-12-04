@@ -143,7 +143,7 @@ public class InfoStageViewModel extends ViewModel {
         return this.heureDebutDiner.getValue();
     }
 
-    public void setHeureDebutDiner(LocalTime temps) {
+    public void setHeureDebutPause(LocalTime temps) {
         this.heureDebutDiner.setValue(temps);
     }
 
@@ -151,7 +151,7 @@ public class InfoStageViewModel extends ViewModel {
         return this.heureFinDiner.getValue();
     }
 
-    public void setHeureFinDiner(LocalTime temps) {
+    public void setHeureFinPause(LocalTime temps) {
         this.heureFinDiner.setValue(temps);
     }
 

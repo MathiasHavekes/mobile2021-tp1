@@ -1,5 +1,6 @@
 package ca.qc.bdeb.c5gm.stageplanif.reseau;
 
+import android.content.Intent;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -7,10 +8,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.concurrent.Future;
 
 import ca.qc.bdeb.c5gm.stageplanif.ConnectUtils;
+import ca.qc.bdeb.c5gm.stageplanif.InfoStageActivity;
+import ca.qc.bdeb.c5gm.stageplanif.MainActivity;
 import ca.qc.bdeb.c5gm.stageplanif.Utils;
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
 import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
 import okhttp3.ResponseBody;
@@ -94,9 +100,7 @@ public class ConnexionBD {
             e.printStackTrace();
         }
     }
-    public static void test() {
-        client.getStages(ConnectUtils.authToken).isExecuted();
-    }
+
     public static void updateStages() {
         client.getStages(ConnectUtils.authToken).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -159,6 +163,8 @@ public class ConnexionBD {
                                 }
                             }
                         }
+                        MainActivity.listeStages = dbHelper.getStages();
+                        MainActivity.stageAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException | IOException e) {
                     e.printStackTrace();
@@ -167,6 +173,46 @@ public class ConnexionBD {
 
             private boolean isNumeric(String str){
                 return str != null && str.matches("[0-9.]+");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
+    public static void ajouterOuModifierStage(Stage stage) {
+        HashMap<String, Object> stageInfo = new HashMap<>();
+        stageInfo.put("id", stage.getId());
+        stageInfo.put("annee", stage.getAnneeScolaire());
+        stageInfo.put("id_entreprise", stage.getEntreprise().getId());
+        stageInfo.put("id_etudiant", stage.getEtudiant().getId());
+        stageInfo.put("id_professeur", stage.getProfesseur());
+        stageInfo.put("commentaire", stage.getCommentaire());
+        stageInfo.put("heureDebut", String.valueOf(stage.getHeureDebut().toSecondOfDay()));
+        stageInfo.put("heureFin", String.valueOf(stage.getHeureFinStage().toSecondOfDay()));
+        stageInfo.put("priorite", stage.getPriorite().toString());
+        stageInfo.put("heureDebutPause", String.valueOf(stage.getHeurePause().toSecondOfDay()));
+        stageInfo.put("heureFinPause", String.valueOf(stage.getHeureFinPause().toSecondOfDay()));
+        client.ajouterStage(ConnectUtils.authToken, stageInfo).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.i("justine_tag", response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
+    public static void supprimerStage(String id) {
+        client.supprStage(ConnectUtils.authToken, id).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.i("justine_tag", response.toString());
             }
 
             @Override

@@ -32,18 +32,20 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
-            android:id="@+id/btn_suivant"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:text="@string/btn_suivant" />
-
-        <Button
             android:id="@+id/btn_annuler"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="199dp"
             android:text="@string/btn_annuler" />
+
+        <Button
+            android:id="@+id/btn_suivant"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="211dp"
+            android:text="@string/btn_suivant" />
 
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

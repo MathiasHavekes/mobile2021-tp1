@@ -44,7 +44,7 @@ public class Utils {
      */
     public static int renvoyerCouleur(Priorite priorite) {
         switch (priorite) {
-            case MINIMUM:
+            case BASSE:
                 return R.color.green;
             case MOYENNE:
                 return R.color.yellow;

@@ -84,7 +84,7 @@ public class InfoEleveFragment extends Fragment implements AdapterView.OnItemSel
             Priorite priorite;
             switch (selectedId) {
                 case R.id.drapeau_vert:
-                    priorite = Priorite.MINIMUM;
+                    priorite = Priorite.BASSE;
                     break;
                 case R.id.drapeau_jaune:
                     priorite = Priorite.MOYENNE;
@@ -147,7 +147,7 @@ public class InfoEleveFragment extends Fragment implements AdapterView.OnItemSel
      */
     private void setRadioButton(Stage stage) {
         switch (stage.getPriorite()) {
-            case MINIMUM:
+            case BASSE:
                 radioPriorite.check(R.id.drapeau_vert);
                 break;
             case MOYENNE:
