@@ -95,7 +95,7 @@ public class InfoStageActivity extends AppCompatActivity {
                 AlertDialog alertDialog = new AlertDialog.Builder(context).create();
                 alertDialog.setTitle(R.string.titre_avertissement);
                 alertDialog.setMessage(getString(R.string.message_avertissement));
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.annuler_message),
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.message_annuler),
                         (dialogInterface, i) -> {
                             //on ne fait rien
                         });
