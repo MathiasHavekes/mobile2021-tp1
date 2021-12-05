@@ -2,6 +2,7 @@ package ca.qc.bdeb.c5gm.stageplanif.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import ca.qc.bdeb.c5gm.stageplanif.CalendrierActivity;
 
 public class Visite implements Parcelable {
     private final String id;
@@ -15,7 +16,11 @@ public class Visite implements Parcelable {
         this.stage = stage;
         this.journee = journee;
         this.heureDeDebut = heureDeDebut;
-        this.duree = duree;
+        if (duree <= 0) {
+            this.duree = CalendrierActivity.DUREE_VISITE_STANDARD;
+        } else {
+            this.duree = duree;
+        }
     }
 
     /**

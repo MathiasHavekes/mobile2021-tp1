@@ -41,14 +41,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.StagePoidsPlume;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
 import ca.qc.bdeb.c5gm.stageplanif.data.Visite;
 import ca.qc.bdeb.c5gm.stageplanif.databinding.ActivityGoogleMapsBinding;
 
@@ -57,6 +54,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     private static final float ZOOM_PAR_DEFAUT = 16f;
     private static final String[] PERMISSIONS = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
     private final View.OnClickListener lancerCalendrierOnClickListener = view -> creerDialogueChoisirJour();
+    private final Stockage dbHelper = Stockage.getInstance(Utils.context);
     private ActivityGoogleMapsBinding binding;
     private ArrayList<StagePoidsPlume> listeStages = new ArrayList<>();
     private ArrayList<Marker> listeMarqueurs = new ArrayList<>();
@@ -229,13 +227,17 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
         if (jourSelectionne > -1) {
             ArrayList<Visite> listeVisites = new ArrayList<>();
+            int heureDeDebutProchaineVisite = CalendrierActivity.HEURE_PREMIERE_VISITE;
 
             for (int i = 0; i < listeStagesSelectionnes.size(); i++) {
-                listeVisites.add(listeStagesSelectionnes.get(i).getVisite());
-                listeVisites.get(i).setJournee(jourSelectionne);
-            }
+                Visite nouvelleVisite = listeStagesSelectionnes.get(i).getVisite();
+                nouvelleVisite.setJournee(jourSelectionne);
+                nouvelleVisite.setHeureDeDebut(heureDeDebutProchaineVisite);
+                listeVisites.add(nouvelleVisite);
+                dbHelper.ajouterVisite(nouvelleVisite);
 
-            intent.putParcelableArrayListExtra("liste_visites", listeVisites);
+                heureDeDebutProchaineVisite += nouvelleVisite.getDuree() + CalendrierActivity.DUREE_PAUSE_STANTARD;
+            }
         }
 
         startActivity(intent);

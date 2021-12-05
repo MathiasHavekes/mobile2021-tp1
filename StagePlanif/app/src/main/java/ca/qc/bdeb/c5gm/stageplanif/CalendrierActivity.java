@@ -36,8 +36,9 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Visite;
 
 public class CalendrierActivity extends AppCompatActivity implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
 
-    private static final int DUREE_VISITE_STANDARD = 45;
-    private static final int HEURE_PREMIERE_VISITE = 480;
+    public static final int DUREE_VISITE_STANDARD = 45;
+    public static final int DUREE_PAUSE_STANTARD = 45;
+    public static final int HEURE_PREMIERE_VISITE = 480;
     private WeekView mWeekView;
     private Toolbar toolbar;
     private ArrayList<Visite> visites = new ArrayList<>();;
@@ -134,6 +135,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         builder.setView(dialog)
                 .setTitle("Description visite")
                 .setPositiveButton(R.string.btn_revenir, null)
+
                 .show();
     }
 
