@@ -156,7 +156,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
 
         List<String> journees = Utils.creeListeAvecValeursHashMap(Utils.JOURS_DE_LA_SEMAINE);
         setSpinner(spinnerJournee, journees);
-        spinnerJournee.setSelection(journees.indexOf(Utils.JOURS_DE_LA_SEMAINE.get(event.getStartTime().getTime().getDay())));
+        spinnerJournee.setSelection(journees.indexOf(Utils.JOURS_DE_LA_SEMAINE.get(event.getStartTime().getTime().getDay() + 1)));
 
         radioGroup.setOnCheckedChangeListener(radioGroupClique);
         setChampsDureeVisite(visiteSelectionnee, radioGroup);

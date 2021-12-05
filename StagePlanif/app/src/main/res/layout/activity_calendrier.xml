@@ -30,7 +30,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:noOfVisibleDays="3"
+        app:noOfVisibleDays="5"
         app:textSize="12sp"
         app:todayBackgroundColor="#1848adff" />
 </androidx.constraintlayout.widget.ConstraintLayout>
