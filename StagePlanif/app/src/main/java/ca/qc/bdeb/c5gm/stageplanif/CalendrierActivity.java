@@ -49,10 +49,11 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
     public static final int DUREE_PAUSE_STANDARD = 45;
     private WeekView mWeekView;
     private Toolbar toolbar;
-    private ArrayList<Visite> visites = new ArrayList<>();;
+    private ArrayList<Visite> visites = new ArrayList<>();
+    private ArrayList<WeekViewEvent> events;
     private ArrayList<Stage> stages = new ArrayList<>();
-    private ArrayList<WeekViewEvent> events = new ArrayList<>();
     private Stockage dbHelper;
+    private int boucle = 0;
     private int tempsSelectionne = DUREE_VISITE_STANDARD;
 
     @Override
@@ -290,35 +291,28 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
     @Override
     public ArrayList<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         events = new ArrayList<>();
-
-        if (!visites.isEmpty()) {
+        boucle++;
+        if(boucle == 3) {
+            boucle = 0;
+        }
+        if (!visites.isEmpty() && boucle == 1) {
             for (Visite v : visites) {
-                if (v.getJournee().getHour() <= 0) {
-                    LocalDateTime localDateTime = v.getJournee();
-                    localDateTime = localDateTime.withHour(HEURE_PREMIERE_VISITE);
-                    v.setJournee(localDateTime);
-                }
-
-                WeekViewEvent event = getWeekViewEventFromVisite(v, newMonth, newYear);
+                WeekViewEvent event = getWeekViewEventFromVisite(v);
                 events.add(event);
             }
         }
-
         return events;
     }
 
-    private WeekViewEvent getWeekViewEventFromVisite(Visite visite, int month, int year) {
+    private WeekViewEvent getWeekViewEventFromVisite(Visite visite) {
         Calendar startTime = Calendar.getInstance();
         LocalDateTime localDateTime = visite.getJournee();
-
-        startTime.set(Calendar.MINUTE, localDateTime.getMinute());
-        startTime.set(Calendar.HOUR_OF_DAY, localDateTime.getHour());
-        startTime.set(Calendar.DAY_OF_WEEK, localDateTime.getDayOfWeek().getValue());
-        startTime.set(Calendar.MONTH, month - 1);
-        startTime.set(Calendar.YEAR, year);
+        Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        startTime.setTime(date);
         Calendar endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.MINUTE, visite.getDuree());
-        endTime.set(Calendar.MONTH, month - 1);
+        localDateTime = localDateTime.plusMinutes(visite.getDuree());
+        Date dateEnd = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        endTime.setTime(dateEnd);
 
         int indexVisite = visites.indexOf(visite);
 

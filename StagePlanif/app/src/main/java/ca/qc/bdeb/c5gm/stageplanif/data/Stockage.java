@@ -289,7 +289,7 @@ public class Stockage extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(VisiteHelper._ID, visite.getId());
         values.put(VisiteHelper.STAGE_ID, visite.getStage().getId());
-        values.put(VisiteHelper.VISITE_DATE, visite.getJournee().toString());
+        values.put(VisiteHelper.VISITE_DATE, Utils.formatterDateTime(visite.getJournee()));
         values.put(VisiteHelper.VISITE_DUREE, visite.getDuree());
         db.insert(VisiteHelper.NOM_TABLE, null, values);
     }
@@ -299,7 +299,7 @@ public class Stockage extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(VisiteHelper._ID, visite.getId());
         values.put(VisiteHelper.STAGE_ID, visite.getStage().getId());
-        values.put(VisiteHelper.VISITE_DATE, visite.getJournee().toString());
+        values.put(VisiteHelper.VISITE_DATE, Utils.formatterDateTime(visite.getJournee()));
         values.put(VisiteHelper.VISITE_DUREE, visite.getDuree());
         String whereClause = VisiteHelper._ID + " = ?";
         String[] whereArgs = {visite.getId()};

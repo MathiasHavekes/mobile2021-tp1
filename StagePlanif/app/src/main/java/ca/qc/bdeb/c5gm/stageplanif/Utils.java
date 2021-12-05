@@ -7,6 +7,8 @@ import android.icu.util.Calendar;
 
 import java.io.ByteArrayOutputStream;
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
 
 public class Utils {
     public static final HashMap<DayOfWeek, String> JOURS_DE_LA_SEMAINE = new HashMap<DayOfWeek, String>() {{
@@ -129,5 +132,10 @@ public class Utils {
 
     public static <K, V> List<V> creeListeAvecValeursHashMap (HashMap<K, V> map){
         return map.values().stream().collect(Collectors.toList());
+    }
+
+    public static String formatterDateTime(LocalDateTime temps) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        return temps.format(formatter);
     }
 }
