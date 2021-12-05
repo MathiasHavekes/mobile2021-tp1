@@ -2,6 +2,7 @@ package ca.qc.bdeb.c5gm.stageplanif;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -77,6 +78,13 @@ public class MainActivity extends AppCompatActivity {
     public static ListeStageAdapter stageAdapter;
     private IAPI IAPIClient;
     /**
+     * Fichier dans lequel est contenu les preferences
+     */
+    private final String PREFERENCEFILE = "ca.qc.bdeb.c5gm.stageplanif";
+    private SharedPreferences sharedPreferences;
+    private final String AUTHTOKEN = "authToken";
+    private final String AUTHID= "authID";
+    /**
      * Defini le logique de swipe d'un item du recycler view
      */
     final ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -137,6 +145,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPreferences = getSharedPreferences(PREFERENCEFILE, MODE_PRIVATE);
+        if (ConnectUtils.authToken == "") {
+            ConnectUtils.authToken = sharedPreferences.getString(AUTHTOKEN, "");
+        }
+        if (ConnectUtils.authId == "") {
+            ConnectUtils.authId = sharedPreferences.getString(AUTHID, "");
+        }
         toolbar = findViewById(R.id.toolbar);
         swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         btnAjouterEleve = findViewById(R.id.btn_ajouter_eleve);
@@ -144,13 +159,23 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Utils.context = getApplicationContext();
         dbHelper = Stockage.getInstance(getApplicationContext());
-        listeStages = dbHelper.getStages();
+        listeStages = dbHelper.getStages(ConnectUtils.authId);
         selectionPriorites = Priorite.getTotalValeursPriorites();
         creationClient();
         creationViewModel();
         creationSwipeRefreshLayout();
         creationRecyclerView();
         btnAjouterEleve.setOnClickListener(ajouterEleveOnClickListener);
+    }
+
+    @Override
+    protected void onPause() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.putString(AUTHID, ConnectUtils.authId);
+        editor.putString(AUTHTOKEN, ConnectUtils.authToken);
+        editor.apply();
+        super.onPause();
     }
 
     private void creationClient() {
@@ -219,6 +244,20 @@ public class MainActivity extends AppCompatActivity {
             lancerGoogleMapActivity();
         } else if (item.getItemId() == R.id.passer_sur_calendrier) {
             lancerCalendrierActivity();
+        } else if (item.getItemId() == R.id.btn_se_deconnecter) {
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle(R.string.titre_avertissement);
+            alertDialog.setMessage(getString(R.string.message_deconnecter));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.message_oui),
+                    (dialogInterface, i) -> {
+                        ConnexionBD.seDeconnecter();
+                        connecter();
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.message_annuler),
+                    (dialogInterface, i) -> {
+                        //on ne fait rien
+                    });
+            alertDialog.show();
         }
 
         return super.onOptionsItemSelected(item);

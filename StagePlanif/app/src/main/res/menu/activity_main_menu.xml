@@ -13,4 +13,10 @@
         android:icon="@drawable/ic_baseline_calendar_today_24"
         android:title="passerSurCalendrier"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/btn_se_deconnecter"
+        android:icon="@drawable/ic_logout_24"
+        android:title="seDeconnecter"
+        app:showAsAction="ifRoom" />
 </menu>

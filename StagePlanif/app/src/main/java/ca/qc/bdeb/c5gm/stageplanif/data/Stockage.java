@@ -133,6 +133,13 @@ public class Stockage extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+    public void viderTables() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + VisiteHelper.NOM_TABLE);
+        db.execSQL("DELETE FROM " + StageHelper.NOM_TABLE);
+        db.execSQL("DELETE FROM " + CompteHelper.NOM_TABLE);
+        db.execSQL("DELETE FROM " + EntrepriseHelper.NOM_TABLE);
+    }
     /**
      * Méthode qui ajoute les comptes à la base de données
      *
@@ -472,7 +479,7 @@ public class Stockage extends SQLiteOpenHelper {
      *
      * @return une liste de stages
      */
-    public ArrayList<Stage> getStages() {
+    public ArrayList<Stage> getStages(String professeurId) {
         ArrayList<Stage> stages = new ArrayList<>();
         ArrayList<Entreprise> entreprisesConnu = new ArrayList<>();
 
@@ -496,7 +503,9 @@ public class Stockage extends SQLiteOpenHelper {
                 StageHelper.STAGE_DISPONIBILITE_TUTEUR,
                 StageHelper.STAGE_ANNEE_SCOLAIRE
         };
-        Cursor cursor = db.query(StageHelper.NOM_TABLE, colonnes, null, null, null, null, null, null);
+        String selection = StageHelper.STAGE_PROFESSEUR_ID + " = ?";
+        String[] selectionArgs = {professeurId};
+        Cursor cursor = db.query(StageHelper.NOM_TABLE, colonnes, selection, selectionArgs, null, null, null, null);
         if (cursor != null) {
             if(cursor.getCount() == 0) {
                 cursor.close();

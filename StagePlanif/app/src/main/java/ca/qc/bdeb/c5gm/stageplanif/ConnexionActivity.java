@@ -1,5 +1,6 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,8 +19,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StageNomComparateur;
+import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrenomComparateur;
+import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrioriteComparateur;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
+import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
+import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.ConnexionBD;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.IAPI;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.APIClient;
@@ -91,6 +99,9 @@ public class ConnexionActivity extends AppCompatActivity {
                         ConnectUtils.authToken = rep.getString("access_token");
                         ConnectUtils.authId = rep.getString("id");
                         ConnexionBD.updateCompte(rep);
+                        ConnexionBD.updateEntreprises();
+                        ConnexionBD.updateComptesEleves();
+                        ConnexionBD.updateStages();
                         Toast.makeText(getApplicationContext(), "Connexion réussie!!", Toast.LENGTH_LONG).show();
                         finish();
                     } catch (JSONException e) {

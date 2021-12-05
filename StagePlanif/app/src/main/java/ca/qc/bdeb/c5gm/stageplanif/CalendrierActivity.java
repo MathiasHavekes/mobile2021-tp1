@@ -51,7 +51,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendrier);
         dbHelper = Stockage.getInstance(this);
-        stages = dbHelper.getStages();
+        stages = dbHelper.getStages(ConnectUtils.authId);
 
         ArrayList<Visite> donneesRecuperees = getIntent().getParcelableArrayListExtra("liste_visites");
 

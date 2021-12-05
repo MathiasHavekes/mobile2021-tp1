@@ -88,6 +88,7 @@ public class Stage implements Parcelable {
 
     protected Stage(Parcel in) {
         id = in.readString();
+        anneeScolaire = in.readString();
         etudiant = in.readParcelable(Compte.class.getClassLoader());
         professeur = in.readString();
         entreprise = in.readParcelable(Entreprise.class.getClassLoader());
@@ -146,6 +147,7 @@ public class Stage implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
+        parcel.writeString(anneeScolaire);
         parcel.writeParcelable(etudiant, i);
         parcel.writeString(professeur);
         parcel.writeParcelable(entreprise, i);

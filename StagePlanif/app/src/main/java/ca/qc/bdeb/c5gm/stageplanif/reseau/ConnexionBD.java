@@ -164,7 +164,7 @@ public class ConnexionBD {
                                 }
                             }
                         }
-                        ArrayList<Stage> stagesArray = dbHelper.getStages();
+                        ArrayList<Stage> stagesArray = dbHelper.getStages(ConnectUtils.authId);
                         MainActivity.listeStages.clear();
                         for (Stage stage: stagesArray) {
                             MainActivity.listeStages.add(stage);
@@ -217,6 +217,20 @@ public class ConnexionBD {
 
     public static void supprimerStage(String id) {
         client.supprStage(ConnectUtils.authToken, id).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.i("justine_tag", response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("TAG", t.toString());
+            }
+        });
+    }
+
+    public static void seDeconnecter() {
+        client.deconnecter(ConnectUtils.authToken).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Log.i("justine_tag", response.toString());

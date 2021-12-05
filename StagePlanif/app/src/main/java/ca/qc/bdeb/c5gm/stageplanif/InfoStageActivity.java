@@ -164,6 +164,9 @@ public class InfoStageActivity extends AppCompatActivity {
                     Stage stage = viewModel.getStage();
                     if(stage == null) {
                         stage = creerStage(dbHelper);
+                        creerIntent(stage);
+                        finish();
+                        break;
                     }
                     ArrayList<Compte> professeurs = dbHelper.getComptes(TypeCompte.PROFESSEUR.getValeur());
                     stage.setPriorite(priorite);
@@ -180,6 +183,8 @@ public class InfoStageActivity extends AppCompatActivity {
                     stage.setHeureFinStage(viewModel.getHeureFinStage());
                     stage.setHeureDiner(viewModel.getHeureDebutDiner());
                     stage.setHeureFinDiner(viewModel.getHeureFinDiner());
+                    String annee = viewModel.getStage().getAnneeScolaire();
+                    stage.setAnneeScolaire(annee);
                     stage.setDureeVisite(viewModel.getTempsVisites());
                     stage.setDisponibiliteTuteur(viewModel.getDispoTuteur());
                     dbHelper.modifierStage(stage);
@@ -305,6 +310,7 @@ public class InfoStageActivity extends AppCompatActivity {
         stage.setHeureFinDiner(viewModel.getHeureFinDiner());
         stage.setDureeVisite(viewModel.getTempsVisites());
         stage.setDisponibiliteTuteur(viewModel.getDispoTuteur());
+        stage.setAnneeScolaire(Utils.getAnneeScolaire());
         dbHelper.createStage(stage);
         dbHelper.changerPhotoCompte(etudiant);
         return stage;
