@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = result.getData();
                     Stage stage = intent.getParcelableExtra("stage");
                     mettreDansRV(stage);
+                    ConnexionBD.ajouterOuModifierStage(stage);
                 }
             });
 

@@ -35,8 +35,10 @@ public class StagePoidsPlume implements Parcelable {
     private final String nomEtudiant;
     private final String prenomEtudiant;
     private final Integer dureeVisite;
+    private final String id;
 
-    public StagePoidsPlume(Entreprise entreprise, Priorite priorite, String idEtudiant, String nomEtudiant, String prenomEtudiant, Integer dureeVisite) {
+    public StagePoidsPlume(String id, Entreprise entreprise, Priorite priorite, String idEtudiant, String nomEtudiant, String prenomEtudiant, Integer dureeVisite) {
+        this.id = id;
         this.entreprise = entreprise;
         this.priorite = priorite;
         this.idEtudiant = idEtudiant;
@@ -49,6 +51,7 @@ public class StagePoidsPlume implements Parcelable {
      * Implementation de parcel
      */
     protected StagePoidsPlume(Parcel in) {
+        id = in.readString();
         entreprise = in.readParcelable(Entreprise.class.getClassLoader());
         priorite = in.readParcelable(Priorite.class.getClassLoader());
         idEtudiant = in.readString();
@@ -64,6 +67,7 @@ public class StagePoidsPlume implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
         parcel.writeParcelable(entreprise, i);
         parcel.writeParcelable(priorite, i);
         parcel.writeString(idEtudiant);
@@ -98,5 +102,9 @@ public class StagePoidsPlume implements Parcelable {
 
     public Integer getDureeVisite() {
         return dureeVisite;
+    }
+
+    public String getId() {
+        return id;
     }
 }

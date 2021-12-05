@@ -25,7 +25,6 @@ public class Stockage extends SQLiteOpenHelper {
      * Nom de fichier de base de donnees
      */
     private static final String DB_NAME = "ca.qc.bdeb.c5gm.stageplanif";
-    private IAPI client;
     /**
      * Query SQL de creation de la table entreprise
      */
@@ -280,6 +279,48 @@ public class Stockage extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(VisiteHelper._ID, visite.getId());
+        values.put(VisiteHelper.STAGE_ID, visite.getStage().getId());
+        values.put(VisiteHelper.VISITE_DATE, visite.getJournee());
+        values.put(VisiteHelper.VISITE_DUREE, visite.getDuree());
+        values.put(VisiteHelper.VISITE_HEURE_DEBUT, visite.getHeureDeDebut());
+        db.insert(VisiteHelper.NOM_TABLE, null, values);
+    }
+
+    public void modifierVisite(Visite visite) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(VisiteHelper._ID, visite.getId());
+        values.put(VisiteHelper.STAGE_ID, visite.getStage().getId());
+        values.put(VisiteHelper.VISITE_DATE, visite.getJournee());
+        values.put(VisiteHelper.VISITE_DUREE, visite.getDuree());
+        values.put(VisiteHelper.VISITE_HEURE_DEBUT, visite.getHeureDeDebut());
+        String whereClause = VisiteHelper._ID + " = ?";
+        String[] whereArgs = {visite.getId()};
+        db.update(VisiteHelper.NOM_TABLE, values, whereClause, whereArgs);
+    }
+
+    public ArrayList<Visite> getVisites() {
+        ArrayList<Visite> visites = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        // les colonnes retournées par la requête:
+        String[] colonnes = {
+                VisiteHelper._ID,
+                VisiteHelper.STAGE_ID,
+                VisiteHelper.VISITE_DATE,
+                VisiteHelper.VISITE_HEURE_DEBUT,
+                VisiteHelper.VISITE_DUREE
+        };
+        Cursor cursor = db.query(VisiteHelper.NOM_TABLE, colonnes, null, null, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            do {
+                Stage stage = getStage(cursor.getString(1), db);
+                Visite visite = new Visite(cursor.getString(0), stage.getStagePoidsPlume(), cursor.getInt(3), cursor.getInt(4), cursor.getInt(2));
+                visites.add(visite);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return visites;
     }
 
     /**
@@ -378,6 +419,54 @@ public class Stockage extends SQLiteOpenHelper {
         return entreprise;
     }
 
+    private Stage getStage(String id, SQLiteDatabase db) {
+        Stage stage;
+        // les colonnes retournées par la requête:
+        String[] colonnes = {
+                StageHelper._ID,
+                StageHelper.STAGE_ANNEE_SCOLAIRE,
+                StageHelper.STAGE_DRAPEAU,
+                StageHelper.STAGE_ETUDIANT_ID,
+                StageHelper.STAGE_PROFESSEUR_ID,
+                StageHelper.STAGE_ENTREPRISE_ID,
+                StageHelper.STAGE_COMMENTAIRE,
+                StageHelper.STAGE_JOURNEES,
+                StageHelper.STAGE_HEURE_DEBUT,
+                StageHelper.STAGE_HEURE_FIN,
+                StageHelper.STAGE_HEURE_PAUSE,
+                StageHelper.STAGE_HEURE_FIN_PAUSE,
+                StageHelper.STAGE_DUREE_VISITE,
+                StageHelper.STAGE_DISPONIBILITE_TUTEUR
+        };
+        Cursor cursor = db.query(StageHelper.NOM_TABLE, colonnes, null, null, null, null, null, null);
+        if (cursor != null) {
+            if(cursor.getCount() == 0) {
+                cursor.close();
+                return null;
+            }
+            cursor.moveToFirst();
+            //Crée un nouveau stage
+            stage = new Stage(cursor.getString(0), cursor.getString(1), Priorite.getPriorite(cursor.getInt(2)));
+            //Verifie si le professeur a ete cree et le cree s'il ne l'a pas ete
+            stage.addProfesseur(cursor.getString(4));
+            //Cree l'etudiant associe au stage
+            stage.addEtudiant(getCompte(cursor.getString(3)));
+            //Verifie que l'entreprise n'a pas deja ete creefinal
+            Entreprise entreprise = getEntreprise(cursor.getString(5));
+            stage.addEntreprise(entreprise);
+            stage.setCommentaire(cursor.getString(6));
+            stage.setJournees((byte) cursor.getInt(7));
+            stage.setheureDebut(LocalTime.ofSecondOfDay(cursor.getInt(8)));
+            stage.setHeureFinStage(LocalTime.ofSecondOfDay(cursor.getInt(9)));
+            stage.setHeureDiner(LocalTime.ofSecondOfDay(cursor.getInt(10)));
+            stage.setHeureFinDiner(LocalTime.ofSecondOfDay(cursor.getInt(11)));
+            stage.setDureeVisite(cursor.getInt(12));
+            stage.setDisponibiliteTuteur(cursor.getInt(13));
+            cursor.close();
+            return stage;
+        }
+        return null;
+    }
     /**
      * Recevoir les stages de la base de données
      *

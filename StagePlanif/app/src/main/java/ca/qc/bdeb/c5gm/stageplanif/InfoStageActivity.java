@@ -183,7 +183,6 @@ public class InfoStageActivity extends AppCompatActivity {
                     stage.setDureeVisite(viewModel.getTempsVisites());
                     stage.setDisponibiliteTuteur(viewModel.getDispoTuteur());
                     dbHelper.modifierStage(stage);
-                    ConnexionBD.ajouterOuModifierStage(stage);
                     creerIntent(stage);
                     finish();
                     break;
