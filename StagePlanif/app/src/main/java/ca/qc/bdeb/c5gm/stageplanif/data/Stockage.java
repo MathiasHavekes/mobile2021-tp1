@@ -82,7 +82,6 @@ public class Stockage extends SQLiteOpenHelper {
                     VisiteHelper._ID + " TEXT PRIMARY KEY," +
                     VisiteHelper.STAGE_ID + " TEXT," +
                     VisiteHelper.VISITE_DATE + " TEXT," +
-                    VisiteHelper.VISITE_HEURE_DEBUT + " NUMERIC," +
                     VisiteHelper.VISITE_DUREE + " INTEGER," +
                     " FOREIGN KEY (" + VisiteHelper.STAGE_ID + ") REFERENCES " +
                     StageHelper.NOM_TABLE + "(" + StageHelper._ID + "));";
@@ -449,7 +448,9 @@ public class Stockage extends SQLiteOpenHelper {
                 StageHelper.STAGE_DUREE_VISITE,
                 StageHelper.STAGE_DISPONIBILITE_TUTEUR
         };
-        Cursor cursor = db.query(StageHelper.NOM_TABLE, colonnes, null, null, null, null, null, null);
+        String selection = StageHelper._ID + " = ?";
+        String[] selectionArgs = {id};
+        Cursor cursor = db.query(StageHelper.NOM_TABLE, colonnes, selection, selectionArgs, null, null, null, null);
         if (cursor != null) {
             if(cursor.getCount() == 0) {
                 cursor.close();
@@ -713,7 +714,6 @@ public class Stockage extends SQLiteOpenHelper {
     public static class VisiteHelper implements BaseColumns {
         public static final String NOM_TABLE = "visite";
         public static final String VISITE_DATE = "date";
-        public static final String VISITE_HEURE_DEBUT = "heure_debut";
         public static final String VISITE_DUREE = "duree";
         public static final String STAGE_ID = "stage_id";
     }
