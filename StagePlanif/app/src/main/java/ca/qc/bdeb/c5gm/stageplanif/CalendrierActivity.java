@@ -1,5 +1,6 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
+import android.content.DialogInterface;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
@@ -143,6 +144,11 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
 
         builder.setView(dialog)
                 .setTitle("Description visite")
+                .setNegativeButton(R.string.btn_supprimer, (dialog1, which) -> {
+                    visites.remove(visite);
+                    dbHelper.deleteVisite(visite.getId());
+                    mWeekView.notifyDatasetChanged();
+                })
                 .setPositiveButton(R.string.btn_revenir, null)
                 .show();
     }
