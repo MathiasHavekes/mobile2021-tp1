@@ -73,7 +73,7 @@ public class StagePoidsPlume implements Parcelable {
     }
 
     public Visite getVisite() {
-        return new Visite(UUID.randomUUID().toString(), this.idEtudiant, this.nomEtudiant, this.prenomEtudiant, this.priorite, 0, this.dureeVisite, 0);
+        return new Visite(UUID.randomUUID().toString(), this, 0, this.dureeVisite, 0);
     }
 
     public Entreprise getEntreprise() {

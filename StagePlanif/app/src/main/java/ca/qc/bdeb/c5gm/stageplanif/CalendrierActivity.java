@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
@@ -121,7 +122,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         View dialog = inflater.inflate(R.layout.dialog_description_visite, null);
         Visite visite = visites.get((int) event.getId());
         TextView textViewEtudiant = dialog.findViewById(R.id.text_etudiant_visite);
-        textViewEtudiant.setText(visite.getNomCompletEtudiant());
+        textViewEtudiant.setText(visite.getStage().getPrenomEtudiant() + " " + visite.getStage().getNomEtudiant());
         builder.setView(dialog)
                 .setTitle("Description visite")
                 .setPositiveButton(R.string.btn_revenir, null)
@@ -173,11 +174,8 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
                         if (stageSpinner.get(i) == itemSelectionne) {
                             Stage stageSelectionne = stages.get(i);
                             Visite nouvelleVisite = new Visite(
-                                    "",
-                                    "",
-                                    stageSelectionne.getEtudiant().getNom(),
-                                    stageSelectionne.getEtudiant().getPrenom(),
-                                    stageSelectionne.getPriorite(),
+                                    UUID.randomUUID().toString(),
+                                    stageSelectionne.getStagePoidsPlume(),
                                     timePicker.getHour() * 60 + timePicker.getMinute(),
                                     stageSelectionne.getDureeVisite(),
                                     time.getTime().getDay() + 1);
@@ -226,8 +224,8 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
 
         int indexVisite = visites.indexOf(visite);
 
-        WeekViewEvent event = new WeekViewEvent(indexVisite, visite.getNomCompletEtudiant(), startTime, endTime);
-        event.setColor(ContextCompat.getColor(this, Utils.renvoyerCouleur(visite.getPriorite())));
+        WeekViewEvent event = new WeekViewEvent(indexVisite, visite.getStage().getPrenomEtudiant() + " " + visite.getStage().getNomEtudiant(), startTime, endTime);
+        event.setColor(ContextCompat.getColor(this, Utils.renvoyerCouleur(visite.getStage().getPriorite())));
         return event;
     }
 

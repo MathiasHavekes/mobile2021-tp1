@@ -95,7 +95,7 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
      *
      * @param comparators les comparateurs utilises pour trier
      */
-    protected void trierListeStages(Comparator<Stage>... comparators) {
+    public void trierListeStages(Comparator<Stage>... comparators) {
         Collections.sort(listeStages, new StageChainedComparateur(comparators));
     }
 
@@ -104,7 +104,7 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
      *
      * @param selectionPriorites priorites choisis
      */
-    protected void filtrerListeStages(int selectionPriorites) {
+    public void filtrerListeStages(int selectionPriorites) {
         regrouperTousLesStages();
 
         ArrayList<Integer> listePrioritesSelectionnees = Utils.calculerPrioritesSelectionnees(selectionPriorites);

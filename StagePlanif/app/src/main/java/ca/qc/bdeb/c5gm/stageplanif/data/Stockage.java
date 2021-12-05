@@ -134,7 +134,6 @@ public class Stockage extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-
     /**
      * Méthode qui ajoute les comptes à la base de données
      *
@@ -275,6 +274,12 @@ public class Stockage extends SQLiteOpenHelper {
             cursor.close();
         }
         return compte;
+    }
+
+    public void ajouterVisite(Visite visite) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(VisiteHelper._ID, visite.getId());
     }
 
     /**

@@ -1,6 +1,5 @@
 package ca.qc.bdeb.c5gm.stageplanif.reseau;
 
-import android.content.Intent;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -8,13 +7,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.Future;
 
 import ca.qc.bdeb.c5gm.stageplanif.ConnectUtils;
-import ca.qc.bdeb.c5gm.stageplanif.InfoStageActivity;
 import ca.qc.bdeb.c5gm.stageplanif.MainActivity;
 import ca.qc.bdeb.c5gm.stageplanif.Utils;
+import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StageNomComparateur;
+import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrenomComparateur;
+import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrioriteComparateur;
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
@@ -163,7 +164,13 @@ public class ConnexionBD {
                                 }
                             }
                         }
-                        MainActivity.listeStages = dbHelper.getStages();
+                        ArrayList<Stage> stagesArray = dbHelper.getStages();
+                        MainActivity.listeStages.clear();
+                        for (Stage stage: stagesArray) {
+                            MainActivity.listeStages.add(stage);
+                        }
+                        MainActivity.stageAdapter.filtrerListeStages(7);
+                        MainActivity.stageAdapter.trierListeStages(new StagePrioriteComparateur(), new StageNomComparateur(), new StagePrenomComparateur());
                         MainActivity.stageAdapter.notifyDataSetChanged();
                     }
                 } catch (JSONException | IOException e) {
