@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GoogleMapsActivity.class);
         ArrayList<StagePoidsPlume> stagePoidsPlumes = new ArrayList<>();
         for (Stage stage : listeStages) {
-            stagePoidsPlumes.add(stage.getGoogleMapsObject());
+            stagePoidsPlumes.add(stage.getStagePoidsPlume());
         }
         intent.putParcelableArrayListExtra("liste_des_stages", stagePoidsPlumes);
         startActivity(intent);

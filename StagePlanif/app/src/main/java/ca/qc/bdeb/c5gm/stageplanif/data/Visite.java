@@ -5,20 +5,14 @@ import android.os.Parcelable;
 
 public class Visite implements Parcelable {
     private final String id;
-    private final String idEtudiant;
-    private final String nomEtudiant;
-    private final String prenomEtudiant;
-    private final Priorite priorite;
+    private final StagePoidsPlume stage;
     private Integer journee;
     private Integer heureDeDebut;
     private Integer duree;
 
-    public Visite(String id, String idEtudiant, String nomEtudiant, String prenomEtudiant, Priorite priorite, Integer heureDeDebut, Integer duree, Integer journee) {
+    public Visite(String id, StagePoidsPlume stage, Integer heureDeDebut, Integer duree, Integer journee) {
         this.id = id;
-        this.idEtudiant = idEtudiant;
-        this.nomEtudiant = nomEtudiant;
-        this.prenomEtudiant = prenomEtudiant;
-        this.priorite = priorite;
+        this.stage = stage;
         this.journee = journee;
         this.heureDeDebut = heureDeDebut;
         this.duree = duree;
@@ -29,10 +23,7 @@ public class Visite implements Parcelable {
      */
     protected Visite(Parcel in) {
         id = in.readString();
-        idEtudiant = in.readString();
-        nomEtudiant = in.readString();
-        prenomEtudiant = in.readString();
-        priorite = in.readParcelable(Priorite.class.getClassLoader());
+        stage = in.readParcelable(StagePoidsPlume.class.getClassLoader());
         journee = in.readInt();
         heureDeDebut = in.readInt();
         duree = in.readInt();
@@ -50,24 +41,12 @@ public class Visite implements Parcelable {
         }
     };
 
-    public String getIdEtudiant() {
-        return idEtudiant;
+    public String getId() {
+        return id;
     }
 
-    public String getNomEtudiant() {
-        return nomEtudiant;
-    }
-
-    public String getPrenomEtudiant() {
-        return prenomEtudiant;
-    }
-
-    public String getNomCompletEtudiant() {
-        return this.prenomEtudiant + " " + this.nomEtudiant;
-    }
-
-    public Priorite getPriorite() {
-        return priorite;
+    public StagePoidsPlume getStage() {
+        return stage;
     }
 
     public Integer getJournee() {
@@ -102,10 +81,7 @@ public class Visite implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
-        parcel.writeString(idEtudiant);
-        parcel.writeString(nomEtudiant);
-        parcel.writeString(prenomEtudiant);
-        parcel.writeParcelable(priorite, i);
+        parcel.writeParcelable(stage, i);
         parcel.writeInt(journee);
         parcel.writeInt(heureDeDebut);
         parcel.writeInt(duree);
