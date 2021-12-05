@@ -54,7 +54,7 @@ import ca.qc.bdeb.c5gm.stageplanif.databinding.ActivityGoogleMapsBinding;
 
 public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int LOCATION_REQUEST_CODE = 1;
-    private static final float ZOOM_PAR_DEFAUT = 16f;
+    private static final float ZOOM_PAR_DEFAUT = 13f;
     private static final String[] PERMISSIONS = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
     private final View.OnClickListener lancerCalendrierOnClickListener = view -> creerDialogueChoisirJour();
     private final Stockage dbHelper = Stockage.getInstance(Utils.context);
@@ -235,7 +235,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
             for (int i = 0; i < listeStagesSelectionnes.size(); i++) {
                 Visite nouvelleVisite = listeStagesSelectionnes.get(i).getVisite();
                 LocalDateTime dateTime = LocalDateTime.now();
-                LocalDateTime localDateTime = dateTime.with(TemporalAdjusters.next(jourSelectionne));
+                LocalDateTime localDateTime = dateTime.with(TemporalAdjusters.nextOrSame(jourSelectionne));
                 localDateTime = localDateTime.withHour(heureDeDebutProchaineVisite / 60);
                 localDateTime = localDateTime.withMinute(heureDeDebutProchaineVisite % 60);
                 nouvelleVisite.setJournee(localDateTime);

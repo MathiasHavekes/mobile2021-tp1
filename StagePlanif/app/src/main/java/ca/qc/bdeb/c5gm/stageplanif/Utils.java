@@ -22,13 +22,13 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
 
 public class Utils {
     public static final HashMap<DayOfWeek, String> JOURS_DE_LA_SEMAINE = new HashMap<DayOfWeek, String>() {{
-        put(DayOfWeek.SUNDAY, "Dimanche");
         put(DayOfWeek.MONDAY, "Lundi");
         put(DayOfWeek.TUESDAY, "Mardi");
         put(DayOfWeek.WEDNESDAY, "Mercredi");
         put(DayOfWeek.THURSDAY, "Jeudi");
         put(DayOfWeek.FRIDAY, "Vendredi");
         put(DayOfWeek.SATURDAY, "Samedi");
+        put(DayOfWeek.SUNDAY, "Dimanche");
     }};
 
     public static Context context;

@@ -45,7 +45,7 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Visite;
 public class CalendrierActivity extends AppCompatActivity implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
 
     public static final int DUREE_VISITE_STANDARD = 45;
-    public static final int HEURE_PREMIERE_VISITE = 8;
+    public static final int HEURE_PREMIERE_VISITE = 9 * 60;
     public static final int DUREE_PAUSE_STANDARD = 45;
     private WeekView mWeekView;
     private Toolbar toolbar;
@@ -166,7 +166,11 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
 
         List<String> journees = Utils.creeListeAvecValeursHashMap(Utils.JOURS_DE_LA_SEMAINE);
         setSpinner(spinnerJournee, journees);
-        spinnerJournee.setSelection(journees.indexOf(Utils.JOURS_DE_LA_SEMAINE.get(event.getStartTime().getTime().getDay() + 1)));
+        int jourDeLaSemaine = event.getStartTime().getTime().getDay();
+        if (jourDeLaSemaine == 0) {
+            jourDeLaSemaine = 7;
+        }
+        spinnerJournee.setSelection(journees.indexOf(Utils.JOURS_DE_LA_SEMAINE.get(DayOfWeek.of(jourDeLaSemaine))));
 
         radioGroup.setOnCheckedChangeListener(radioGroupClique);
         setChampsDureeVisite(visiteSelectionnee, radioGroup);
@@ -182,7 +186,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
                     LocalDateTime localDateTime = visiteSelectionnee.getJournee();
                     localDateTime = localDateTime.withHour(timePicker.getHour());
                     localDateTime = localDateTime.withMinute(timePicker.getMinute());
-                    localDateTime = localDateTime.with(TemporalAdjusters.next(cleJourSelectionne));
+                    localDateTime = localDateTime.with(TemporalAdjusters.nextOrSame(cleJourSelectionne));
                     visiteSelectionnee.setJournee(localDateTime);
                     visiteSelectionnee.setDuree(tempsSelectionne);
                     dbHelper.modifierVisite(visiteSelectionnee);
@@ -212,7 +216,11 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
 
         List<String> journees = Utils.creeListeAvecValeursHashMap(Utils.JOURS_DE_LA_SEMAINE);
         setSpinner(spinnerJournee, journees);
-        spinnerJournee.setSelection(journees.indexOf(Utils.JOURS_DE_LA_SEMAINE.get(time.getTime().getDay() + 1)));
+        int jourDeLaSemaine = time.getTime().getDay();
+        if (jourDeLaSemaine == 0) {
+            jourDeLaSemaine = 7;
+        }
+        spinnerJournee.setSelection(journees.indexOf(Utils.JOURS_DE_LA_SEMAINE.get(DayOfWeek.of(jourDeLaSemaine))));
 
         radioGroup.setOnCheckedChangeListener(radioGroupClique);
         radioButtonParDefaut.setChecked(true);
@@ -233,6 +241,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
                             LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
                             LocalTime localTime = LocalTime.of(timePicker.getHour(), timePicker.getMinute());
                             LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+                            localDateTime = localDateTime.with(TemporalAdjusters.nextOrSame(cleJourSelectionne));
                             Visite nouvelleVisite = new Visite(
                                     UUID.randomUUID().toString(),
                                     stageSelectionne.getStagePoidsPlume(), tempsSelectionne,
