@@ -25,9 +25,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StagePlanif">
-        <activity
-            android:name=".SeConnecterActivity"
-            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -66,11 +63,13 @@
             android:exported="true"
             android:label="@string/titre_activity_demande_info_stage"
             android:parentActivityName=".MainActivity" />
+
         <activity
             android:name=".ConnexionActivity"
             android:exported="true"
-            android:label="@string/title_activity_login"
+            android:label="@string/titre_activity_connexion"
             android:parentActivityName=".MainActivity" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

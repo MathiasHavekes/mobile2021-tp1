@@ -60,21 +60,19 @@
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.315625" />
         <entry key="app/src/main/res/layout/activity_calendrier.xml" value="0.20652173913043478" />
         <entry key="app/src/main/res/layout/activity_clendrier.xml" value="0.28804347826086957" />
+        <entry key="app/src/main/res/layout/activity_connexion.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_demande_info_eleve.xml" value="0.29791666666666666" />
         <entry key="app/src/main/res/layout/activity_demande_info_stage.xml" value="0.37864583333333335" />
         <entry key="app/src/main/res/layout/activity_google_maps.xml" value="0.37083333333333335" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_se_connecter.xml" value="0.29438405797101447" />
+        <entry key="app/src/main/res/layout/activity_se_connecter.xml" value="1.0" />
         <entry key="app/src/main/res/layout/app_toolbar.xml" value="0.5052083333333334" />
         <entry key="app/src/main/res/layout/dialog_ajouter_visite.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/dialog_choisir_jour.xml" value="0.2749094202898551" />
         <entry key="app/src/main/res/layout/dialog_creer_visite.xml" value="0.35572916666666665" />
         <entry key="app/src/main/res/layout/dialog_demander_jour.xml" value="0.2749094202898551" />
         <entry key="app/src/main/res/layout/dialog_description_visite.xml" value="0.35572916666666665" />
-        <entry key="app/src/main/res/layout/dialog_modifier_visite.xml" value="0.2749094202898551" />
-        <entry key="app/src/main/res/layout/fragment_commentaires_visite.xml" value="0.29438405797101447" />
-        <entry key="app/src/main/res/layout/activity_se_connecter.xml" value="0.24164133738601823" />
-        <entry key="app/src/main/res/layout/app_toolbar.xml" value="0.5052083333333334" />
+        <entry key="app/src/main/res/layout/dialog_modifier_visite.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_commentaires_visite.xml" value="0.5" />
         <entry key="app/src/main/res/layout/fragment_demande_info_eleve.xml" value="0.37864583333333335" />
         <entry key="app/src/main/res/layout/fragment_demande_info_entreprise.xml" value="0.37864583333333335" />

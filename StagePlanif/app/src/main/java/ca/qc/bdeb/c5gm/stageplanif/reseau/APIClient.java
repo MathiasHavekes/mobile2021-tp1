@@ -10,7 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class APIClient {
     private static Retrofit retrofit = null;
     private static OkHttpClient client = null;
-    //    private static String adresse = "192.168.4.36";
     private static String adresse = "192.168.122.153";
     private static String server_url = "http://"+adresse+":8888/";
 

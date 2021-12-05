@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,8 +20,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 
-import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
-import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.ConnexionBD;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.IAPI;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.APIClient;
@@ -36,15 +35,14 @@ public class ConnexionActivity extends AppCompatActivity {
     private Button btnLogin;
     private ProgressBar loadingProgressBar;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connexion);
-        loginEditText = findViewById(R.id.login);
-        passwordEditText = findViewById(R.id.password);
-        btnLogin = findViewById(R.id.loginBtn);
-        loadingProgressBar = findViewById(R.id.loading);
+        loginEditText = findViewById(R.id.text_adresse_email);
+        passwordEditText = findViewById(R.id.text_mot_de_passe);
+        btnLogin = findViewById(R.id.btn_connexion);
+        loadingProgressBar = findViewById(R.id.chargement);
         Utils.context = getApplicationContext();
         btnLogin.setEnabled(false);
 

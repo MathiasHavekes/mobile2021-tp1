@@ -147,7 +147,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
     public void onEmptyViewLongPress(Calendar time) {
         LayoutInflater inflater = getLayoutInflater();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialog = inflater.inflate(R.layout.dialog_ajouter_visite, null);
+        View dialog = inflater.inflate(R.layout.dialog_modifier_visite, null);
         Spinner spinnerEtudiant = dialog.findViewById(R.id.spinner_selection_etudiant);
         TimePicker timePicker = dialog.findViewById(R.id.time_picker);
 
@@ -164,7 +164,6 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         spinnerEtudiant.setAdapter(adapter);
         timePicker.setHour(time.getTime().getHours());
         timePicker.setMinute(time.getTime().getMinutes());
-
         builder.setView(dialog)
                 .setTitle("Ajouter une visite")
                 .setNegativeButton(R.string.btn_annuler, null)
@@ -197,7 +196,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
                     v.setDuree(DUREE_VISITE_STANDARD);
                 }
 
-                if (v.getHeureDeDebut() > 0) {
+                if (v.getHeureDeDebut() <= 0) {
                     v.setHeureDeDebut(HEURE_PREMIERE_VISITE);
                 }
 

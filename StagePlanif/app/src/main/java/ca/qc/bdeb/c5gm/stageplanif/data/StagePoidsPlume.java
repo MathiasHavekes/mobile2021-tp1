@@ -23,6 +23,8 @@ public class StagePoidsPlume implements Parcelable {
             return new StagePoidsPlume[size];
         }
     };
+
+    private final String id;
     /**
      * L'entreprise qui donne le stage
      */
@@ -35,9 +37,9 @@ public class StagePoidsPlume implements Parcelable {
     private final String nomEtudiant;
     private final String prenomEtudiant;
     private final Integer dureeVisite;
-    private final String id;
+    private final String commentaire;
 
-    public StagePoidsPlume(String id, Entreprise entreprise, Priorite priorite, String idEtudiant, String nomEtudiant, String prenomEtudiant, Integer dureeVisite) {
+    public StagePoidsPlume(String id, Entreprise entreprise, Priorite priorite, String idEtudiant, String nomEtudiant, String prenomEtudiant, Integer dureeVisite, String commentaire) {
         this.id = id;
         this.entreprise = entreprise;
         this.priorite = priorite;
@@ -45,6 +47,7 @@ public class StagePoidsPlume implements Parcelable {
         this.nomEtudiant = nomEtudiant;
         this.prenomEtudiant = prenomEtudiant;
         this.dureeVisite = dureeVisite;
+        this.commentaire = commentaire;
     }
 
     /**
@@ -58,6 +61,7 @@ public class StagePoidsPlume implements Parcelable {
         nomEtudiant = in.readString();
         prenomEtudiant = in.readString();
         dureeVisite = in.readInt();
+        commentaire = in.readString();
     }
 
     @Override
@@ -74,10 +78,15 @@ public class StagePoidsPlume implements Parcelable {
         parcel.writeString(nomEtudiant);
         parcel.writeString(prenomEtudiant);
         parcel.writeInt(dureeVisite);
+        parcel.writeString(commentaire);
     }
 
     public Visite getVisite() {
         return new Visite(UUID.randomUUID().toString(), this, 0, this.dureeVisite, 0);
+    }
+
+    public String getId() {
+        return id;
     }
 
     public Entreprise getEntreprise() {
@@ -104,7 +113,7 @@ public class StagePoidsPlume implements Parcelable {
         return dureeVisite;
     }
 
-    public String getId() {
-        return id;
+    public String getCommentaire() {
+        return commentaire;
     }
 }
