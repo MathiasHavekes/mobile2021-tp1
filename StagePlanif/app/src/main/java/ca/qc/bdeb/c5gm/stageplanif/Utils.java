@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.icu.util.Calendar;
 
 import java.io.ByteArrayOutputStream;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,14 +18,14 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 
 public class Utils {
-    public static final HashMap<Integer, String> JOURS_DE_LA_SEMAINE = new HashMap<Integer, String>() {{
-        put(1, "Dimanche");
-        put(2, "Lundi");
-        put(3, "Mardi");
-        put(4, "Mercredi");
-        put(5, "Jeudi");
-        put(6, "Vendredi");
-        put(7, "Samedi");
+    public static final HashMap<DayOfWeek, String> JOURS_DE_LA_SEMAINE = new HashMap<DayOfWeek, String>() {{
+        put(DayOfWeek.SUNDAY, "Dimanche");
+        put(DayOfWeek.MONDAY, "Lundi");
+        put(DayOfWeek.TUESDAY, "Mardi");
+        put(DayOfWeek.WEDNESDAY, "Mercredi");
+        put(DayOfWeek.THURSDAY, "Jeudi");
+        put(DayOfWeek.FRIDAY, "Vendredi");
+        put(DayOfWeek.SATURDAY, "Samedi");
     }};
 
     public static Context context;

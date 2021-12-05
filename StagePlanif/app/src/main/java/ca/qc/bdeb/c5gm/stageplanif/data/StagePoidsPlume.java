@@ -3,6 +3,7 @@ package ca.qc.bdeb.c5gm.stageplanif.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -82,7 +83,7 @@ public class StagePoidsPlume implements Parcelable {
     }
 
     public Visite getVisite() {
-        return new Visite(UUID.randomUUID().toString(), this, 0, this.dureeVisite, 0);
+        return new Visite(UUID.randomUUID().toString(), this, this.dureeVisite, LocalDateTime.now());
     }
 
     public String getId() {

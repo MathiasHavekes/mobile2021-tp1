@@ -23,8 +23,16 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -37,8 +45,8 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Visite;
 public class CalendrierActivity extends AppCompatActivity implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener {
 
     public static final int DUREE_VISITE_STANDARD = 45;
-    public static final int DUREE_PAUSE_STANTARD = 45;
-    public static final int HEURE_PREMIERE_VISITE = 480;
+    public static final int HEURE_PREMIERE_VISITE = 8;
+    public static final int DUREE_PAUSE_STANDARD = 45;
     private WeekView mWeekView;
     private Toolbar toolbar;
     private ArrayList<Visite> visites = new ArrayList<>();;
@@ -54,9 +62,9 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         dbHelper = Stockage.getInstance(this);
         stages = dbHelper.getStages(ConnectUtils.authId);
 
-        ArrayList<Visite> donneesRecuperees = getIntent().getParcelableArrayListExtra("liste_visites");
+        ArrayList<Visite> donneesRecuperees = dbHelper.getVisites();
 
-        if (!(donneesRecuperees == null)) {
+        if (donneesRecuperees != null) {
             visites = donneesRecuperees;
         }
 
@@ -135,7 +143,6 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         builder.setView(dialog)
                 .setTitle("Description visite")
                 .setPositiveButton(R.string.btn_revenir, null)
-
                 .show();
     }
 
@@ -170,10 +177,14 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
                 .setNegativeButton(R.string.btn_annuler, null)
                 .setPositiveButton(R.string.btn_terminer, (dialog1, which) -> {
                     String jourSelectionne = (String) spinnerJournee.getSelectedItem();
-                    int cleJourSelectionne = Utils.trouverCleAvecValeurHashMap(Utils.JOURS_DE_LA_SEMAINE, jourSelectionne);
-                    visiteSelectionnee.setJournee(cleJourSelectionne);
+                    DayOfWeek cleJourSelectionne = Utils.trouverCleAvecValeurHashMap(Utils.JOURS_DE_LA_SEMAINE, jourSelectionne);
+                    LocalDateTime localDateTime = visiteSelectionnee.getJournee();
+                    localDateTime = localDateTime.withHour(timePicker.getHour());
+                    localDateTime = localDateTime.withMinute(timePicker.getMinute());
+                    localDateTime = localDateTime.with(TemporalAdjusters.next(cleJourSelectionne));
+                    visiteSelectionnee.setJournee(localDateTime);
                     visiteSelectionnee.setDuree(tempsSelectionne);
-                    visiteSelectionnee.setHeureDeDebut(timePicker.getHour() * 60 + timePicker.getMinute());
+                    dbHelper.modifierVisite(visiteSelectionnee);
                     mWeekView.notifyDatasetChanged();
                 })
                 .show();
@@ -215,16 +226,19 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
                     for (int i = 0; i < stageSpinner.size(); i++) {
                         if (stageSpinner.get(i) == itemSelectionne) {
                             String jourSelectionne = (String) spinnerJournee.getSelectedItem();
-                            int cleJourSelectionne = Utils.trouverCleAvecValeurHashMap(Utils.JOURS_DE_LA_SEMAINE, jourSelectionne);
+                            DayOfWeek cleJourSelectionne = Utils.trouverCleAvecValeurHashMap(Utils.JOURS_DE_LA_SEMAINE, jourSelectionne);
                             Stage stageSelectionne = stages.get(i);
+                            Instant instant = time.getTime().toInstant();
+                            LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+                            LocalTime localTime = LocalTime.of(timePicker.getHour(), timePicker.getMinute());
+                            LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
                             Visite nouvelleVisite = new Visite(
                                     UUID.randomUUID().toString(),
-                                    stageSelectionne.getStagePoidsPlume(),
-                                    timePicker.getHour() * 60 + timePicker.getMinute(),
-                                    tempsSelectionne,
-                                    cleJourSelectionne
-                                    );
+                                    stageSelectionne.getStagePoidsPlume(), tempsSelectionne,
+                                    localDateTime
+                            );
                             visites.add(nouvelleVisite);
+                            dbHelper.ajouterVisite(nouvelleVisite);
                             mWeekView.notifyDatasetChanged();
                         }
                     }
@@ -279,12 +293,10 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
 
         if (!visites.isEmpty()) {
             for (Visite v : visites) {
-                if (v.getDuree() <= 0) {
-                    v.setDuree(DUREE_VISITE_STANDARD);
-                }
-
-                if (v.getHeureDeDebut() <= 0) {
-                    v.setHeureDeDebut(HEURE_PREMIERE_VISITE);
+                if (v.getJournee().getHour() <= 0) {
+                    LocalDateTime localDateTime = v.getJournee();
+                    localDateTime = localDateTime.withHour(HEURE_PREMIERE_VISITE);
+                    v.setJournee(localDateTime);
                 }
 
                 WeekViewEvent event = getWeekViewEventFromVisite(v, newMonth, newYear);
@@ -297,11 +309,11 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
 
     private WeekViewEvent getWeekViewEventFromVisite(Visite visite, int month, int year) {
         Calendar startTime = Calendar.getInstance();
-        int[] heureDeDebut = separerHeuresEtMinutes(visite.getHeureDeDebut());
+        LocalDateTime localDateTime = visite.getJournee();
 
-        startTime.set(Calendar.MINUTE, heureDeDebut[0]);
-        startTime.set(Calendar.HOUR_OF_DAY, heureDeDebut[1]);
-        startTime.set(Calendar.DAY_OF_WEEK, visite.getJournee());
+        startTime.set(Calendar.MINUTE, localDateTime.getMinute());
+        startTime.set(Calendar.HOUR_OF_DAY, localDateTime.getHour());
+        startTime.set(Calendar.DAY_OF_WEEK, localDateTime.getDayOfWeek().getValue());
         startTime.set(Calendar.MONTH, month - 1);
         startTime.set(Calendar.YEAR, year);
         Calendar endTime = (Calendar) startTime.clone();
@@ -313,15 +325,5 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         WeekViewEvent event = new WeekViewEvent(indexVisite, visite.getStage().getPrenomEtudiant() + " " + visite.getStage().getNomEtudiant(), startTime, endTime);
         event.setColor(ContextCompat.getColor(this, Utils.renvoyerCouleur(visite.getStage().getPriorite())));
         return event;
-    }
-
-    private int regrouperHeuresEtMinutes(int[] tableauHeuresEtMinutes) {
-        return tableauHeuresEtMinutes[0] + tableauHeuresEtMinutes[1] * 60;
-    }
-
-    private int[] separerHeuresEtMinutes(int nombreTotalMinutes) {
-        int nombreHeures = nombreTotalMinutes / 60;
-        int nombreMinutes = nombreTotalMinutes % 60;
-        return new int[] {nombreMinutes, nombreHeures};
     }
 }

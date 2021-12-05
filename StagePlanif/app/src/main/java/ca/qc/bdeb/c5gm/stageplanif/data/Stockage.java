@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import ca.qc.bdeb.c5gm.stageplanif.Utils;
@@ -79,7 +81,7 @@ public class Stockage extends SQLiteOpenHelper {
             "CREATE TABLE " + VisiteHelper.NOM_TABLE + " (" +
                     VisiteHelper._ID + " TEXT PRIMARY KEY," +
                     VisiteHelper.STAGE_ID + " TEXT," +
-                    VisiteHelper.VISITE_DATE + " NUMERIC," +
+                    VisiteHelper.VISITE_DATE + " TEXT," +
                     VisiteHelper.VISITE_HEURE_DEBUT + " NUMERIC," +
                     VisiteHelper.VISITE_DUREE + " INTEGER," +
                     " FOREIGN KEY (" + VisiteHelper.STAGE_ID + ") REFERENCES " +
@@ -287,9 +289,8 @@ public class Stockage extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(VisiteHelper._ID, visite.getId());
         values.put(VisiteHelper.STAGE_ID, visite.getStage().getId());
-        values.put(VisiteHelper.VISITE_DATE, visite.getJournee());
+        values.put(VisiteHelper.VISITE_DATE, visite.getJournee().toString());
         values.put(VisiteHelper.VISITE_DUREE, visite.getDuree());
-        values.put(VisiteHelper.VISITE_HEURE_DEBUT, visite.getHeureDeDebut());
         db.insert(VisiteHelper.NOM_TABLE, null, values);
     }
 
@@ -298,9 +299,8 @@ public class Stockage extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(VisiteHelper._ID, visite.getId());
         values.put(VisiteHelper.STAGE_ID, visite.getStage().getId());
-        values.put(VisiteHelper.VISITE_DATE, visite.getJournee());
+        values.put(VisiteHelper.VISITE_DATE, visite.getJournee().toString());
         values.put(VisiteHelper.VISITE_DUREE, visite.getDuree());
-        values.put(VisiteHelper.VISITE_HEURE_DEBUT, visite.getHeureDeDebut());
         String whereClause = VisiteHelper._ID + " = ?";
         String[] whereArgs = {visite.getId()};
         db.update(VisiteHelper.NOM_TABLE, values, whereClause, whereArgs);
@@ -314,15 +314,19 @@ public class Stockage extends SQLiteOpenHelper {
                 VisiteHelper._ID,
                 VisiteHelper.STAGE_ID,
                 VisiteHelper.VISITE_DATE,
-                VisiteHelper.VISITE_HEURE_DEBUT,
                 VisiteHelper.VISITE_DUREE
         };
         Cursor cursor = db.query(VisiteHelper.NOM_TABLE, colonnes, null, null, null, null, null, null);
         if (cursor != null) {
+            if(cursor.getCount() < 1) {
+                return visites;
+            }
             cursor.moveToFirst();
             do {
                 Stage stage = getStage(cursor.getString(1), db);
-                Visite visite = new Visite(cursor.getString(0), stage.getStagePoidsPlume(), cursor.getInt(3), cursor.getInt(4), cursor.getInt(2));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+                LocalDateTime dateTime = LocalDateTime.parse(cursor.getString(2), formatter);
+                Visite visite = new Visite(cursor.getString(0), stage.getStagePoidsPlume(), cursor.getInt(3), dateTime);
                 visites.add(visite);
             } while (cursor.moveToNext());
             cursor.close();

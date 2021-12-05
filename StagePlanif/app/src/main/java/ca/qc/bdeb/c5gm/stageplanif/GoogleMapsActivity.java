@@ -40,6 +40,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -222,21 +225,24 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
-    private void lancerActiviteCalendrier(int jourSelectionne) {
+    private void lancerActiviteCalendrier(DayOfWeek jourSelectionne) {
         Intent intent = new Intent(this, CalendrierActivity.class);
 
-        if (jourSelectionne > -1) {
+        if (jourSelectionne != null) {
             ArrayList<Visite> listeVisites = new ArrayList<>();
             int heureDeDebutProchaineVisite = CalendrierActivity.HEURE_PREMIERE_VISITE;
 
             for (int i = 0; i < listeStagesSelectionnes.size(); i++) {
                 Visite nouvelleVisite = listeStagesSelectionnes.get(i).getVisite();
-                nouvelleVisite.setJournee(jourSelectionne);
-                nouvelleVisite.setHeureDeDebut(heureDeDebutProchaineVisite);
+                LocalDateTime dateTime = LocalDateTime.now();
+                LocalDateTime localDateTime = dateTime.with(TemporalAdjusters.next(jourSelectionne));
+                localDateTime = localDateTime.withHour(heureDeDebutProchaineVisite / 60);
+                localDateTime = localDateTime.withMinute(heureDeDebutProchaineVisite % 60);
+                nouvelleVisite.setJournee(localDateTime);
                 listeVisites.add(nouvelleVisite);
                 dbHelper.ajouterVisite(nouvelleVisite);
 
-                heureDeDebutProchaineVisite += nouvelleVisite.getDuree() + CalendrierActivity.DUREE_PAUSE_STANTARD;
+                heureDeDebutProchaineVisite += nouvelleVisite.getDuree() + CalendrierActivity.DUREE_PAUSE_STANDARD;
             }
         }
 
@@ -262,12 +268,12 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                     .setNegativeButton(R.string.btn_annuler, null)
                     .setPositiveButton(R.string.btn_ajouter, (dialog1, which) -> {
                         String jourSelectionne = (String) spinnerJour.getSelectedItem();
-                        int cleJourSelectionne = Utils.trouverCleAvecValeurHashMap(Utils.JOURS_DE_LA_SEMAINE, jourSelectionne);
+                        DayOfWeek cleJourSelectionne = Utils.trouverCleAvecValeurHashMap(Utils.JOURS_DE_LA_SEMAINE, jourSelectionne);
                         lancerActiviteCalendrier(cleJourSelectionne);
                     })
                     .show();
         } else {
-            lancerActiviteCalendrier(-1);
+            lancerActiviteCalendrier(null);
         }
     }
 }

@@ -4,18 +4,21 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import ca.qc.bdeb.c5gm.stageplanif.CalendrierActivity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 public class Visite implements Parcelable {
     private final String id;
     private final StagePoidsPlume stage;
-    private Integer journee;
-    private Integer heureDeDebut;
+    private LocalDateTime journee;
     private Integer duree;
 
-    public Visite(String id, StagePoidsPlume stage, Integer heureDeDebut, Integer duree, Integer journee) {
+    public Visite(String id, StagePoidsPlume stage, Integer duree, LocalDateTime journee) {
         this.id = id;
         this.stage = stage;
         this.journee = journee;
-        this.heureDeDebut = heureDeDebut;
         if (duree <= 0) {
             this.duree = CalendrierActivity.DUREE_VISITE_STANDARD;
         } else {
@@ -29,8 +32,8 @@ public class Visite implements Parcelable {
     protected Visite(Parcel in) {
         id = in.readString();
         stage = in.readParcelable(StagePoidsPlume.class.getClassLoader());
-        journee = in.readInt();
-        heureDeDebut = in.readInt();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        journee = LocalDateTime.parse(in.readString(), formatter);
         duree = in.readInt();
     }
 
@@ -54,28 +57,21 @@ public class Visite implements Parcelable {
         return stage;
     }
 
-    public Integer getJournee() {
-        return journee;
-    }
-
-    public int getHeureDeDebut() {
-        return heureDeDebut;
-    }
 
     public int getDuree() {
         return duree;
     }
 
-    public void setJournee(Integer journee) {
-        this.journee = journee;
-    }
-
-    public void setHeureDeDebut(int heureDeDebut) {
-        this.heureDeDebut = heureDeDebut;
-    }
-
     public void setDuree(int duree) {
         this.duree = duree;
+    }
+
+    public LocalDateTime getJournee() {
+        return journee;
+    }
+
+    public void setJournee(LocalDateTime journee) {
+        this.journee = journee;
     }
 
     @Override
@@ -86,9 +82,8 @@ public class Visite implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
+        parcel.writeString(journee.toString());
         parcel.writeParcelable(stage, i);
-        parcel.writeInt(journee);
-        parcel.writeInt(heureDeDebut);
         parcel.writeInt(duree);
     }
 }
