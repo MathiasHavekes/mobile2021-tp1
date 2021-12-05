@@ -126,6 +126,8 @@ public class InfoEleveFragment extends Fragment implements AdapterView.OnItemSel
         btnPrendrePhoto = view.findViewById(R.id.btn_prendre_photo);
         spinnerNom = view.findViewById(R.id.nom_complet_entre_utilisateur);
         radioPriorite = view.findViewById(R.id.radio_group_drapeau);
+        radioPriorite.check(R.id.drapeau_vert);
+        viewModel.setPriorite(Priorite.BASSE);
         radioPriorite.setOnCheckedChangeListener(radioGroupOnClickListener);
         Stage stage = viewModel.getStage();
         if (stage != null) {

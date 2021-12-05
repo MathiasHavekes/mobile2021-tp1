@@ -12,6 +12,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import ca.qc.bdeb.c5gm.stageplanif.ConnectUtils;
 import ca.qc.bdeb.c5gm.stageplanif.Utils;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.IAPI;
 
@@ -323,6 +324,9 @@ public class Stockage extends SQLiteOpenHelper {
             cursor.moveToFirst();
             do {
                 Stage stage = getStage(cursor.getString(1), db);
+                if (!stage.getProfesseur().equals(ConnectUtils.authId)) {
+                    continue;
+                }
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
                 LocalDateTime dateTime = LocalDateTime.parse(cursor.getString(2), formatter);
                 Visite visite = new Visite(cursor.getString(0), stage.getStagePoidsPlume(), cursor.getInt(3), dateTime);
@@ -606,6 +610,17 @@ public class Stockage extends SQLiteOpenHelper {
         String whereClause = StageHelper._ID + " = ?";
         String[] whereArgs = {id};
         db.delete(StageHelper.NOM_TABLE, whereClause, whereArgs);
+    }
+
+    /**
+     * Supprime une visite
+     *
+     */
+    public void deleteVisite(String id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String whereClause = VisiteHelper._ID + " = ?";
+        String[] whereArgs = {id};
+        db.delete(VisiteHelper.NOM_TABLE, whereClause, whereArgs);
     }
 
     private boolean entrepriseExists(String id, SQLiteDatabase db){

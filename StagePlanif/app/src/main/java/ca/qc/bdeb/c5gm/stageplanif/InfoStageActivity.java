@@ -168,7 +168,6 @@ public class InfoStageActivity extends AppCompatActivity {
                         finish();
                         break;
                     }
-                    ArrayList<Compte> professeurs = dbHelper.getComptes(TypeCompte.PROFESSEUR.getValeur());
                     stage.setPriorite(priorite);
                     stage.addEntreprise(entreprise);
                     stage.addEtudiant(etudiant);
@@ -176,7 +175,7 @@ public class InfoStageActivity extends AppCompatActivity {
                         stage.getEtudiant().setPhoto(photo);
                         dbHelper.changerPhotoCompte(stage.getEtudiant());
                     }
-                    stage.addProfesseur(professeurs.get(0).getId());
+                    stage.addProfesseur(ConnectUtils.authId);
                     stage.setCommentaire(viewModel.getCommentaire());
                     stage.setJournees(viewModel.getJourStage());
                     stage.setheureDebut(viewModel.getHeureDebutStage());
@@ -296,12 +295,11 @@ public class InfoStageActivity extends AppCompatActivity {
      * @return Le stage cre
      */
     private Stage creerStage(Stockage dbHelper) {
-        ArrayList<Compte> professeurs = dbHelper.getComptes(1);
         Stage stage = new Stage(priorite);
         etudiant.setPhoto(photo);
         stage.addEntreprise(entreprise);
         stage.addEtudiant(etudiant);
-        stage.addProfesseur(professeurs.get(0).getId());
+        stage.addProfesseur(ConnectUtils.authId);
         stage.setCommentaire(viewModel.getCommentaire());
         stage.setJournees(viewModel.getJourStage());
         stage.setheureDebut(viewModel.getHeureDebutStage());
