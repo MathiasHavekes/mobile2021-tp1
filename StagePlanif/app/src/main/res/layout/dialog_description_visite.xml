@@ -75,10 +75,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Description : "
+            android:text="Commentaires : "
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
-            android:id="@+id/text_description_visite"
+            android:id="@+id/text_commentaire_visite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"

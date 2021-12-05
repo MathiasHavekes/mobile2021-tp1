@@ -109,6 +109,8 @@ public class StagePoidsPlume implements Parcelable {
         return prenomEtudiant;
     }
 
+    public String getNomCompletEtudiant() { return this.prenomEtudiant + " " + this.nomEtudiant; }
+
     public Integer getDureeVisite() {
         return dureeVisite;
     }

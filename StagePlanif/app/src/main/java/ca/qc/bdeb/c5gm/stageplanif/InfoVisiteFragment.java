@@ -116,6 +116,7 @@ public class InfoVisiteFragment extends Fragment {
             viewModel.setJourStage(coche);
         }
     };
+
     /**
      * Action lorsqu'un item du radio group est clique
      */

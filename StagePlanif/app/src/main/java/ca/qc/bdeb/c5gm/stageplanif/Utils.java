@@ -7,12 +7,28 @@ import android.icu.util.Calendar;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 
 public class Utils {
+    public static final HashMap<Integer, String> JOURS_DE_LA_SEMAINE = new HashMap<Integer, String>() {{
+        put(1, "Dimanche");
+        put(2, "Lundi");
+        put(3, "Mardi");
+        put(4, "Mercredi");
+        put(5, "Jeudi");
+        put(6, "Vendredi");
+        put(7, "Samedi");
+    }};
+
     public static Context context;
+
     public static ArrayList<Integer> calculerPrioritesSelectionnees(int selection) {
         ArrayList<Integer> ListePrioritesSelectionnees = new ArrayList<>();
 
@@ -101,4 +117,16 @@ public class Utils {
         return String.format("%d-%d", anneeActuelle, anneeActuelle + 1);
     }
 
+    public static <K, V> K trouverCleAvecValeurHashMap(HashMap<K, V> map, V value) {
+        for (Map.Entry<K, V> entree : map.entrySet()) {
+            if (Objects.equals(value, entree.getValue())) {
+                return entree.getKey();
+            }
+        }
+        return null;
+    }
+
+    public static <K, V> List<V> creeListeAvecValeursHashMap (HashMap<K, V> map){
+        return map.values().stream().collect(Collectors.toList());
+    }
 }

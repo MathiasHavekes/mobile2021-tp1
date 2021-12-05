@@ -56,7 +56,6 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     private static final int LOCATION_REQUEST_CODE = 1;
     private static final float ZOOM_PAR_DEFAUT = 16f;
     private static final String[] PERMISSIONS = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
-    private static HashMap<Integer, String> joursDeLaSemaines = new HashMap<>();
     private final View.OnClickListener lancerCalendrierOnClickListener = view -> creerDialogueChoisirJour();
     private ActivityGoogleMapsBinding binding;
     private ArrayList<StagePoidsPlume> listeStages = new ArrayList<>();
@@ -100,11 +99,6 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
         listeStages = getIntent().getParcelableArrayListExtra("liste_des_stages");
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         geocoder = new Geocoder(this);
-        joursDeLaSemaines.put(2, "Lundi");
-        joursDeLaSemaines.put(3, "Mardi");
-        joursDeLaSemaines.put(4, "Mercredi");
-        joursDeLaSemaines.put(5, "Jeudi");
-        joursDeLaSemaines.put(6, "Vendredi");
     }
 
     /**
@@ -253,7 +247,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             View dialog = inflater.inflate(R.layout.dialog_choisir_jour, null);
             Spinner spinnerJour = dialog.findViewById(R.id.spinner_selection_jour);
-            List<String> joursDeLaSemainesListe = creeListeAvecValeursHashMap(joursDeLaSemaines);
+            List<String> joursDeLaSemainesListe = Utils.creeListeAvecValeursHashMap(Utils.JOURS_DE_LA_SEMAINE);
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                     android.R.layout.simple_spinner_item, joursDeLaSemainesListe);
@@ -266,25 +260,12 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
                     .setNegativeButton(R.string.btn_annuler, null)
                     .setPositiveButton(R.string.btn_ajouter, (dialog1, which) -> {
                         String jourSelectionne = (String) spinnerJour.getSelectedItem();
-                        int cleJourSelectionne = trouverCleAvecValeurHashMap(joursDeLaSemaines, jourSelectionne);
+                        int cleJourSelectionne = Utils.trouverCleAvecValeurHashMap(Utils.JOURS_DE_LA_SEMAINE, jourSelectionne);
                         lancerActiviteCalendrier(cleJourSelectionne);
                     })
                     .show();
         } else {
             lancerActiviteCalendrier(-1);
         }
-    }
-
-    private static <K, V> K trouverCleAvecValeurHashMap(HashMap<K, V> map, V value) {
-        for (Map.Entry<K, V> entree : map.entrySet()) {
-            if (Objects.equals(value, entree.getValue())) {
-                return entree.getKey();
-            }
-        }
-        return null;
-    }
-
-    private static <K, V>  List<V> creeListeAvecValeursHashMap (HashMap<K, V> map){
-        return map.values().stream().collect(Collectors.toList());
     }
 }
