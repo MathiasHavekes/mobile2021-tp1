@@ -1,12 +1,13 @@
 <resources>
     <string name="app_name">StagePlanif</string>
-    <string name="msg_img_eleve">TODO</string>
-    <string name="msg_img_drapeau">TODO</string>
-    <string name="msg_btn_ajout_eleve">TODO</string>
-    <string name="msg_btn_filtre">TODO</string>
-    <string name="msg_btn_lancer_calendrier">TODO</string>
-    <string name="msg_nom">Nom de l\'eleve</string>
-    <string name="msg_prenom">Prénom de l\'eleve</string>
+
+    <string name="msg_img_eleve">Image de l\'élève</string>
+    <string name="msg_img_drapeau">Image drapeau</string>
+    <string name="msg_btn_ajout_eleve">Ajouter un élève</string>
+    <string name="msg_btn_filtre">Filtrer stages</string>
+    <string name="msg_btn_lancer_calendrier">Lancer calendrier</string>
+    <string name="msg_nom">Nom de l\'élève</string>
+    <string name="msg_prenom">Prénom de l\'élève</string>
 
     <string name="titre_avertissement">Avertissement</string>
     <string name="titre_erreur">Erreur</string>
@@ -14,6 +15,16 @@
     <string name="titre_activity_google_maps">GoogleMaps</string>
     <string name="titre_activity_demande_info_stage">Infos Stage</string>
     <string name="titre_activity_calendrier">Calendrier</string>
+    <string name="titre_journnes_de_stage">Journées de stage</string>
+    <string name="titre_horaire_de_stage">Horaire de stage</string>
+    <string name="titre_horaire_de_diner">Horaire de diner</string>
+    <string name="titre_duree_moyenne_des_visites">Durée moyenne des visites</string>
+    <string name="titre_commentaires">Commentaires</string>
+    <string name="titre_dispo_tuteur">Disponibilités du tuteur</string>
+    <string name="titre_choisir_un_tudiant">Choisir un étudiant</string>
+    <string name="titre_choisir_une_journee">Choisir une journée</string>
+    <string name="titre_duree_de_la_visite">Durée de la visite</string>
+    <string name="titre_choisir_une_heure_de_debut">Choisir une heure de début</string>
 
     <string name="btn_suivant">Suivant</string>
     <string name="btn_terminer">Terminer</string>
@@ -25,15 +36,6 @@
     <string name="btn_ok">ok</string>
     <string name="btn_prendre_photo_description">Bouton prise de photo</string>
 
-    <string name="info_eleve">Élève</string>
-    <string name="entree_prenom">Prénom</string>
-    <string name="entree_nom">Nom de famille</string>
-
-    <string name="adresse_entreprise">Adresse</string>
-    <string name="ville_entreprise">Ville</string>
-    <string name="code_postale_entreprise">Code Postale</string>
-    <string name="province_entreprise">Province</string>
-
     <string name="message_erreur">Veuillez remplir tous les champs</string>
     <string name="message_modification">Veuillez modifier un champ pour enregistrer</string>
     <string name="message_supprimer">Voulez-vous supprimer cet item ?</string>
@@ -43,7 +45,6 @@
     <string name="message_annuler">Annuler</string>
 
     <string name="image_eleve_description">Image de l\'élève</string>
-    <string name="txt_dispo_tuteur">Disponibilités du tuteur</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_mot_de_passe">Mot de passe</string>
     <string name="action_sign_in">Se connecter ou s\'enregistrer</string>
@@ -52,4 +53,27 @@
     <string name="invalid_username">Adresse email invalide</string>
     <string name="invalid_password">Le mot de passe doit être > 5 lettres</string>
     <string name="erreur_connexion">Erreur de connexion</string>
+
+    <string name="txt_info_eleve">Élève</string>
+    <string name="txt_entree_prenom">Prénom</string>
+    <string name="txt_entree_nom">Nom de famille</string>
+    <string name="txt_adresse_entreprise">Adresse</string>
+    <string name="txt_ville_entreprise">Ville</string>
+    <string name="txt_code_postale_entreprise">Code Postale</string>
+    <string name="txt_province_entreprise">Province</string>
+    <string name="txt_lundi">Lundi</string>
+    <string name="txt_mardi">Mardi</string>
+    <string name="txt_30_min">30 min</string>
+    <string name="txt_45_min">45 min</string>
+    <string name="txt_1_h">1 h</string>
+    <string name="txt_mercredi">Mercredi</string>
+    <string name="txt_jeudi">Jeudi</string>
+    <string name="txt_vendredi">Vendredi</string>
+    <string name="txt_heure_de_debut">Heure de début</string>
+    <string name="txt_heure_de_fin">Heure de fin</string>
+    <string name="txt_heure_de_d_but">Heure de début</string>
+    <string name="txt_etudiant">Etudiant :</string>
+    <string name="txt_entreprise">Entreprise :</string>
+    <string name="txt_adresse">Adresse :</string>
+    <string name="txt_commentaires">Commentaires :</string>
 </resources>

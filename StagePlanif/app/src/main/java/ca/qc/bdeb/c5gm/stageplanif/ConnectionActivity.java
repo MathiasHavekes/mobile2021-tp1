@@ -1,6 +1,5 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,15 +17,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StageNomComparateur;
-import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrenomComparateur;
-import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrioriteComparateur;
-import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
-import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
-import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.ConnexionBD;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.IAPI;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.APIClient;
@@ -36,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ConnexionActivity extends AppCompatActivity {
+public class ConnectionActivity extends AppCompatActivity {
     private EditText loginEditText;
     private EditText passwordEditText;
     private IAPI client;
@@ -46,7 +37,7 @@ public class ConnexionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connexion);
+        setContentView(R.layout.activity_connection);
         loginEditText = findViewById(R.id.text_adresse_email);
         passwordEditText = findViewById(R.id.text_mot_de_passe);
         btnLogin = findViewById(R.id.btn_connexion);

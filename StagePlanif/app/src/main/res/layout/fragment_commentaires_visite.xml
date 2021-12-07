@@ -8,33 +8,23 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="32dp"
-        android:paddingVertical="32dp">
+        android:padding="@dimen/activity_big_vertical_margin">
 
         <TextView
             android:id="@+id/txt_dispo_tuteur"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/txt_dispo_tuteur"
+            android:text="@string/titre_dispo_tuteur"
             android:textSize="24sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"></LinearLayout>
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/activity_small_vertical_margin">
 
             <CheckBox
                 android:id="@+id/box_lundi_am"
@@ -92,7 +82,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:enabled="false"
-                android:text="Mercredi AM" />
+                android:text="Mercredi AM"
+                tools:ignore="NestedWeights" />
 
             <CheckBox
                 android:id="@+id/box_mercredi_pm"
@@ -116,7 +107,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:enabled="false"
-                android:text="Jeudi AM" />
+                android:text="Jeudi AM"
+                tools:ignore="NestedWeights" />
 
             <CheckBox
                 android:id="@+id/box_jeudi_pm"
@@ -154,17 +146,20 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Commentaire sur le stage"
+            android:text="@string/titre_commentaires"
+            android:layout_marginTop="@dimen/activity_big_vertical_margin"
             android:textSize="24sp" />
 
         <EditText
             android:id="@+id/txt_commentaire"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/activity_small_vertical_margin"
             android:inputType="textMultiLine"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></EditText>
+            app:layout_constraintTop_toTopOf="parent"
+            android:autofillHints="Commentaires"
+            tools:ignore="LabelFor" />
     </LinearLayout>
 </ScrollView>

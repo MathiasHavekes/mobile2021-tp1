@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
-import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
 
 public class Utils {
     public static final HashMap<DayOfWeek, String> JOURS_DE_LA_SEMAINE = new HashMap<DayOfWeek, String>() {{
@@ -55,13 +54,6 @@ public class Utils {
         return listeStagesMasques;
     }
 
-    /**
-     * Renvoie une couleur en fonction de la priorite passée en paramètre
-     * Priorité minimum = vert, Priorité moyenne = jaune, Priorité maximum = Rouge
-     * Sinon renvoie du noir
-     * @param priorite
-     * @return la couleur en format RGB (int)
-     */
     public static int renvoyerCouleur(Priorite priorite) {
         switch (priorite) {
             case BASSE:
@@ -103,8 +95,7 @@ public class Utils {
         bmOptions.inJustDecodeBounds = false;
         bmOptions.inSampleSize = scaleFactor;
 
-        Bitmap bitmap = BitmapFactory.decodeByteArray(photo, 0, photo.length, bmOptions);
-        return bitmap;
+        return BitmapFactory.decodeByteArray(photo, 0, photo.length, bmOptions);
     }
 
     /**
@@ -130,8 +121,8 @@ public class Utils {
         return null;
     }
 
-    public static <K, V> List<V> creeListeAvecValeursHashMap (HashMap<K, V> map){
-        return map.values().stream().collect(Collectors.toList());
+    public static <K, V> ArrayList<V> creeListeAvecValeursHashMap (HashMap<K, V> map){
+        return new ArrayList<>(map.values());
     }
 
     public static String formatterDateTime(LocalDateTime temps) {

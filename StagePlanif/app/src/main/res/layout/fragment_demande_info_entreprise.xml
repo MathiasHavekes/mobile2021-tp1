@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="32dp"
-        android:paddingVertical="32dp">
+        android:padding="@dimen/activity_big_vertical_margin">
 
         <Spinner
             android:id="@+id/spinner_entreprise"
@@ -21,10 +20,10 @@
             android:id="@+id/text_adresse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/activity_big_vertical_margin"
             android:ems="10"
             android:enabled="false"
-            android:hint="@string/adresse_entreprise"
+            android:hint="@string/txt_adresse_entreprise"
             android:inputType="text"
             android:autofillHints="@string/adresse_entreprise" />
 
@@ -32,10 +31,10 @@
             android:id="@+id/texte_ville"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/activity_big_vertical_margin"
             android:ems="10"
             android:enabled="false"
-            android:hint="@string/ville_entreprise"
+            android:hint="@string/txt_ville_entreprise"
             android:inputType="text"
             android:autofillHints="@string/ville_entreprise" />
 
@@ -43,10 +42,10 @@
             android:id="@+id/text_cp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/activity_big_vertical_margin"
             android:ems="10"
             android:enabled="false"
-            android:hint="@string/code_postale_entreprise"
+            android:hint="@string/txt_code_postale_entreprise"
             android:inputType="text"
             android:autofillHints="@string/code_postale_entreprise" />
 
@@ -54,10 +53,10 @@
             android:id="@+id/text_province"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/activity_big_vertical_margin"
             android:ems="10"
             android:enabled="false"
-            android:hint="@string/province_entreprise"
+            android:hint="@string/txt_province_entreprise"
             android:inputType="text"
             android:autofillHints="@string/province_entreprise" />
     </LinearLayout>

@@ -65,7 +65,7 @@
             android:parentActivityName=".MainActivity" />
 
         <activity
-            android:name=".ConnexionActivity"
+            android:name=".ConnectionActivity"
             android:exported="true"
             android:label="@string/titre_activity_connexion"
             android:parentActivityName=".MainActivity" />

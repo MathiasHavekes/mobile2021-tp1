@@ -1,6 +1,6 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,12 +34,10 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
-import ca.qc.bdeb.c5gm.stageplanif.data.StagePoidsPlume;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
 import ca.qc.bdeb.c5gm.stageplanif.data.Visite;
 
@@ -49,13 +47,25 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
     public static final int HEURE_PREMIERE_VISITE = 9 * 60;
     public static final int DUREE_PAUSE_STANDARD = 45;
     private WeekView mWeekView;
-    private Toolbar toolbar;
     private ArrayList<Visite> visites = new ArrayList<>();
-    private ArrayList<WeekViewEvent> events;
     private ArrayList<Stage> stages = new ArrayList<>();
     private Stockage dbHelper;
     private int boucle = 0;
     private int tempsSelectionne = DUREE_VISITE_STANDARD;
+    @SuppressLint("NonConstantResourceId")
+    private final RadioGroup.OnCheckedChangeListener radioGroupClique = (radioGroup, i) -> {
+        switch (i) {
+            case R.id.duree_30_minutes:
+                tempsSelectionne = 30;
+                break;
+            case R.id.duree_45_minutes:
+                tempsSelectionne = 45;
+                break;
+            case R.id.duree_60_minutes:
+                tempsSelectionne = 60;
+                break;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +81,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         }
 
         // Get a reference for the week view in the layout.
-        mWeekView = (WeekView) findViewById(R.id.weekView);
+        mWeekView = findViewById(R.id.weekView);
 
         // Show a toast message about the touched event.
         mWeekView.setOnEventClickListener(this);
@@ -93,7 +103,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
     }
 
     private void initToolBar() {
-        toolbar = findViewById((R.id.toolbar));
+        Toolbar toolbar = findViewById((R.id.toolbar));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -101,6 +111,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
     /**
      * Set up a date time interpreter which will show short date values when in week view and long
      * date values otherwise.
+     *
      * @param shortDate True if the date values should be short.
      */
     private void setupDateTimeInterpreter(final boolean shortDate) {
@@ -126,6 +137,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         });
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
         LayoutInflater inflater = getLayoutInflater();
@@ -165,12 +177,12 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
 
         Visite visiteSelectionnee = visites.get((int) event.getId());
 
-        List<String> stagesSpinner = new ArrayList<>();
+        ArrayList<String> stagesSpinner = new ArrayList<>();
         stagesSpinner.add(visiteSelectionnee.getStage().getNomCompletEtudiant());
         setSpinner(spinnerEtudiant, stagesSpinner);
         spinnerEtudiant.setEnabled(false);
 
-        List<String> journees = Utils.creeListeAvecValeursHashMap(Utils.JOURS_DE_LA_SEMAINE);
+        ArrayList<String> journees = Utils.creeListeAvecValeursHashMap(Utils.JOURS_DE_LA_SEMAINE);
         setSpinner(spinnerJournee, journees);
         int jourDeLaSemaine = event.getStartTime().getTime().getDay();
         if (jourDeLaSemaine == 0) {
@@ -220,7 +232,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
 
         setSpinner(spinnerEtudiant, stageSpinner);
 
-        List<String> journees = Utils.creeListeAvecValeursHashMap(Utils.JOURS_DE_LA_SEMAINE);
+        ArrayList<String> journees = Utils.creeListeAvecValeursHashMap(Utils.JOURS_DE_LA_SEMAINE);
         setSpinner(spinnerJournee, journees);
         int jourDeLaSemaine = time.getTime().getDay();
         if (jourDeLaSemaine == 0) {
@@ -239,7 +251,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
                 .setPositiveButton(R.string.btn_ajouter, (dialog1, which) -> {
                     String itemSelectionne = (String) spinnerEtudiant.getSelectedItem();
                     for (int i = 0; i < stageSpinner.size(); i++) {
-                        if (stageSpinner.get(i) == itemSelectionne) {
+                        if (stageSpinner.get(i).equals(itemSelectionne)) {
                             String jourSelectionne = (String) spinnerJournee.getSelectedItem();
                             DayOfWeek cleJourSelectionne = Utils.trouverCleAvecValeurHashMap(Utils.JOURS_DE_LA_SEMAINE, jourSelectionne);
                             Stage stageSelectionne = stages.get(i);
@@ -262,20 +274,6 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
                 .show();
     }
 
-    private final RadioGroup.OnCheckedChangeListener radioGroupClique = (radioGroup, i) -> {
-        switch (i) {
-            case R.id.duree_30_minutes:
-                tempsSelectionne = 30;
-                break;
-            case R.id.duree_45_minutes:
-                tempsSelectionne = 45;
-                break;
-            case R.id.duree_60_minutes:
-                tempsSelectionne = 60;
-                break;
-        }
-    };
-
     private void setChampsDureeVisite(Visite visite, RadioGroup radioGroup) {
         int dureeVisite = visite.getDuree();
         if (dureeVisite != 0) {
@@ -295,7 +293,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         }
     }
 
-    private void setSpinner(Spinner spinner, List<String> listSpinner) {
+    private void setSpinner(Spinner spinner, ArrayList<String> listSpinner) {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, listSpinner);
 
@@ -305,9 +303,10 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
 
     @Override
     public ArrayList<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-        events = new ArrayList<>();
+        ArrayList<WeekViewEvent> events = new ArrayList<>();
+
         boucle++;
-        if(boucle == 3) {
+        if (boucle == 3) {
             boucle = 0;
         }
         if (!visites.isEmpty() && boucle == 1) {

@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ConnexionActivity">
+    tools:context=".ConnectionActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <include
@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="32dp">
+            android:padding="@dimen/activity_big_vertical_margin">
 
             <EditText
                 android:id="@+id/text_adresse_email"
@@ -34,7 +34,7 @@
                 android:id="@+id/text_mot_de_passe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="@dimen/activity_big_vertical_margin"
                 android:autofillHints="@string/prompt_mot_de_passe"
                 android:hint="@string/prompt_mot_de_passe"
                 android:drawableEnd="@drawable/ic_baseline_lock_24"
@@ -44,9 +44,9 @@
                 android:id="@+id/btn_connexion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="@dimen/activity_big_vertical_margin"
                 android:onClick="connecter"
-                android:text="Se Connecter" />
+                android:text="@string/btn_se_connecter" />
         </LinearLayout>
 
         <ProgressBar

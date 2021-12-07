@@ -3,58 +3,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="32dp">
+    android:padding="@dimen/activity_big_vertical_margin">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choisir un étudiant"
-            android:textSize="16dp" />
+            android:text="@string/titre_choisir_un_tudiant"
+            android:textSize="16sp" />
 
         <Spinner
             android:id="@+id/spinner_selection_etudiant"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="@dimen/activity_small_vertical_margin"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choisir une journée"
-            android:textSize="16dp"
-            android:layout_marginTop="32dp"/>
+            android:text="@string/titre_choisir_une_journee"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/activity_big_vertical_margin"/>
 
         <Spinner
             android:id="@+id/spinner_selection_jour"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="@dimen/activity_small_vertical_margin"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Durée de la visite"
-            android:textSize="16dp"
-            android:layout_marginTop="32dp"/>
+            android:text="@string/titre_duree_de_la_visite"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/activity_big_vertical_margin"/>
 
         <RadioGroup
             android:id="@+id/radio_group_temps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="@dimen/activity_small_vertical_margin">
 
             <RadioButton
                 android:id="@+id/duree_30_minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="30 min"/>
+                android:text="@string/txt_30_min"/>
 
-            <!--suppress AndroidUnresolvableTag -->
+            <!--suppress AndroidUnresolvableTag, AndroidElementNotAllowed -->
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,9 +64,9 @@
                 android:id="@+id/duree_45_minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="45 min"/>
+                android:text="@string/txt_45_min"/>
 
-            <!--suppress AndroidUnresolvableTag -->
+            <!--suppress AndroidUnresolvableTag, AndroidElementNotAllowed -->
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -76,21 +76,21 @@
                 android:id="@+id/duree_60_minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1 h"/>
+                android:text="@string/txt_1_h"/>
         </RadioGroup>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choisir une heure de début"
-            android:textSize="16dp"
-            android:layout_marginTop="32dp"/>
+            android:text="@string/titre_choisir_une_heure_de_debut"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/activity_big_vertical_margin"/>
 
         <TimePicker
             android:id="@+id/time_picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/activity_small_vertical_margin"
             android:timePickerMode="spinner"/>
     </LinearLayout>
 </ScrollView>

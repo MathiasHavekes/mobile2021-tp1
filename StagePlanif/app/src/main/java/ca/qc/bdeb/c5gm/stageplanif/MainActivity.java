@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void connecter() {
-        Intent intent = new Intent(this, ConnexionActivity.class);
+        Intent intent = new Intent(this, ConnectionActivity.class);
         startActivity(intent);
     }
 
