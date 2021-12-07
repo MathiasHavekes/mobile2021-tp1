@@ -20,6 +20,24 @@ public class SelectionPrioriteFragment extends Fragment {
     private CheckBox drapeauVert, drapeauJaune, drapeauRouge;
     private int selection;
     private SelectionViewModel viewModel;
+    private final View.OnClickListener drapeauVertOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            calculerValeurSelection(drapeauVert.isChecked(), VALEUR_DRAPEAU_VERT);
+        }
+    };
+    private final View.OnClickListener drapeauJauneOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            calculerValeurSelection(drapeauJaune.isChecked(), VALEUR_DRAPEAU_JAUNE);
+        }
+    };
+    private final View.OnClickListener drapeauRougeOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            calculerValeurSelection(drapeauRouge.isChecked(), VALEUR_DRAPEAU_ROUGE);
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,29 +58,7 @@ public class SelectionPrioriteFragment extends Fragment {
         selection = Priorite.getTotalValeursPriorites();
     }
 
-    private final View.OnClickListener drapeauVertOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            calculerValeurSelection(drapeauVert.isChecked(), VALEUR_DRAPEAU_VERT);
-        }
-    };
-
-    private final View.OnClickListener drapeauJauneOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            calculerValeurSelection(drapeauJaune.isChecked(), VALEUR_DRAPEAU_JAUNE);
-        }
-    };
-
-    private final View.OnClickListener drapeauRougeOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            calculerValeurSelection(drapeauRouge.isChecked(), VALEUR_DRAPEAU_ROUGE);
-        }
-    };
-
     /**
-     *
      * @param estCoche
      * @param valeurDrapeau
      */

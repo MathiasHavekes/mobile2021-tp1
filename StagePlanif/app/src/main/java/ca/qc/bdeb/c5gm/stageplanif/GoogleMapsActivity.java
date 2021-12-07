@@ -12,7 +12,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -56,12 +55,12 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     private static final int LOCATION_REQUEST_CODE = 1;
     private static final float ZOOM_PAR_DEFAUT = 13f;
     private static final String[] PERMISSIONS = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
-    private final View.OnClickListener lancerCalendrierOnClickListener = view -> creerDialogueChoisirJour();
     private final Stockage dbHelper = Stockage.getInstance(Utils.context);
     private ActivityGoogleMapsBinding binding;
     private ArrayList<StagePoidsPlume> listeStages = new ArrayList<>();
-    private ArrayList<Marker> listeMarqueurs = new ArrayList<>();
-    private ArrayList<StagePoidsPlume> listeStagesSelectionnes = new ArrayList<>();
+    private final ArrayList<Marker> listeMarqueurs = new ArrayList<>();
+    private final ArrayList<StagePoidsPlume> listeStagesSelectionnes = new ArrayList<>();
+    private final View.OnClickListener lancerCalendrierOnClickListener = view -> creerDialogueChoisirJour();
     private GoogleMap mMap;
     private Geocoder geocoder;
     private FusedLocationProviderClient fusedLocationClient;
@@ -120,7 +119,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
     private void filtrerlisteStages(int selection) {
         ArrayList<Integer> listePrioritesSelectionnees = Utils.calculerPrioritesSelectionnees(selection);
 
-        for(int i = 0; i < listeStages.size(); i++) {
+        for (int i = 0; i < listeStages.size(); i++) {
             listeMarqueurs.get(i).setVisible(listePrioritesSelectionnees.contains(listeStages.get(i).getPriorite().getValeur()));
         }
     }
@@ -133,7 +132,7 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
         mMap.setOnMarkerClickListener(marker -> {
             StagePoidsPlume stage = listeStages.get((int) marker.getTag());
-            if(listeStagesSelectionnes.contains(stage)) {
+            if (listeStagesSelectionnes.contains(stage)) {
                 listeStagesSelectionnes.remove(stage);
                 marker.setIcon(bitmapDescriptorFromVector(getApplicationContext(), R.drawable.ic_baseline_location_on_24, listeStages.get((int) marker.getTag()).getPriorite()));
             } else {

@@ -113,10 +113,6 @@ public class StagePoidsPlume implements Parcelable {
         return priorite;
     }
 
-    public String getIdEtudiant() {
-        return idEtudiant;
-    }
-
     public String getNomEtudiant() {
         return nomEtudiant;
     }
@@ -125,10 +121,8 @@ public class StagePoidsPlume implements Parcelable {
         return prenomEtudiant;
     }
 
-    public String getNomCompletEtudiant() { return this.prenomEtudiant + " " + this.nomEtudiant; }
-
-    public Integer getDureeVisite() {
-        return dureeVisite;
+    public String getNomCompletEtudiant() {
+        return this.prenomEtudiant + " " + this.nomEtudiant;
     }
 
     public String getCommentaire() {

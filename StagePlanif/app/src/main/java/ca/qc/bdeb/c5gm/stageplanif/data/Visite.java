@@ -2,17 +2,27 @@ package ca.qc.bdeb.c5gm.stageplanif.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import ca.qc.bdeb.c5gm.stageplanif.CalendrierActivity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+
+import ca.qc.bdeb.c5gm.stageplanif.CalendrierActivity;
 
 /**
  * Classe qui stock des visites dans un environnement de stage
  */
 public class Visite implements Parcelable {
+    public static final Creator<Visite> CREATOR = new Creator<Visite>() {
+        @Override
+        public Visite createFromParcel(Parcel in) {
+            return new Visite(in);
+        }
+
+        @Override
+        public Visite[] newArray(int size) {
+            return new Visite[size];
+        }
+    };
     /**
      * ID de la visite
      */
@@ -51,18 +61,6 @@ public class Visite implements Parcelable {
         journee = LocalDateTime.parse(in.readString(), formatter);
         duree = in.readInt();
     }
-
-    public static final Creator<Visite> CREATOR = new Creator<Visite>() {
-        @Override
-        public Visite createFromParcel(Parcel in) {
-            return new Visite(in);
-        }
-
-        @Override
-        public Visite[] newArray(int size) {
-            return new Visite[size];
-        }
-    };
 
     public String getId() {
         return id;

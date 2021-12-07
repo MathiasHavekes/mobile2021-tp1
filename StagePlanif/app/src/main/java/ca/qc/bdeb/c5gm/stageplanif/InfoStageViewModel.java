@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel;
 
 import java.time.LocalTime;
 
-import ca.qc.bdeb.c5gm.stageplanif.Utils;
 import ca.qc.bdeb.c5gm.stageplanif.data.Compte;
 import ca.qc.bdeb.c5gm.stageplanif.data.Entreprise;
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
@@ -18,6 +17,26 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
  * ViewModel permettant de faire communiquer les fragments et l'activitee
  */
 public class InfoStageViewModel extends ViewModel {
+    /**
+     * Valeur de lundi
+     */
+    public final byte LUNDI = 0x01;
+    /**
+     * Valeur de mardi
+     */
+    public final byte MARDI = 0x02;
+    /**
+     * Valeur de mercredi
+     */
+    public final byte MERCREDI = 0x04;
+    /**
+     * Valeur de jeudi
+     */
+    public final byte JEUDI = 0x08;
+    /**
+     * Valeur de vendredi
+     */
+    public final byte VENDREDI = 0x10;
     /**
      * Donnee live contenant la priorite du stage
      */
@@ -67,27 +86,6 @@ public class InfoStageViewModel extends ViewModel {
      * Propriete contenant le stage si c'est une modification
      */
     private Stage stage;
-    /**
-     * Valeur de lundi
-     */
-    public final byte LUNDI = 0x01;
-    /**
-     * Valeur de mardi
-     */
-    public final byte MARDI = 0x02;
-    /**
-     * Valeur de mercredi
-     */
-    public final byte MERCREDI = 0x04;
-    /**
-     * Valeur de jeudi
-     */
-    public final byte JEUDI = 0x08;
-    /**
-     * Valeur de vendredi
-     */
-    public final byte VENDREDI = 0x10;
-
 
     public void setImage(Bitmap photo) {
         if (photo != null) {

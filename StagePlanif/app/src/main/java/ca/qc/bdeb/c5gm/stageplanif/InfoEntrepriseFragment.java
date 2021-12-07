@@ -125,5 +125,5 @@ public class InfoEntrepriseFragment extends Fragment {
         spinnerEntreprise.setAdapter(adapter);
         spinnerEntreprise.setOnItemSelectedListener(itemSelectionneListener);
     }
-    
+
 }

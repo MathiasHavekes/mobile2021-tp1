@@ -29,7 +29,7 @@ public class ConnexionBD {
     /**
      * Instance de l'interface de L'API
      */
-    private static IAPI client = APIClient.getRetrofit().create(IAPI.class);
+    private static final IAPI client = APIClient.getRetrofit().create(IAPI.class);
 
     /**
      * Methode qui met a jour la BD interne des entreprises a partir des donnees de la BD externe
@@ -139,7 +139,7 @@ public class ConnexionBD {
                             String prioriteStr = stage.getString("priorite");
                             int priorite = Priorite.valueOf(prioriteStr).getValeur();
                             String commentaire = stage.getString("commentaire");
-                            if(commentaire == "null") {
+                            if (commentaire == "null") {
                                 commentaire = null;
                             }
                             String heureDebutStr = stage.getString("heureDebut");
@@ -150,30 +150,29 @@ public class ConnexionBD {
                             int heureFin = -1;
                             int heureDebutPause = -1;
                             int heureFinPause = -1;
-                            try{
-                                if(isNumeric(heureDebutStr)) {
-                                     heureDebut = Integer.parseInt(heureDebutStr);
+                            try {
+                                if (isNumeric(heureDebutStr)) {
+                                    heureDebut = Integer.parseInt(heureDebutStr);
                                 }
-                                if(isNumeric(heureFinStr)) {
+                                if (isNumeric(heureFinStr)) {
                                     heureFin = Integer.parseInt(heureFinStr);
                                 }
-                                if(isNumeric(heureDebutPauseStr)) {
+                                if (isNumeric(heureDebutPauseStr)) {
                                     heureDebutPause = Integer.parseInt(heureDebutPauseStr);
                                 }
-                                if(isNumeric(heureFinPauseStr)) {
+                                if (isNumeric(heureFinPauseStr)) {
                                     heureFinPause = Integer.parseInt(heureFinPauseStr);
                                 }
-                            }
-                            catch (NumberFormatException ex){
+                            } catch (NumberFormatException ex) {
                                 ex.printStackTrace();
                             }
 
-                            if(deletedAt == "null") {
-                                dbHelper.ajouterouModifierStage(id, anneeScolaire,entrepriseId, etudiantId,
+                            if (deletedAt == "null") {
+                                dbHelper.ajouterouModifierStage(id, anneeScolaire, entrepriseId, etudiantId,
                                         professeurId, commentaire, heureDebut, heureFin, priorite,
                                         heureDebutPause, heureFinPause);
                             } else {
-                                if(dbHelper.stageExists(id)) {
+                                if (dbHelper.stageExists(id)) {
                                     dbHelper.deleteVisites(id);
                                     dbHelper.deleteStage(id);
                                 }
@@ -181,7 +180,7 @@ public class ConnexionBD {
                         }
                         ArrayList<Stage> stagesArray = dbHelper.getStages(ConnectUtils.authId);
                         MainActivity.listeStages.clear();
-                        for (Stage stage: stagesArray) {
+                        for (Stage stage : stagesArray) {
                             MainActivity.listeStages.add(stage);
                         }
                         MainActivity.stageAdapter.filtrerListeStages(7);
@@ -193,7 +192,7 @@ public class ConnexionBD {
                 }
             }
 
-            private boolean isNumeric(String str){
+            private boolean isNumeric(String str) {
                 return str != null && str.matches("[0-9.]+");
             }
 
@@ -206,6 +205,7 @@ public class ConnexionBD {
 
     /**
      * Methode qui permet d'ajouter ou modifier un stage dans la BD externe
+     *
      * @param stage
      */
     public static void ajouterOuModifierStage(Stage stage) {
@@ -236,6 +236,7 @@ public class ConnexionBD {
 
     /**
      * Methode qui permet de supprimer un stage dans la BD externe
+     *
      * @param id
      */
     public static void supprimerStage(String id) {

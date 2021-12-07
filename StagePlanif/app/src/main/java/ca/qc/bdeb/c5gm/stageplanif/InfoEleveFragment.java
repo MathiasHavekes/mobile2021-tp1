@@ -71,6 +71,10 @@ public class InfoEleveFragment extends Fragment implements AdapterView.OnItemSel
      */
     private String lienPhotoActuel;
     /**
+     * Listener du bouton pour prendre une photo
+     */
+    private final View.OnClickListener prendrePhotoOnClickListener = view -> envoyerPrendrePhotoIntent();
+    /**
      * Instance du viewModel qui permet de communiquer avec l'activitee et l'autre fragment
      */
     private InfoStageViewModel viewModel;
@@ -106,10 +110,6 @@ public class InfoEleveFragment extends Fragment implements AdapterView.OnItemSel
                     setPic();
                 }
             });
-    /**
-     * Listener du bouton pour prendre une photo
-     */
-    private final View.OnClickListener prendrePhotoOnClickListener = view -> envoyerPrendrePhotoIntent();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

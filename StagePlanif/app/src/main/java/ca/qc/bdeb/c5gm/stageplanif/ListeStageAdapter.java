@@ -18,7 +18,6 @@ import java.util.Comparator;
 
 import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StageChainedComparateur;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
-import okhttp3.internal.Util;
 
 /**
  * Adapte la liste de stage pour le recycler view
@@ -33,6 +32,10 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
      */
     private final LayoutInflater inflater;
     /**
+     * Contexte de l'activitee
+     */
+    private final Context context;
+    /**
      * La liste des stages à ne pas afficher
      */
     private ArrayList<Stage> listeStagesMasques;
@@ -40,10 +43,6 @@ public class ListeStageAdapter extends RecyclerView.Adapter<ListeStageAdapter.Li
      * Les listener de cliques
      */
     private OnItemClickListener listener;
-    /**
-     * Contexte de l'activitee
-     */
-    private final Context context;
 
     public ListeStageAdapter(Context context, ArrayList<Stage> listeStages) {
         inflater = LayoutInflater.from(context);

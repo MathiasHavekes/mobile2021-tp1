@@ -36,9 +36,9 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 import ca.qc.bdeb.c5gm.stageplanif.data.StagePoidsPlume;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
 import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
+import ca.qc.bdeb.c5gm.stageplanif.reseau.APIClient;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.ConnexionBD;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.IAPI;
-import ca.qc.bdeb.c5gm.stageplanif.reseau.APIClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,9 +49,19 @@ import retrofit2.Response;
  */
 public class MainActivity extends AppCompatActivity {
     /**
-     * Onclick listener pour lancer l'activitee d'ajout de stage
+     * Liste des stages
      */
-    private final View.OnClickListener ajouterEleveOnClickListener = view -> lancerActiviteAjoutStage(view);
+    public static ArrayList<Stage> listeStages;
+    /**
+     * L'adapteur des stages
+     */
+    public static ListeStageAdapter stageAdapter;
+    /**
+     * Fichier dans lequel est contenu les preferences
+     */
+    private final String PREFERENCEFILE = "ca.qc.bdeb.c5gm.stageplanif";
+    private final String AUTHTOKEN = "authToken";
+    private final String AUTHID = "authID";
     /**
      * Contient le SwipeRefreshLayout
      */
@@ -64,26 +74,6 @@ public class MainActivity extends AppCompatActivity {
      * Contient le lien avec la BD
      */
     private Stockage dbHelper;
-    /**
-     * Liste des stages
-     */
-    public static ArrayList<Stage> listeStages;
-    /**
-     * Contient le recycler view des stages
-     */
-    private RecyclerView recyclerView;
-    /**
-     * L'adapteur des stages
-     */
-    public static ListeStageAdapter stageAdapter;
-    private IAPI IAPIClient;
-    /**
-     * Fichier dans lequel est contenu les preferences
-     */
-    private final String PREFERENCEFILE = "ca.qc.bdeb.c5gm.stageplanif";
-    private SharedPreferences sharedPreferences;
-    private final String AUTHTOKEN = "authToken";
-    private final String AUTHID= "authID";
     /**
      * Defini le logique de swipe d'un item du recycler view
      */
@@ -117,6 +107,12 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     /**
+     * Contient le recycler view des stages
+     */
+    private RecyclerView recyclerView;
+    private IAPI IAPIClient;
+    private SharedPreferences sharedPreferences;
+    /**
      * La toolbar
      */
     private Toolbar toolbar;
@@ -141,6 +137,10 @@ public class MainActivity extends AppCompatActivity {
                     ConnexionBD.ajouterOuModifierStage(stage);
                 }
             });
+    /**
+     * Onclick listener pour lancer l'activitee d'ajout de stage
+     */
+    private final View.OnClickListener ajouterEleveOnClickListener = view -> lancerActiviteAjoutStage(view);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,6 +179,9 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    /**
+     * Cree un client API avec les informations de connexion
+     */
     private void creationClient() {
         IAPIClient = APIClient.getRetrofit().create(IAPI.class);
         if (ConnectUtils.authToken.isEmpty()) {
@@ -209,6 +212,9 @@ public class MainActivity extends AppCompatActivity {
         ConnexionBD.updateStages();
     }
 
+    /**
+     * Commence l'activitee de connexion
+     */
     private void connecter() {
         Intent intent = new Intent(this, ConnectionActivity.class);
         startActivity(intent);

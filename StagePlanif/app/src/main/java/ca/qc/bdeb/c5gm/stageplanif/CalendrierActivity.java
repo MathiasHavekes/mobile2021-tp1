@@ -52,6 +52,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
     private Stockage dbHelper;
     private int boucle = 0;
     private int tempsSelectionne = DUREE_VISITE_STANDARD;
+    
     @SuppressLint("NonConstantResourceId")
     private final RadioGroup.OnCheckedChangeListener radioGroupClique = (radioGroup, i) -> {
         switch (i) {

@@ -8,13 +8,13 @@ public enum TypeCompte {
     PROFESSEUR(1),
     ADMINISTRATEUR(0);
 
+    private final int valeur;
+
     TypeCompte(int valeur) {
         this.valeur = valeur;
     }
 
-    private int valeur;
-
-    public int getValeur(){
+    public int getValeur() {
         return this.valeur;
     }
 }
