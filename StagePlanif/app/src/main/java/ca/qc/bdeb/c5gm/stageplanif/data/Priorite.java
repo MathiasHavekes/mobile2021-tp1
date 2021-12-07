@@ -8,17 +8,22 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Classe qui définit l
+ * Enum qui définit une priorité de stage
  */
 public enum Priorite implements Parcelable{
     BASSE(1),
     MOYENNE(2),
     HAUTE(4);
 
+    /**
+     * Valeurs possibles de priorité
+     */
     private static final List<Priorite> VALUES =
             Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();
-    private static final Random RANDOM = new Random();
+    /**
+     * Valeur de la priorite
+     */
     private final int valeur;
 
     Priorite(int valeur) {
@@ -50,14 +55,6 @@ public enum Priorite implements Parcelable{
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(ordinal());
-    }
-
-    /**
-     * Cree une priorite aleatoire
-     * @return une priorite
-     */
-    public static Priorite randomPriorite() {
-        return VALUES.get(RANDOM.nextInt(SIZE));
     }
 
     /**

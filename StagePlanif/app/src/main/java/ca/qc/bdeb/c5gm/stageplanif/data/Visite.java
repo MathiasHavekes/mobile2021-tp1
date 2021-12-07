@@ -9,10 +9,25 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+/**
+ * Classe qui stock des visites dans un environnement de stage
+ */
 public class Visite implements Parcelable {
+    /**
+     * ID de la visite
+     */
     private final String id;
+    /**
+     * Stage associe a la visite
+     */
     private final StagePoidsPlume stage;
+    /**
+     * Journee du stage avec le temps defini
+     */
     private LocalDateTime journee;
+    /**
+     * Duree definie de la visite
+     */
     private Integer duree;
 
     public Visite(String id, StagePoidsPlume stage, Integer duree, LocalDateTime journee) {

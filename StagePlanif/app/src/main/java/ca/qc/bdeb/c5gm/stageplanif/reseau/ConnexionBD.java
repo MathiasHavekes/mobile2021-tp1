@@ -26,9 +26,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ConnexionBD {
+    /**
+     * Instance de l'interface de L'API
+     */
     private static IAPI client = APIClient.getRetrofit().create(IAPI.class);
-    private static JSONArray entreprises;
 
+    /**
+     * Methode qui met a jour la BD interne des entreprises a partir des donnees de la BD externe
+     */
     public static void updateEntreprises() {
         client.getEntreprises(ConnectUtils.authToken).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -37,7 +42,7 @@ public class ConnexionBD {
                 try {
                     if (response.code() == 200) {
                         Stockage dbHelper = Stockage.getInstance(Utils.context);
-                        entreprises = new JSONArray(response.body().string());
+                        JSONArray entreprises = new JSONArray(response.body().string());
                         for (int i = 0; i < entreprises.length(); i++) {
                             JSONObject entreprise = entreprises.getJSONObject(i);
                             String id = entreprise.get("id").toString();
@@ -62,6 +67,9 @@ public class ConnexionBD {
         });
     }
 
+    /**
+     * Methode qui met a jour la BD interne des entreprises a partir des donnees de la BD externe
+     */
     public static void updateComptesEleves() {
         client.getComptesEleves(ConnectUtils.authToken).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -87,6 +95,9 @@ public class ConnexionBD {
         });
     }
 
+    /**
+     * Methode qui met a jour la BD interne des compte a partir d'un JSONObject
+     */
     public static void updateCompte(JSONObject compte) {
         try {
             Stockage dbHelper = Stockage.getInstance(Utils.context);
@@ -102,6 +113,9 @@ public class ConnexionBD {
         }
     }
 
+    /**
+     * Methode qui met a jour la BD interne des stages a partir des donnees de la BD externe
+     */
     public static void updateStages() {
         client.getStages(ConnectUtils.authToken).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -160,6 +174,7 @@ public class ConnexionBD {
                                         heureDebutPause, heureFinPause);
                             } else {
                                 if(dbHelper.stageExists(id)) {
+                                    dbHelper.deleteVisites(id);
                                     dbHelper.deleteStage(id);
                                 }
                             }
@@ -189,6 +204,10 @@ public class ConnexionBD {
         });
     }
 
+    /**
+     * Methode qui permet d'ajouter ou modifier un stage dans la BD externe
+     * @param stage
+     */
     public static void ajouterOuModifierStage(Stage stage) {
         HashMap<String, Object> stageInfo = new HashMap<>();
         stageInfo.put("id", stage.getId());
@@ -215,6 +234,10 @@ public class ConnexionBD {
         });
     }
 
+    /**
+     * Methode qui permet de supprimer un stage dans la BD externe
+     * @param id
+     */
     public static void supprimerStage(String id) {
         client.supprStage(ConnectUtils.authToken, id).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -229,6 +252,9 @@ public class ConnexionBD {
         });
     }
 
+    /**
+     * Methode qui permet de se deconnecter de l'API
+     */
     public static void seDeconnecter() {
         client.deconnecter(ConnectUtils.authToken).enqueue(new Callback<ResponseBody>() {
             @Override

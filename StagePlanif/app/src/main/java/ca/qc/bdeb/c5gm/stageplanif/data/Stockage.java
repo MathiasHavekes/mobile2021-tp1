@@ -135,13 +135,6 @@ public class Stockage extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void viderTables() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE FROM " + VisiteHelper.NOM_TABLE);
-        db.execSQL("DELETE FROM " + StageHelper.NOM_TABLE);
-        db.execSQL("DELETE FROM " + CompteHelper.NOM_TABLE);
-        db.execSQL("DELETE FROM " + EntrepriseHelper.NOM_TABLE);
-    }
     /**
      * Méthode qui ajoute les comptes à la base de données
      *
@@ -163,6 +156,9 @@ public class Stockage extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Methode qui ajoute des entreprises a la base de donnees
+     */
     public void ajouterOumodifierEntreprise(String id, String nom, String adresse, String ville, String province, String codePostal) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues values = new ContentValues();
@@ -181,6 +177,9 @@ public class Stockage extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Methode qui ajoute ou modifie un stage
+     */
     public void ajouterouModifierStage(String id, String anneeScolaire, String entrepriseId, String etudiantId,
                              String professeurId, String commentaire, int heureDebut, int heureFin,
                              int priorite, int heureDebutPause, int heureFinPause) {
@@ -219,41 +218,6 @@ public class Stockage extends SQLiteOpenHelper {
     }
 
     /**
-     * Recevoir la liste des comptes d'un certain type dans la base de données
-     *
-     * @param type type de compte voulu
-     * @return la liste des comptes dans la base de données
-     */
-    public ArrayList<Compte> getComptes(Integer type) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        ArrayList<Compte> comptes = new ArrayList<>();
-        // les colonnes retournées par la requête:
-        String[] colonnes = {
-                CompteHelper._ID,
-                CompteHelper.COMPTE_NOM,
-                CompteHelper.COMPTE_PRENOM,
-                CompteHelper.COMPTE_PHOTO,
-                CompteHelper.COMPTE_TYPE_COMPTE
-        };
-        String selection = CompteHelper.COMPTE_TYPE_COMPTE + " = ?";
-        String[] selectionArgs = {String.valueOf(type)};
-        String orderBy = CompteHelper.COMPTE_NOM + " ASC, " + CompteHelper.COMPTE_PRENOM + " ASC";
-        Cursor cursor = db.query(CompteHelper.NOM_TABLE, colonnes, selection, selectionArgs, null, null, orderBy, null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-            do {
-                comptes.add(new Compte(cursor.getString(0),
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getBlob(3),
-                        cursor.getInt(4)));
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        return comptes;
-    }
-
-    /**
      * Recevoir un compte de la base de données en fonction de l'ID
      * @param id l'id du compte
      * @return le compte correspondant à l'id
@@ -284,6 +248,10 @@ public class Stockage extends SQLiteOpenHelper {
         return compte;
     }
 
+    /**
+     * Ajoute une visite a la base de donnees
+     * @param visite la visite a ajouter
+     */
     public void ajouterVisite(Visite visite) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -294,6 +262,10 @@ public class Stockage extends SQLiteOpenHelper {
         db.insert(VisiteHelper.NOM_TABLE, null, values);
     }
 
+    /**
+     * Modifier une visite dans la base de donnees
+     * @param visite visite a modifier
+     */
     public void modifierVisite(Visite visite) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -306,6 +278,10 @@ public class Stockage extends SQLiteOpenHelper {
         db.update(VisiteHelper.NOM_TABLE, values, whereClause, whereArgs);
     }
 
+    /**
+     * Recevoir les visites qui sont associees au professeur connecte
+     * @return une liste de visites
+     */
     public ArrayList<Visite> getVisites() {
         ArrayList<Visite> visites = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -433,6 +409,12 @@ public class Stockage extends SQLiteOpenHelper {
         return entreprise;
     }
 
+    /**
+     *  Recoit le stage associe a l'ID
+     * @param id id du stage
+     * @param db instance de base de donnees
+     * @return
+     */
     private Stage getStage(String id, SQLiteDatabase db) {
         Stage stage;
         // les colonnes retournées par la requête:
@@ -467,7 +449,7 @@ public class Stockage extends SQLiteOpenHelper {
             stage.addProfesseur(cursor.getString(4));
             //Cree l'etudiant associe au stage
             stage.addEtudiant(getCompte(cursor.getString(3)));
-            //Verifie que l'entreprise n'a pas deja ete creefinal
+            //Verifie que l'entreprise n'a pas deja ete creee
             Entreprise entreprise = getEntreprise(cursor.getString(5));
             stage.addEntreprise(entreprise);
             stage.setCommentaire(cursor.getString(6));
@@ -484,7 +466,7 @@ public class Stockage extends SQLiteOpenHelper {
         return null;
     }
     /**
-     * Recevoir les stages de la base de données
+     * Recevoir les stages associe au professeur connecte
      *
      * @return une liste de stages
      */
@@ -623,6 +605,20 @@ public class Stockage extends SQLiteOpenHelper {
         db.delete(VisiteHelper.NOM_TABLE, whereClause, whereArgs);
     }
 
+    /**
+     * Supprime les visites associees a un stage
+     * @param idStage id du stage dont les visites sont a supprimer
+     */
+    public void deleteVisites(String idStage) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String whereClause = VisiteHelper.STAGE_ID + " = ?";
+        String[] whereArgs = {idStage};
+        db.delete(VisiteHelper.NOM_TABLE, whereClause, whereArgs);
+    }
+
+    /**
+     * Regarde si l'entreprise existe deja dans la base de donnees
+     */
     private boolean entrepriseExists(String id, SQLiteDatabase db){
         String selection = EntrepriseHelper._ID + " = ?";
         String[] selectionArgs = {id};
@@ -632,6 +628,9 @@ public class Stockage extends SQLiteOpenHelper {
         return count;
     }
 
+    /**
+     * Regarde si le compte existe deja dans la base de donnees
+     */
     private boolean compteExists(String id, SQLiteDatabase db){
         String selection = CompteHelper._ID + " = ?";
         String[] selectionArgs = {id};
@@ -641,6 +640,9 @@ public class Stockage extends SQLiteOpenHelper {
         return count;
     }
 
+    /**
+     * Regarde si le stage existe deja dans la base de donnees
+     */
     private boolean stageExists(String id, SQLiteDatabase db){
         String selection = StageHelper._ID + " = ?";
         String[] selectionArgs = {id};
@@ -650,6 +652,9 @@ public class Stockage extends SQLiteOpenHelper {
         return count;
     }
 
+    /**
+     * Regarde si le stage existe deja dans la base de donnees
+     */
     public boolean stageExists(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
         return stageExists(id, db);

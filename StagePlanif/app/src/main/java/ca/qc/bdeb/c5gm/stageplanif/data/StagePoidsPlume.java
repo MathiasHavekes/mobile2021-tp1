@@ -34,10 +34,25 @@ public class StagePoidsPlume implements Parcelable {
      * La priorite du stage
      */
     private final Priorite priorite;
+    /**
+     * Id de l'etudiant associe au stage
+     */
     private final String idEtudiant;
+    /**
+     * Nom de l'etudiant associe au stage
+     */
     private final String nomEtudiant;
+    /**
+     * Prenom de l'etudiant associe au stage
+     */
     private final String prenomEtudiant;
+    /**
+     * Duree de visite du stage
+     */
     private final Integer dureeVisite;
+    /**
+     * Commentaire du stage
+     */
     private final String commentaire;
 
     public StagePoidsPlume(String id, Entreprise entreprise, Priorite priorite, String idEtudiant, String nomEtudiant, String prenomEtudiant, Integer dureeVisite, String commentaire) {

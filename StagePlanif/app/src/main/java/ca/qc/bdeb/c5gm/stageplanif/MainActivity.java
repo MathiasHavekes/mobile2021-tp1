@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.message_oui),
                     (dialogInterface, i) -> {
                         int indexEnleve = viewHolder.getAdapterPosition();
+                        dbHelper.deleteVisites(listeStages.get(indexEnleve).getId());
                         dbHelper.deleteStage(listeStages.get(indexEnleve).getId());
                         ConnexionBD.supprimerStage(listeStages.get(indexEnleve).getId());
                         listeStages.remove(indexEnleve);

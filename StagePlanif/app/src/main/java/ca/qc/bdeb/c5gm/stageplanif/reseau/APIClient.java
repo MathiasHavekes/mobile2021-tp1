@@ -7,10 +7,19 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Le client qui communique avec l'API externe
+ */
 public class APIClient {
     private static Retrofit retrofit = null;
     private static OkHttpClient client = null;
+    /**
+     * Adresse du serveur TO DO: a modifier selon l'adresse du serveur de BD externe
+     */
     private static String adresse = "192.168.122.153";
+    /**
+     * URL du serveur de BD externe
+     */
     private static String server_url = "http://"+adresse+":8888/";
 
     public static Retrofit getRetrofit(){
