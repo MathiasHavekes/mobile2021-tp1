@@ -25,7 +25,7 @@
             android:enabled="false"
             android:hint="@string/txt_adresse_entreprise"
             android:inputType="text"
-            android:autofillHints="@string/adresse_entreprise" />
+            android:autofillHints="@string/txt_adresse_entreprise" />
 
         <EditText
             android:id="@+id/texte_ville"
@@ -36,7 +36,7 @@
             android:enabled="false"
             android:hint="@string/txt_ville_entreprise"
             android:inputType="text"
-            android:autofillHints="@string/ville_entreprise" />
+            android:autofillHints="@string/txt_ville_entreprise" />
 
         <EditText
             android:id="@+id/text_cp"
@@ -47,7 +47,7 @@
             android:enabled="false"
             android:hint="@string/txt_code_postale_entreprise"
             android:inputType="text"
-            android:autofillHints="@string/code_postale_entreprise" />
+            android:autofillHints="@string/txt_code_postale_entreprise" />
 
         <EditText
             android:id="@+id/text_province"
@@ -58,6 +58,6 @@
             android:enabled="false"
             android:hint="@string/txt_province_entreprise"
             android:inputType="text"
-            android:autofillHints="@string/province_entreprise" />
+            android:autofillHints="@string/txt_province_entreprise" />
     </LinearLayout>
 </ScrollView>
