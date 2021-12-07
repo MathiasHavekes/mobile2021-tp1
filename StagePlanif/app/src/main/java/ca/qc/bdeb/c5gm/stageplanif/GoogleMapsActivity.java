@@ -261,6 +261,9 @@ public class GoogleMapsActivity extends AppCompatActivity implements OnMapReadyC
 
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerJour.setAdapter(adapter);
+            DayOfWeek defaultDay = LocalDateTime.now().plusDays(1).getDayOfWeek();
+            int indexDeDemain = joursDeLaSemainesListe.indexOf(Utils.JOURS_DE_LA_SEMAINE.get(defaultDay));
+            spinnerJour.setSelection(indexDeDemain);
 
             builder.setView(dialog)
                     .setTitle("Choisir un jour")

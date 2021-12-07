@@ -258,6 +258,8 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.message_oui),
                     (dialogInterface, i) -> {
                         ConnexionBD.seDeconnecter();
+                        ConnectUtils.authId = "";
+                        ConnectUtils.authToken = "";
                         connecter();
                     });
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.message_annuler),

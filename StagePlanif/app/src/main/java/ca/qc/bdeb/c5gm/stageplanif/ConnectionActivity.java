@@ -19,6 +19,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 
+import ca.qc.bdeb.c5gm.stageplanif.reseau.APIClient;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.ConnexionBD;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.IAPI;
 import okhttp3.ResponseBody;

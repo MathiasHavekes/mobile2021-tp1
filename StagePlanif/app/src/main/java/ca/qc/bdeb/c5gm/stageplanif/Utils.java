@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -23,7 +24,7 @@ public class Utils {
     /**
      * Hashmap contenant des jours de la semaine et leur affichage
      */
-    public static final HashMap<DayOfWeek, String> JOURS_DE_LA_SEMAINE = new HashMap<DayOfWeek, String>() {{
+    public static final LinkedHashMap<DayOfWeek, String> JOURS_DE_LA_SEMAINE = new LinkedHashMap<DayOfWeek, String>() {{
         put(DayOfWeek.MONDAY, "Lundi");
         put(DayOfWeek.TUESDAY, "Mardi");
         put(DayOfWeek.WEDNESDAY, "Mercredi");
