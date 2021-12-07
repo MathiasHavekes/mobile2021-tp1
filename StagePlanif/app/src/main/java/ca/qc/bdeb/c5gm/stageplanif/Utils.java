@@ -18,9 +18,11 @@ import java.util.stream.Collectors;
 
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
-import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
 
 public class Utils {
+    /**
+     * Hashmap contenant des jours de la semaine et leur affichage
+     */
     public static final HashMap<DayOfWeek, String> JOURS_DE_LA_SEMAINE = new HashMap<DayOfWeek, String>() {{
         put(DayOfWeek.MONDAY, "Lundi");
         put(DayOfWeek.TUESDAY, "Mardi");
@@ -59,6 +61,7 @@ public class Utils {
      * Renvoie une couleur en fonction de la priorite passée en paramètre
      * Priorité minimum = vert, Priorité moyenne = jaune, Priorité maximum = Rouge
      * Sinon renvoie du noir
+     *
      * @param priorite
      * @return la couleur en format RGB (int)
      */
@@ -97,7 +100,7 @@ public class Utils {
         int photoH = bmOptions.outHeight;
 
         // Determine how much to scale down the image
-        int scaleFactor = Math.max(1, Math.min(photoW/targetW, photoH/targetH));
+        int scaleFactor = Math.max(1, Math.min(photoW / targetW, photoH / targetH));
 
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;
@@ -109,6 +112,7 @@ public class Utils {
 
     /**
      * Methode qui determine l'annee scolaire en cours
+     *
      * @return l'annee scolaire en cours
      */
     public static String getAnneeScolaire() {
@@ -130,10 +134,13 @@ public class Utils {
         return null;
     }
 
-    public static <K, V> List<V> creeListeAvecValeursHashMap (HashMap<K, V> map){
+    public static <K, V> List<V> creeListeAvecValeursHashMap(HashMap<K, V> map) {
         return map.values().stream().collect(Collectors.toList());
     }
 
+    /**
+     * Formatte le DateTime et retourne un string
+     */
     public static String formatterDateTime(LocalDateTime temps) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         return temps.format(formatter);

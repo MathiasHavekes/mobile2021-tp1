@@ -16,17 +16,17 @@ public class APIClient {
     /**
      * Adresse du serveur TO DO: a modifier selon l'adresse du serveur de BD externe
      */
-    private static String adresse = "192.168.122.153";
+    private static final String adresse = "192.168.122.153";
     /**
      * URL du serveur de BD externe
      */
-    private static String server_url = "http://"+adresse+":8888/";
+    private static final String server_url = "http://" + adresse + ":8888/";
 
-    public static Retrofit getRetrofit(){
+    public static Retrofit getRetrofit() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        if (client == null){
+        if (client == null) {
             client = new OkHttpClient.Builder()
                     .readTimeout(60, TimeUnit.SECONDS)
                     .writeTimeout(60, TimeUnit.SECONDS)

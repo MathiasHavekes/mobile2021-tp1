@@ -1,6 +1,5 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
-import android.content.DialogInterface;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,7 +38,6 @@ import java.util.Locale;
 import java.util.UUID;
 
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
-import ca.qc.bdeb.c5gm.stageplanif.data.StagePoidsPlume;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
 import ca.qc.bdeb.c5gm.stageplanif.data.Visite;
 
@@ -56,6 +54,19 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
     private Stockage dbHelper;
     private int boucle = 0;
     private int tempsSelectionne = DUREE_VISITE_STANDARD;
+    private final RadioGroup.OnCheckedChangeListener radioGroupClique = (radioGroup, i) -> {
+        switch (i) {
+            case R.id.duree_30_minutes:
+                tempsSelectionne = 30;
+                break;
+            case R.id.duree_45_minutes:
+                tempsSelectionne = 45;
+                break;
+            case R.id.duree_60_minutes:
+                tempsSelectionne = 60;
+                break;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +82,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
         }
 
         // Get a reference for the week view in the layout.
-        mWeekView = (WeekView) findViewById(R.id.weekView);
+        mWeekView = findViewById(R.id.weekView);
 
         // Show a toast message about the touched event.
         mWeekView.setOnEventClickListener(this);
@@ -101,6 +112,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
     /**
      * Set up a date time interpreter which will show short date values when in week view and long
      * date values otherwise.
+     *
      * @param shortDate True if the date values should be short.
      */
     private void setupDateTimeInterpreter(final boolean shortDate) {
@@ -262,20 +274,6 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
                 .show();
     }
 
-    private final RadioGroup.OnCheckedChangeListener radioGroupClique = (radioGroup, i) -> {
-        switch (i) {
-            case R.id.duree_30_minutes:
-                tempsSelectionne = 30;
-                break;
-            case R.id.duree_45_minutes:
-                tempsSelectionne = 45;
-                break;
-            case R.id.duree_60_minutes:
-                tempsSelectionne = 60;
-                break;
-        }
-    };
-
     private void setChampsDureeVisite(Visite visite, RadioGroup radioGroup) {
         int dureeVisite = visite.getDuree();
         if (dureeVisite != 0) {
@@ -307,7 +305,7 @@ public class CalendrierActivity extends AppCompatActivity implements WeekView.Ev
     public ArrayList<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         events = new ArrayList<>();
         boucle++;
-        if(boucle == 3) {
+        if (boucle == 3) {
             boucle = 0;
         }
         if (!visites.isEmpty() && boucle == 1) {

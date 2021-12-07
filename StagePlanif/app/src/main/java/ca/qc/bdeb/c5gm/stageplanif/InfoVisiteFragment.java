@@ -55,6 +55,36 @@ public class InfoVisiteFragment extends Fragment {
      */
     private InfoStageViewModel viewModel;
     /**
+     * OnClickListener pour choisir l'heure
+     */
+    private final View.OnClickListener choisirTemps = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            dialogueChoixTemps = new TimePickerDialog(context, (timePicker, heure, minute) -> mettreHeures(heure, minute, view),
+                    0, 0, true);
+            dialogueChoixTemps.show();
+        }
+    };
+    /**
+     * Action lorsqu'un item du radio group est clique
+     */
+    private final RadioGroup.OnCheckedChangeListener radioGroupClique = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup radioGroup, int i) {
+            switch (i) {
+                case R.id.duree_30_minutes:
+                    viewModel.setTempsVisites(30);
+                    break;
+                case R.id.duree_45_minutes:
+                    viewModel.setTempsVisites(45);
+                    break;
+                case R.id.duree_60_minutes:
+                    viewModel.setTempsVisites(60);
+                    break;
+            }
+        }
+    };
+    /**
      * Checkbox du lundi
      */
     private CheckBox checkBoxLundi;
@@ -78,18 +108,6 @@ public class InfoVisiteFragment extends Fragment {
      * Valeur des cases de jours coches
      */
     private byte coche = 0;
-
-    /**
-     * OnClickListener pour choisir l'heure
-     */
-    private final View.OnClickListener choisirTemps = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            dialogueChoixTemps = new TimePickerDialog(context, (timePicker, heure, minute) -> mettreHeures(heure, minute, view),
-                    0, 0, true);
-            dialogueChoixTemps.show();
-        }
-    };
     /**
      * Action lors d'un clique de checkbox
      */
@@ -118,31 +136,7 @@ public class InfoVisiteFragment extends Fragment {
     };
 
     /**
-     * Action lorsqu'un item du radio group est clique
-     */
-    private final RadioGroup.OnCheckedChangeListener radioGroupClique = new RadioGroup.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(RadioGroup radioGroup, int i) {
-            switch (i) {
-                case R.id.duree_30_minutes:
-                    viewModel.setTempsVisites(30);
-                    break;
-                case R.id.duree_45_minutes:
-                    viewModel.setTempsVisites(45);
-                    break;
-                case R.id.duree_60_minutes:
-                    viewModel.setTempsVisites(60);
-                    break;
-            }
-        }
-    };
-
-    /**
      * Met l'heure dans le viewmodel
-     *
-     * @param heure
-     * @param minutes
-     * @param view    view qui a ete utilisee
      */
     private void mettreHeures(int heure, int minutes, View view) {
         LocalTime temps = LocalTime.of(heure, minutes);
@@ -185,58 +179,54 @@ public class InfoVisiteFragment extends Fragment {
 
     /**
      * Set les champs des heures de stage
-     *
-     * @param stage instance du stage
      */
     private void setChampsHeures(Stage stage) {
         LocalTime heureDebut = stage.getHeureDebut();
         if (heureDebut == null) {
-            heureDebut = LocalTime.of(8,0);
+            heureDebut = LocalTime.of(8, 0);
         }
         afficherTemps(txtTempsDebutStage, heureDebut);
         viewModel.setHeureDebutStage(heureDebut);
 
         LocalTime heureFin = stage.getHeureFinStage();
         if (heureFin == null) {
-            heureFin = LocalTime.of(16,0);
+            heureFin = LocalTime.of(16, 0);
         }
         viewModel.setHeureFinStage(heureFin);
         afficherTemps(txtTempsFinStage, heureFin);
 
         LocalTime heurePause = stage.getHeurePause();
         if (heurePause == null) {
-            heurePause = LocalTime.of(12,0);
+            heurePause = LocalTime.of(12, 0);
         }
         viewModel.setHeureDebutPause(heurePause);
         afficherTemps(txtTempsDebutPause, heurePause);
 
         LocalTime heureFinPause = stage.getHeureFinPause();
         if (heureFinPause == null) {
-            heureFinPause = LocalTime.of(12,30);
+            heureFinPause = LocalTime.of(12, 30);
         }
         viewModel.setHeureFinPause(heureFinPause);
         afficherTemps(txtTempsFinPause, heureFinPause);
     }
 
     private void setValeurDefaut() {
-        LocalTime temps = LocalTime.of(8,0);
+        LocalTime temps = LocalTime.of(8, 0);
         afficherTemps(txtTempsDebutStage, temps);
         viewModel.setHeureDebutStage(temps);
-        temps = LocalTime.of(16,0);
+        temps = LocalTime.of(16, 0);
         afficherTemps(txtTempsFinStage, temps);
         viewModel.setHeureFinStage(temps);
-        temps = LocalTime.of(12,0);
+        temps = LocalTime.of(12, 0);
         afficherTemps(txtTempsDebutPause, temps);
         viewModel.setHeureDebutPause(temps);
-        temps = LocalTime.of(12,30);
+        temps = LocalTime.of(12, 30);
         afficherTemps(txtTempsFinPause, temps);
         viewModel.setHeureFinPause(temps);
     }
 
     /**
      * Set les checkbox des jours de stage
-     *
-     * @param stage instance du stage
      */
     private void setChampsJoursStage(Stage stage) {
         byte journees = stage.getJournees();
@@ -268,8 +258,6 @@ public class InfoVisiteFragment extends Fragment {
 
     /**
      * Set les boutons radio de duree de visite
-     *
-     * @param stage instance du stage
      */
     private void setChampsDureeVisite(Stage stage) {
         int dureeVisite = stage.getDureeVisite();
@@ -292,9 +280,6 @@ public class InfoVisiteFragment extends Fragment {
 
     /**
      * Affiche un texte d'heure dans un champ de texte defini
-     *
-     * @param champs champs a remplir
-     * @param heure  le temps qu'il faut afficher
      */
     private void afficherTemps(EditText champs, LocalTime heure) {
         String texteTemps = String.format("%02d:%02d", heure.getHour(), heure.getMinute());
@@ -303,8 +288,6 @@ public class InfoVisiteFragment extends Fragment {
 
     /**
      * Initialise la vue
-     *
-     * @param view
      */
     private void initView(View view) {
         txtTempsDebutStage = view.findViewById(R.id.text_stage_debut);

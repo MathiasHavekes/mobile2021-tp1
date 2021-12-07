@@ -1,7 +1,5 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
-import static java.time.temporal.ChronoUnit.MINUTES;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +15,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -26,8 +23,6 @@ import ca.qc.bdeb.c5gm.stageplanif.data.Entreprise;
 import ca.qc.bdeb.c5gm.stageplanif.data.Priorite;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
 import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
-import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
-import ca.qc.bdeb.c5gm.stageplanif.reseau.ConnexionBD;
 
 /**
  * Classe qui s'occupe de l'activite activity_demande_info_stage
@@ -78,14 +73,6 @@ public class InfoStageActivity extends AppCompatActivity {
      */
     private Stage stageStockage;
     /**
-     * Liste des fragments affiches en ordre
-     */
-    private Fragment[] fragments;
-    /**
-     * Indice du fragment afficher dans la liste fragments
-     */
-    private int fragmentActuel;
-    /**
      * Contient la logique du clique sur le bouton annuler
      */
     private final View.OnClickListener annulerClique = new View.OnClickListener() {
@@ -112,7 +99,14 @@ public class InfoStageActivity extends AppCompatActivity {
             }
         }
     };
-
+    /**
+     * Liste des fragments affiches en ordre
+     */
+    private Fragment[] fragments;
+    /**
+     * Indice du fragment afficher dans la liste fragments
+     */
+    private int fragmentActuel;
     /**
      * Logique du bouton suivant
      */
@@ -122,7 +116,7 @@ public class InfoStageActivity extends AppCompatActivity {
             switch (fragmentActuel) {
                 case 0:
                     Boolean champsRempli = priorite != null && etudiant != null;
-                    if(champsRempli) {
+                    if (champsRempli) {
                         fragmentActuel++;
                         changerFragment(fragments[fragmentActuel]);
                         return;
@@ -135,7 +129,7 @@ public class InfoStageActivity extends AppCompatActivity {
                     break;
                 case 2:
                     champsRempli = viewModel.getJourStage() != null;
-                    if(champsRempli) {
+                    if (champsRempli) {
                         champsRempli &= viewModel.getJourStage() != 0x00;
                     }
                     champsRempli &= viewModel.getHeureDebutStage() != null;
@@ -151,10 +145,10 @@ public class InfoStageActivity extends AppCompatActivity {
                     boutonSuivant.setText(getResources().getString(R.string.btn_terminer));
                     changerFragment(fragments[fragmentActuel]);
                     break;
-                case  3:
+                case 3:
                     Stockage dbHelper = Stockage.getInstance(context);
                     champsRempli = viewModel.getDispoTuteur() != null;
-                    if(champsRempli) {
+                    if (champsRempli) {
                         champsRempli &= viewModel.getDispoTuteur() != 0x00;
                     }
                     if (!champsRempli) {
@@ -162,7 +156,7 @@ public class InfoStageActivity extends AppCompatActivity {
                         return;
                     }
                     Stage stage = viewModel.getStage();
-                    if(stage == null) {
+                    if (stage == null) {
                         stage = creerStage(dbHelper);
                         creerIntent(stage);
                         finish();
@@ -285,7 +279,7 @@ public class InfoStageActivity extends AppCompatActivity {
             return !photoEgal() && entreprise != null && priorite != null;
         }
         //Logique si c'est dans le fragment d'info d'eleves
-        return ! photoEgal() || priorite != null;
+        return !photoEgal() || priorite != null;
     }
 
     /**

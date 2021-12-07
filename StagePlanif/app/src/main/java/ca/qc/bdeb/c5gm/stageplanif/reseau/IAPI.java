@@ -28,6 +28,7 @@ public interface IAPI {
 
     /**
      * Methode qui permet de se deconnecter de la BD externe
+     *
      * @param token le token de connexion a l'API
      */
     @POST("/auth/deconnexion")
@@ -35,7 +36,8 @@ public interface IAPI {
 
     /**
      * Tester la connexion a l'API
-     * @param token token de connexion
+     *
+     * @param token  token de connexion
      * @param userId id de l'utilisateur
      */
     @POST("/auth/testerconnexion")
@@ -43,6 +45,7 @@ public interface IAPI {
 
     /**
      * Demander les donnees des entreprises a l'API
+     *
      * @param token token de connexion
      */
     @GET("/entreprise")
@@ -50,6 +53,7 @@ public interface IAPI {
 
     /**
      * Demander les donnees des stages a l'API
+     *
      * @param token le token de connexion
      */
     @GET("/stage")
@@ -57,7 +61,8 @@ public interface IAPI {
 
     /**
      * Demander les donnees d'un stage particulier a l'API
-     * @param token token de connexion
+     *
+     * @param token   token de connexion
      * @param idStage ID du stage a chercher
      */
     @GET("/stage/{idStage}")
@@ -65,6 +70,7 @@ public interface IAPI {
 
     /**
      * Demander les comptes des etudiants actifs a l'API
+     *
      * @param token token de connexion
      */
     @GET("/compte/getcomptesetudiantsactifs")
@@ -72,15 +78,17 @@ public interface IAPI {
 
     /**
      * Ajouter un stage a la BD externe
+     *
      * @param token token de connection
-     * @param data Les donnees a mettre dans la BD
+     * @param data  Les donnees a mettre dans la BD
      */
     @POST("/stage")
     Call<ResponseBody> ajouterStage(@Header("Authorization") String token, @Body HashMap<String, Object> data);
 
     /**
      * Supprimer un stage dans la BD externe
-     * @param token token de connexion
+     *
+     * @param token   token de connexion
      * @param idStage id du stage a supprimer
      */
     @DELETE("/stage/{idStage}")

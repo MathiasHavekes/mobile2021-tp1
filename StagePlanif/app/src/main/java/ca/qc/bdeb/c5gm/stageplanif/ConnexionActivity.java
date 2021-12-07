@@ -1,6 +1,5 @@
 package ca.qc.bdeb.c5gm.stageplanif;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,23 +17,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StageNomComparateur;
-import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrenomComparateur;
-import ca.qc.bdeb.c5gm.stageplanif.comparateurs.StagePrioriteComparateur;
-import ca.qc.bdeb.c5gm.stageplanif.data.Stage;
-import ca.qc.bdeb.c5gm.stageplanif.data.Stockage;
-import ca.qc.bdeb.c5gm.stageplanif.data.TypeCompte;
+import ca.qc.bdeb.c5gm.stageplanif.reseau.APIClient;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.ConnexionBD;
 import ca.qc.bdeb.c5gm.stageplanif.reseau.IAPI;
-import ca.qc.bdeb.c5gm.stageplanif.reseau.APIClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Classe qui gere l'activitee de connexion
+ */
 public class ConnexionActivity extends AppCompatActivity {
     private EditText loginEditText;
     private EditText passwordEditText;
@@ -78,22 +72,25 @@ public class ConnexionActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Connecte l'application a l'API externe avec les donnees inscrites
+     */
     public void connecter(View view) {
 
         loadingProgressBar.setVisibility(View.VISIBLE);
         HashMap<String, Object> loginData = new HashMap<>();
-        if (!loginEditText.getText().toString().isEmpty()){
-            loginData.put("email", loginEditText.getText().toString() );
+        if (!loginEditText.getText().toString().isEmpty()) {
+            loginData.put("email", loginEditText.getText().toString());
         }
-        if (!passwordEditText.getText().toString().isEmpty()){
-            loginData.put("mot_de_passe", passwordEditText.getText().toString() );
+        if (!passwordEditText.getText().toString().isEmpty()) {
+            loginData.put("mot_de_passe", passwordEditText.getText().toString());
         }
 
         Call<ResponseBody> call = client.connecter(loginData);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.code() == 200) {
+                if (response.code() == 200) {
                     try {
                         JSONObject rep = new JSONObject(response.body().string());
                         ConnectUtils.authToken = rep.getString("access_token");
@@ -123,6 +120,9 @@ public class ConnexionActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Verifie que les donnees de connexion sont valides
+     */
     public void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {
             loginEditText.setError(getString(R.string.invalid_username));
@@ -134,6 +134,10 @@ public class ConnexionActivity extends AppCompatActivity {
             btnLogin.setEnabled(true);
         }
     }
+
+    /**
+     * Verifie que le nom d'utilisateur est valide
+     */
     // A placeholder username validation check
     private boolean isUserNameValid(String username) {
         if (username == null) {
@@ -146,7 +150,9 @@ public class ConnexionActivity extends AppCompatActivity {
         }
     }
 
-    // A placeholder password validation check
+    /**
+     * Verifie que le mot de passe est valide
+     */
     private boolean isPasswordValid(String password) {
         return password != null && password.trim().length() > 5;
     }
